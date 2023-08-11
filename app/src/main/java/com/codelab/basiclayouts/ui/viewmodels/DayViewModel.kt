@@ -1,16 +1,21 @@
 package com.codelab.basiclayouts.ui.viewmodels
 
+import android.content.res.Resources
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.codelab.basiclayouts.ui.components.DaySummary
 import com.codelab.basiclayouts.ui.components.Transaction
 import org.json.JSONObject
+
 class DayViewModel : ViewModel(){
     private val _daySummary = MutableLiveData<DaySummary>()
     val daySummary: LiveData<DaySummary> = _daySummary
 
-    fun loadDaySummary(){
+    init {
+        loadDaySummary()
+    }
+    private fun loadDaySummary(){
          val jsonString = """
     {
       "year": 2023,
@@ -26,11 +31,16 @@ class DayViewModel : ViewModel(){
             "title": "Dinner",
             "amount": 30,
             "category": "Food"
+          },
+          {
+            "title": "hmmm",
+            "amount": 69,
+            "category": "Food"
           }
         ]
       }
     """.trimIndent()
-
+        val resources : Resources
         val jsonObject = JSONObject(jsonString)
         val jsonTransactionArray = jsonObject.getJSONArray("transactions")
 

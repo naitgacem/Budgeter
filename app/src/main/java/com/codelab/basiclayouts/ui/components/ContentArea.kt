@@ -12,13 +12,14 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AcUnit
-import androidx.compose.material.icons.filled.AccountBalance
-import androidx.compose.material.icons.filled.AdsClick
 import androidx.compose.material.icons.filled.Apps
+import androidx.compose.material.icons.filled.Details
 import androidx.compose.material.icons.filled.LocalPhone
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
@@ -30,26 +31,16 @@ import com.codelab.basiclayouts.ui.viewmodels.DayViewModel
 @Composable
 fun ContentArea(
                 modifier: Modifier = Modifier,
-    viewModel: DayViewModel = viewModel()
+                viewModel: DayViewModel = viewModel()
 ){
+    val daySummary = viewModel.daySummary.observeAsState()
+
+
 
     Column {
         TopSection()
-        val transaction1 = Transaction(Icons.Filled.AcUnit, "Air Conditioner", 101)
-        val transaction2 = Transaction(Icons.Filled.Apps, "Premium App", 102)
-        val transaction3 = Transaction(Icons.Filled.LocalPhone, "Phone bill", 103)
-        val spending: List<Transaction> = listOf(transaction1, transaction2, transaction3)
-
-        val day = DaySummary(2023, 8, 10, spending)
-
-        val transaction12 = Transaction(Icons.Filled.AdsClick, "Archery", 101)
-        val transaction22 = Transaction(Icons.Filled.AccountBalance, "Lawyer", 102)
-        val spending2: List<Transaction> = listOf(transaction12, transaction22)
-
-
-
-
-        val data: List<DaySummary> = listOf(day, day2)
+        val day = remember { viewModel.daySummary.value }
+        val data: List<DaySummary> = listOf(day ?:  DaySummary(1970, 1, 1, listOf(Transaction(Icons.Filled.Details, "error", 0))))
         LazyColumn(
             modifier = modifier
         ){
