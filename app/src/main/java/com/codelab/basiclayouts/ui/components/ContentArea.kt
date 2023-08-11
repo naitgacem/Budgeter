@@ -24,24 +24,30 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.codelab.basiclayouts.ui.viewmodels.DayViewModel
 
 @Composable
-fun ContentArea(modifier: Modifier = Modifier){
+fun ContentArea(
+                modifier: Modifier = Modifier,
+    viewModel: DayViewModel = viewModel()
+){
+
     Column {
         TopSection()
-        val item1 = Item(Icons.Filled.AcUnit, "Air Conditioner", 101)
-        val item2 = Item(Icons.Filled.Apps, "Premium App", 102)
-        val item3 = Item(Icons.Filled.LocalPhone, "Phone bill", 103)
+        val transaction1 = Transaction(Icons.Filled.AcUnit, "Air Conditioner", 101)
+        val transaction2 = Transaction(Icons.Filled.Apps, "Premium App", 102)
+        val transaction3 = Transaction(Icons.Filled.LocalPhone, "Phone bill", 103)
+        val spending: List<Transaction> = listOf(transaction1, transaction2, transaction3)
 
-        val spending: List<Item> = listOf(item1, item2, item3)
         val day = DaySummary(2023, 8, 10, spending)
 
-        val item12 = Item(Icons.Filled.AdsClick, "Archery", 101)
-        val item22 = Item(Icons.Filled.AccountBalance, "Lawyer", 102)
+        val transaction12 = Transaction(Icons.Filled.AdsClick, "Archery", 101)
+        val transaction22 = Transaction(Icons.Filled.AccountBalance, "Lawyer", 102)
+        val spending2: List<Transaction> = listOf(transaction12, transaction22)
 
 
-        val spending2: List<Item> = listOf(item12, item22)
-        val day2 = DaySummary(2023, 8, 11, spending2)
+
 
         val data: List<DaySummary> = listOf(day, day2)
         LazyColumn(
@@ -72,31 +78,31 @@ fun DayDisplay(
 
         ){
             items(day.spending){
-                item -> ItemDisplay(item = item)
+                item -> ItemDisplay(transaction = item)
             }
         }
     }
 }
 
 @Composable
-fun ItemDisplay(modifier: Modifier = Modifier, item: Item){
+fun ItemDisplay(modifier: Modifier = Modifier, transaction: Transaction){
     Row(
 
         modifier = modifier.border(1.dp, Color.Black)
     ) {
         Icon(
-            imageVector = item.icon ,
+            imageVector = transaction.icon ,
             contentDescription = "",
             modifier = modifier.weight(0.1f)
         )
         Text(
-            text = item.title,
+            text = transaction.title,
             modifier = modifier
                 .weight(0.6f)
                 .padding(horizontal = 12.dp)
         )
         Text(
-            text = item.amount.toString(),
+            text = transaction.amount.toString(),
             textAlign = TextAlign.Center,
             modifier = modifier.weight(0.3f)
         )
@@ -107,18 +113,18 @@ fun ItemDisplay(modifier: Modifier = Modifier, item: Item){
 @Preview
 @Composable
 fun ItemDisplayPreview(){
-    ItemDisplay(item = Item(Icons.Filled.AcUnit, "Air Conditioner", 101))
+    ItemDisplay(transaction = Transaction(Icons.Filled.AcUnit, "Air Conditioner", 101))
 }
 
 @Preview
 @Composable
 fun DayDisplayPreview(){
     //TODO("This should be a function that reads from JSON or something then calls the appropriate function")
-    val item1 = Item(Icons.Filled.AcUnit, "Air Conditioner", 101)
-    val item2 = Item(Icons.Filled.Apps, "Premium App", 102)
-    val item3 = Item(Icons.Filled.LocalPhone, "Phone bill", 103)
+    val transaction1 = Transaction(Icons.Filled.AcUnit, "Air Conditioner", 101)
+    val transaction2 = Transaction(Icons.Filled.Apps, "Premium App", 102)
+    val transaction3 = Transaction(Icons.Filled.LocalPhone, "Phone bill", 103)
 
-    val spending: List<Item> = listOf(item1, item2, item3)
+    val spending: List<Transaction> = listOf(transaction1, transaction2, transaction3)
     val day = DaySummary(2023, 8, 10, spending)
 
     DayDisplay(day)
