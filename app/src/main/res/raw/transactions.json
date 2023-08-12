@@ -12,6 +12,16 @@
         "title": "Dinner",
         "amount": 30,
         "category": "Food"
+      },
+      {
+        "title": "Dinner",
+        "amount": 30,
+        "category": "Food"
+      },
+      {
+        "title": "Dinner",
+        "amount": 30,
+        "category": "Food"
       }
     ]
   }

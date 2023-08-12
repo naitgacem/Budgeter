@@ -1,46 +1,34 @@
 package com.codelab.basiclayouts.ui.viewmodels
 
-import android.content.res.Resources
+import android.app.Application
+import androidx.compose.runtime.mutableStateOf
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
+import com.codelab.basiclayouts.R
 import com.codelab.basiclayouts.ui.components.DaySummary
 import com.codelab.basiclayouts.ui.components.Transaction
 import org.json.JSONObject
 
-class DayViewModel : ViewModel(){
+class DayViewModel(application: Application) : AndroidViewModel(application) {
+
     private val _daySummary = MutableLiveData<DaySummary>()
     val daySummary: LiveData<DaySummary> = _daySummary
+
+    private val _isEmpty = mutableStateOf(false)
+    private val isEmpty = _isEmpty
+
+    private lateinit var recentDays: List<DaySummary>
 
     init {
         loadDaySummary()
     }
-    private fun loadDaySummary(){
-         val jsonString = """
-    {
-      "year": 2023,
-      "month": 8,
-      "day": 10,
-        "transactions": [
-          {
-            "title": "Groceries",
-            "amount": 50,
-            "category": "Food"
-          },
-          {
-            "title": "Dinner",
-            "amount": 30,
-            "category": "Food"
-          },
-          {
-            "title": "hmmm",
-            "amount": 69,
-            "category": "Food"
-          }
-        ]
-      }
-    """.trimIndent()
-        val resources : Resources
+
+    private fun loadDaySummary() {
+        val jsonString = getApplication<Application>().resources.openRawResource(R.raw.transactions)
+            .bufferedReader().use {
+            it.readText()
+        }
         val jsonObject = JSONObject(jsonString)
         val jsonTransactionArray = jsonObject.getJSONArray("transactions")
 
@@ -49,7 +37,7 @@ class DayViewModel : ViewModel(){
         val day = jsonObject.getInt("day")
 
         val transactionList = mutableListOf<Transaction>()
-        for(i in 0 until jsonTransactionArray.length()){
+        for (i in 0 until jsonTransactionArray.length()) {
             val transactionObject = jsonTransactionArray.getJSONObject(i)
 
             val title = transactionObject.getString("title")
@@ -61,4 +49,6 @@ class DayViewModel : ViewModel(){
         }
         _daySummary.value = DaySummary(year, month, day, transactionList)
     }
+
+
 }
