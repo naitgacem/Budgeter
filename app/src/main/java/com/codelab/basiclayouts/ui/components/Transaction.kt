@@ -1,11 +1,11 @@
 package com.codelab.basiclayouts.ui.components
 
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Adb
-import androidx.compose.ui.graphics.vector.ImageVector
+import kotlinx.serialization.Serializable
 
-data class Transaction(val icon: ImageVector = Icons.Filled.Adb,
+@Serializable
+data class Transaction(
+    val id: Long ,
                        val title: String,
                        val amount: Int,
-                       val category: String = "Other"
+                       val category: String = "Others"
 )
