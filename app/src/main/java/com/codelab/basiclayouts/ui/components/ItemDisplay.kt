@@ -21,7 +21,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 
@@ -61,11 +60,6 @@ fun ItemDisplay(modifier: Modifier = Modifier, transaction: Transaction){
     }
 }
 
-data class SpendingCategory (
-        val category: String,
-        val icon: ImageVector,
-        )
-
 private val categoryToIconMap = mapOf(
     "Housing" to Icons.Default.Apartment,
     "Transportation" to Icons.Default.DirectionsBus,
@@ -78,42 +72,3 @@ private val categoryToIconMap = mapOf(
     "Others" to Icons.Default.Edit
 )
 
-
-private val spandingCategorisses = listOf<SpendingCategory>(
-    SpendingCategory(
-        category = "Housing",
-        icon = Icons.Filled.Apartment
-    ),
-    SpendingCategory(
-        category = "Transportation",
-        icon = Icons.Filled.DirectionsBus
-    ),
-    SpendingCategory(
-        category = "Groceries",
-        icon = Icons.Filled.ShoppingCart
-    ),
-    SpendingCategory(
-        category = "Entertainment",
-        icon = Icons.Filled.Movie
-    ),
-    SpendingCategory(
-        category = "Healthcare",
-        icon = Icons.Filled.Spa
-    ),
-    SpendingCategory(
-        category = "Education",
-        icon = Icons.Filled.School
-    ),
-    SpendingCategory(
-        category = "Travel",
-        icon = Icons.Filled.Map
-    ),
-    SpendingCategory(
-        category = "Utilities",
-        icon = Icons.Filled.Phone
-    ),
-    SpendingCategory(
-        category = "Others",
-        icon = Icons.Filled.Edit
-    )
-)

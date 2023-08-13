@@ -6,5 +6,5 @@ import kotlinx.serialization.Serializable
 data class DaySummary(
     val year: Int, val month: Int, val day: Int,
     val spending: List<Transaction>,
-    val date: String = "1970-01-01"
+    val date: String
 )

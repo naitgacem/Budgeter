@@ -10,12 +10,19 @@ import com.codelab.basiclayouts.ui.components.TopBar
 
 
 @Composable
-fun HomeScreen(modifier: Modifier = Modifier, navController: () -> Unit) {
+fun HomeScreen(
+    modifier: Modifier = Modifier,
+    navigateToSettings: () -> Unit,
+    navigateToAddTransaction: () -> Unit
+) {
 
     Scaffold(
-        topBar = { TopBar(navController) },
+        topBar = { TopBar(navigateToSettings) },
         bottomBar = { NavBar() }
     ) { paddingValues ->
-        ContentArea(Modifier.padding(paddingValues))
+        ContentArea(
+            Modifier.padding(paddingValues),
+            addTransactionNavController = navigateToAddTransaction
+        )
     }
 }

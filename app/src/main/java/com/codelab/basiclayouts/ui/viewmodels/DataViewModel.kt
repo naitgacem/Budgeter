@@ -21,23 +21,25 @@ class DataViewModel(
     val recentTransactions = _recentTransactions
 
     init {
-        repository.deleteAllFiles()
         refreshRecentTransactions()
     }
-    private fun refreshRecentTransactions(){
+
+
+    private fun refreshRecentTransactions() {
         val calendar = Calendar.getInstance()
-        for (i in 0 .. 6){
+        for (i in 0..6) {
             calendar.add(Calendar.DAY_OF_MONTH, -1)
             val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
             val formattedDate = dateFormat.format(calendar.time)
 
             val day: DaySummary? = loadDayTransaction(formattedDate)
-            if(day != null){
+            if (day != null) {
                 _recentTransactions.value = _recentTransactions.value + day.spending
             }
         }
     }
-    private fun loadDayTransaction(date: String) : DaySummary? {
+
+    private fun loadDayTransaction(date: String): DaySummary? {
         return repository.readDailyTransactionsFromFile(date)
     }
 
@@ -48,7 +50,7 @@ class DataViewModel(
     companion object {
         val Factory: ViewModelProvider.Factory = viewModelFactory {
             initializer {
-                    val myRepository = (this[APPLICATION_KEY] as Budgeter).transactionsRepository
+                val myRepository = (this[APPLICATION_KEY] as Budgeter).transactionsRepository
                 DataViewModel(
                     repository = myRepository
                 )

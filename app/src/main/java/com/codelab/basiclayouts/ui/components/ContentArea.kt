@@ -7,37 +7,31 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.codelab.basiclayouts.ui.viewmodels.DataViewModel
 
 @Composable
 fun ContentArea(
-                modifier: Modifier = Modifier,
-                dataViewModel: DataViewModel = viewModel(factory = DataViewModel.Factory)
-){
+    modifier: Modifier = Modifier,
+    addTransactionNavController: () -> Unit,
+    dataViewModel: DataViewModel = viewModel(factory = DataViewModel.Factory)
+) {
 
     val recentTransactionsState = dataViewModel.recentTransactions.collectAsState()
 
     LazyColumn() {
         item {
-            TopSection()
+            TopSection(addTransactionNavController = addTransactionNavController)
         }
-        item{
+        item {
             Spacer(modifier = Modifier.height(40.dp))
         }
 
-        items(recentTransactionsState.value){
-                day -> ItemDisplay(transaction = day)
+        items(recentTransactionsState.value) { day ->
+            ItemDisplay(transaction = day)
         }
     }
 }
 
 
-
-@Preview
-@Composable
-fun ContentAreaPreview(){
-    ContentArea()
-}

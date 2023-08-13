@@ -19,16 +19,18 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun TopSection(modifier: Modifier = Modifier){
+fun TopSection(
+    modifier: Modifier = Modifier,
+    addTransactionNavController: () -> Unit
+) {
     Card(
-       modifier = modifier
-           .fillMaxWidth()
-           .height(IntrinsicSize.Min)
-    ){
+        modifier = modifier
+            .fillMaxWidth()
+            .height(IntrinsicSize.Min)
+    ) {
         Row {
             Budget(
                 modifier
@@ -36,13 +38,16 @@ fun TopSection(modifier: Modifier = Modifier){
                     .height(132.dp)
 
             )
-            Operations(modifier.weight(1f))
+            Operations(modifier.weight(1f), addTransactionNavController)
         }
     }
 }
 
 @Composable
-fun Operations(modifier: Modifier = Modifier) {
+fun Operations(
+    modifier: Modifier = Modifier,
+    addTransactionNavController: () -> Unit
+) {
 
     Column(
         modifier = modifier
@@ -51,7 +56,7 @@ fun Operations(modifier: Modifier = Modifier) {
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.SpaceBetween
     ) {
-       FilledIconButton(
+        FilledIconButton(
             onClick = {},
 
             modifier = modifier
@@ -63,7 +68,7 @@ fun Operations(modifier: Modifier = Modifier) {
             Text("Deposit")
         }
         FilledIconButton(
-            onClick = {},
+            onClick = addTransactionNavController,
             modifier = modifier
                 .padding(8.dp)
                 .width(120.dp)
@@ -76,44 +81,27 @@ fun Operations(modifier: Modifier = Modifier) {
 
 @Composable
 fun Budget(modifier: Modifier = Modifier) {
-        Column(
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center,
-            modifier = modifier.fillMaxSize().height(IntrinsicSize.Min)
-        ) {
-            Text(
-                text = "500",
-                style = MaterialTheme.typography.headlineMedium,
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center,
+        modifier = modifier
+            .fillMaxSize()
+            .height(IntrinsicSize.Min)
+    ) {
+        Text(
+            text = "500",
+            style = MaterialTheme.typography.headlineMedium,
 
-                )
-            Text(
-                text = "DZD",
-                fontFamily = FontFamily.Monospace,
-                style = MaterialTheme.typography.labelMedium,
+            )
+        Text(
+            text = "DZD",
+            fontFamily = FontFamily.Monospace,
+            style = MaterialTheme.typography.labelMedium,
 
 
             )
 
-        }
+    }
 
 }
-
-@Preview(showBackground = true)
-@Composable
-fun BudgetPreview(){
-    Budget()
-}
-
-@Preview(showBackground = true)
-@Composable
-fun OperationsPreview(){
-    Operations()
-}
-
-@Preview
-@Composable
-fun TopSectionPreview(){
-    TopSection()
-}
-
 

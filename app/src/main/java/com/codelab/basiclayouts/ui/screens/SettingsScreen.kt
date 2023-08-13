@@ -35,6 +35,7 @@ fun SettingsScreen(
                         style = MaterialTheme.typography.titleMedium
                     )
                 },
+
             )
         }
     ) {
@@ -44,13 +45,14 @@ fun SettingsScreen(
 }
 
 
+
 data class SettingMenuItem(
     val icon: ImageVector,
     val title: String,
     val description: String,
 )
 
-val settingsMenuItems = listOf<SettingMenuItem>(
+val settingsMenuItems = listOf(
     SettingMenuItem(
         icon = Icons.Filled.Tune,
         title = "General" ,
