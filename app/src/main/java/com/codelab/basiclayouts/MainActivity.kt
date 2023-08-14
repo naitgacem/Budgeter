@@ -3,7 +3,6 @@ package com.codelab.basiclayouts
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -19,25 +18,11 @@ class MainActivity : ComponentActivity() {
         setContent {
             val navController = rememberNavController()
 
-            fun navigateToSettings() {
-                navController.navigate("settings")
-            }
-
-            fun navigateToAddTransaction() {
-                navController.navigate("add_transaction")
-            }
-
-
-            val LocalNavigateToSettings = staticCompositionLocalOf {
-                navigateToAddTransaction()
-            }
-
-
             NavHost(navController = navController, startDestination = "home") {
                 composable("home") {
                     HomeScreen(
-                        navigateToSettings = { navigateToSettings() },
-                        navigateToAddTransaction = { navigateToAddTransaction() }
+                        navigateToSettings = { navController.navigate("settings") },
+                        navigateToAddTransaction = { navController.navigate("add_transaction") }
                     )
                 }
                 composable("settings") { SettingsScreen() }
