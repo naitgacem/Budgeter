@@ -26,22 +26,23 @@ import com.codelab.basiclayouts.ui.components.SettingsList
 @Composable
 fun SettingsScreen(
 ) {
-    Scaffold(
-        topBar = {
-            TopAppBar(
-                title = {
-                    Text(
-                        text = stringResource(id = R.string.settings),
-                        style = MaterialTheme.typography.titleMedium
-                    )
-                },
+        Scaffold(
+            topBar = {
+                TopAppBar(
+                    title = {
+                        Text(
+                            text = stringResource(id = R.string.settings),
+                            style = MaterialTheme.typography.titleMedium
+                        )
+                    },
 
-            )
+                    )
+            }
+        ) {
+                paddingValues ->
+            SettingsList(modifier = Modifier.padding(paddingValues))
         }
-    ) {
-       paddingValues ->
-        SettingsList(modifier = Modifier.padding(paddingValues))
-    }
+
 }
 
 

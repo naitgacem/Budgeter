@@ -22,14 +22,14 @@ class TransactionsRepository(private val context: Context) {
     }
 
     fun addEntry(daySummary: DaySummary){
-        val file = File(fileDirectory, "${daySummary.date}")
+        val file = File(fileDirectory, "${daySummary.date}.json")
         return if(!file.exists()){
             writeDailyTransactionsToFile(daySummary)
         } else {
             val json = Json { ignoreUnknownKeys = true }
             val jsonString = file.readText()
             val oldDaySummary = json.decodeFromString<DaySummary>(string = jsonString)
-            val newDaySummary = oldDaySummary.copy(spending = oldDaySummary.spending + daySummary.spending)
+            val newDaySummary = oldDaySummary.copy(spending = daySummary.spending + oldDaySummary.spending )
             writeDailyTransactionsToFile(newDaySummary)
         }
     }

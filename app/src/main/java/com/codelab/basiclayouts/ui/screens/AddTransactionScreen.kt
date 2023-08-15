@@ -3,32 +3,36 @@ package com.codelab.basiclayouts.ui.screens
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.widthIn
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.DropdownMenuItem
+import androidx.compose.material.Chip
+import androidx.compose.material.ChipDefaults
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Scaffold
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.AttachMoney
-import androidx.compose.material.icons.filled.Category
 import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material.icons.filled.Description
+import androidx.compose.material.icons.filled.ErrorOutline
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material3.Button
 import androidx.compose.material3.DatePicker
 import androidx.compose.material3.DatePickerFormatter
 import androidx.compose.material3.DatePickerState
 import androidx.compose.material3.DisplayMode
-import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
@@ -42,6 +46,7 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.codelab.basiclayouts.ui.components.categoryToIconMap
 import com.codelab.basiclayouts.ui.theme.typography
 import com.codelab.basiclayouts.ui.viewmodels.AddTransactionViewModel
 import java.util.Calendar
@@ -65,13 +70,11 @@ fun AddTransactionScreen(
 @Composable
 fun AddTransactionContent(
     modifier: Modifier = Modifier,
-    addTransactionViewModel: AddTransactionViewModel = viewModel()
+    addTransactionViewModel: AddTransactionViewModel = viewModel(factory = AddTransactionViewModel.Factory)
 ) {
     val amount by addTransactionViewModel.amount.collectAsState()
     val description by addTransactionViewModel.description.collectAsState()
     val category by addTransactionViewModel.category.collectAsState()
-    val dropDownExpanded by addTransactionViewModel.dropDownExpanded.collectAsState()
-    val menuItems by addTransactionViewModel.menuItems.collectAsState()
 
     val state = rememberDatePickerState(
         initialDisplayMode = DisplayMode.Input,
@@ -108,16 +111,16 @@ fun AddTransactionContent(
 
         item {
             InsertCategory(
-                value = category,
-                menuItems = menuItems,
-                dropDownExpanded = dropDownExpanded,
-                expandDropDown = { addTransactionViewModel.expandOrCollapse(it) },
+                menuItems = addTransactionViewModel.menuItems,
+                selectedCategory = category,
                 updateCategory = { addTransactionViewModel.updateCategory(it) }
             )
         }
         item {
             Spacer(modifier = Modifier.height(24.dp))
-            SaveButton()
+            SaveButton(
+                saveEntry = { addTransactionViewModel.saveTransaction()}
+            )
         }
     }
 }
@@ -233,7 +236,10 @@ fun InsertDescription(
 }
 
 @Composable
-fun SaveButton() {
+fun SaveButton(
+    modifier: Modifier = Modifier,
+    saveEntry: () -> Unit
+) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -241,7 +247,8 @@ fun SaveButton() {
         horizontalArrangement = Arrangement.Center,
     ) {
         Button(
-            onClick = { /*TODO*/ }) {
+            onClick = saveEntry
+        ) {
             Text(
                 text = "Save"
             )
@@ -261,55 +268,49 @@ private fun TitleBar(modifier: Modifier = Modifier) {
     Spacer(modifier = Modifier.height(16.dp))
 }
 
+@OptIn(ExperimentalMaterialApi::class, ExperimentalLayoutApi::class)
 @Composable
 private fun InsertCategory(
     modifier: Modifier = Modifier,
-    value: String,
     menuItems: List<String>,
-    dropDownExpanded: Boolean,
-    expandDropDown: (Boolean) -> Unit,
+    selectedCategory: String,
     updateCategory: (String) -> Unit
 ) {
-    Column {
-        Row(
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Icon(
-                modifier = modifier.weight(.1f),
-                imageVector = Icons.Default.Category, contentDescription = ""
-            )
-            OutlinedTextField(
-                modifier = modifier
-                    .weight(.9f)
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp),
-                label = { Text("Category") },
-                value = value,
-                onValueChange = {
-                    updateCategory(it)
-                    expandDropDown(true)
-                },
-            )
-        }
-        DropdownMenu(
-            modifier = modifier.widthIn(170.dp),
-            expanded = dropDownExpanded,
-            onDismissRequest = { expandDropDown(false) }
-        ) {
-            MenuItems(items = menuItems)
-        }
-    }
-}
+    Column(
+        modifier = modifier.padding(horizontal = 16.dp)
+    ) {
 
-@Composable
-fun MenuItems(items: List<String>) {
-    for (item in items) {
-        DropdownMenuItem(modifier = Modifier
-            .padding(horizontal = 8.dp),
-            onClick = { /*TODO*/ }
+        FlowRow(
+            Modifier
+                .fillMaxWidth()
+                .wrapContentHeight(align = Alignment.Top),
+            horizontalArrangement = Arrangement.Start,
         ) {
-            Text(item)
-        }
+            for (element in menuItems) {
+                Chip(
+                    modifier = Modifier
+                        .padding(2.dp)
+                        .align(alignment = Alignment.CenterVertically),
+                    colors = if (element != selectedCategory) {
+                        ChipDefaults.chipColors()
+                    } else {
+                        ChipDefaults.chipColors(backgroundColor = MaterialTheme.colorScheme.primaryContainer)
+                    },
+                    onClick = { updateCategory(element) },
+                    leadingIcon = {
+                        Icon(
+                            imageVector = categoryToIconMap[element] ?: Icons.Default.ErrorOutline,
+                            contentDescription = "",
+                        )
+                    }
+                ) {
 
+                    Text(
+                        modifier = Modifier,
+                        text = element
+                    )
+                }
+            }
+        }
     }
 }

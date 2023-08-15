@@ -25,7 +25,9 @@ class MainActivity : ComponentActivity() {
                         navigateToAddTransaction = { navController.navigate("add_transaction") }
                     )
                 }
-                composable("settings") { SettingsScreen() }
+                composable("settings") {
+                    SettingsScreen()
+                }
                 composable("add_transaction") {
                     AddTransactionScreen(
                     )

@@ -7,5 +7,5 @@ data class Transaction(
     val id: Long ,
    val title: String,
    val amount: Int,
-   val category: String = "Others"
+   val category: String
 )

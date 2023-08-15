@@ -6,15 +6,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Apartment
-import androidx.compose.material.icons.filled.DirectionsBus
-import androidx.compose.material.icons.filled.Edit
-import androidx.compose.material.icons.filled.Map
-import androidx.compose.material.icons.filled.Movie
-import androidx.compose.material.icons.filled.Phone
-import androidx.compose.material.icons.filled.School
-import androidx.compose.material.icons.filled.ShoppingCart
-import androidx.compose.material.icons.filled.Spa
 import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
@@ -59,16 +50,4 @@ fun ItemDisplay(modifier: Modifier = Modifier, transaction: Transaction){
 
     }
 }
-
-private val categoryToIconMap = mapOf(
-    "Housing" to Icons.Default.Apartment,
-    "Transportation" to Icons.Default.DirectionsBus,
-    "Groceries" to Icons.Default.ShoppingCart,
-    "Entertainment" to Icons.Default.Movie,
-    "Healthcare" to Icons.Default.Spa,
-    "Education" to Icons.Default.School,
-    "Travel" to Icons.Default.Map,
-    "Utilities" to Icons.Default.Phone,
-    "Others" to Icons.Default.Edit
-)
 
