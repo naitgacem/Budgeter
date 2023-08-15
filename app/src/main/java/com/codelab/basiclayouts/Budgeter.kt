@@ -1,7 +1,7 @@
 package com.codelab.basiclayouts
 
 import android.app.Application
-import com.codelab.basiclayouts.data.model.TransactionsRepository
+import com.codelab.basiclayouts.data.TransactionsRepository
 
 class Budgeter : Application() {
     lateinit var transactionsRepository: TransactionsRepository

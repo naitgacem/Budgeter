@@ -5,9 +5,9 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.codelab.basiclayouts.Budgeter
-import com.codelab.basiclayouts.data.model.TransactionsRepository
-import com.codelab.basiclayouts.ui.components.DaySummary
-import com.codelab.basiclayouts.ui.components.Transaction
+import com.codelab.basiclayouts.data.TransactionsRepository
+import com.codelab.basiclayouts.data.model.DaySummary
+import com.codelab.basiclayouts.data.model.Transaction
 import com.codelab.basiclayouts.ui.components.categoryToIconMap
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -28,9 +28,6 @@ class AddTransactionViewModel(
     private var _category = MutableStateFlow<String>("")
     val category: StateFlow<String> = _category
 
-    private var _dropDownExpanded = MutableStateFlow(false)
-    val dropDownExpanded: StateFlow<Boolean> = _dropDownExpanded
-
 
     fun updateAmount(newAmount: String){
         _amount.value = newAmount.toIntOrNull()
@@ -42,9 +39,7 @@ class AddTransactionViewModel(
     fun updateCategory(category: String){
         _category.value = category
     }
-    fun expandOrCollapse(expanded: Boolean){
-        _dropDownExpanded.value = expanded
-    }
+
 
     fun saveTransaction(){
         val transaction = Transaction(

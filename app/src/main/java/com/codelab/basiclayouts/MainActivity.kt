@@ -3,6 +3,8 @@ package com.codelab.basiclayouts
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -19,18 +21,25 @@ class MainActivity : ComponentActivity() {
             val navController = rememberNavController()
 
             NavHost(navController = navController, startDestination = "home") {
-                composable("home") {
+                composable(
+                    route = "home"
+                ) {
                     HomeScreen(
                         navigateToSettings = { navController.navigate("settings") },
                         navigateToAddTransaction = { navController.navigate("add_transaction") }
                     )
                 }
-                composable("settings") {
-                    SettingsScreen()
+                composable(
+                    route = "settings",
+                    enterTransition = { slideInVertically(initialOffsetY = {it}) },
+                    exitTransition = { slideOutVertically (targetOffsetY = {it}) }
+                ) {
+                        SettingsScreen()
                 }
-                composable("add_transaction") {
-                    AddTransactionScreen(
-                    )
+                composable(
+                    route = "add_transaction"
+                ) {
+                    AddTransactionScreen()
                 }
             }
         }

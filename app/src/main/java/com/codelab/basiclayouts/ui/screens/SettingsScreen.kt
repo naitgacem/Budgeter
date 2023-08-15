@@ -1,7 +1,9 @@
 package com.codelab.basiclayouts.ui.screens
 
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.Scaffold
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.Scaffold
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CreditCard
 import androidx.compose.material.icons.filled.Help
@@ -19,7 +21,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.codelab.basiclayouts.R
-import com.codelab.basiclayouts.ui.components.SettingsList
+import com.codelab.basiclayouts.ui.components.SettingCategoryDisplay
 
 @Preview
 @OptIn(ExperimentalMaterial3Api::class)
@@ -83,3 +85,20 @@ val settingsMenuItems = listOf(
     ),
 )
 
+@Composable
+fun SettingsList(
+    modifier: Modifier = Modifier
+){
+    LazyColumn(
+        modifier = modifier
+    ) {
+        items(settingsMenuItems) { item ->
+            SettingCategoryDisplay(
+                icon = item.icon,
+                title = item.title,
+                description = item.description
+            )
+        }
+
+    }
+}

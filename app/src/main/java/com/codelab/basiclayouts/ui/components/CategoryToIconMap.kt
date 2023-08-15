@@ -14,11 +14,11 @@ import androidx.compose.material.icons.filled.Spa
 val categoryToIconMap = mapOf(
    "Transportation" to Icons.Default.DirectionsBus,
    "Groceries" to Icons.Default.ShoppingCart,
+   "Travel" to Icons.Default.Map,
    "Utilities" to Icons.Default.Phone,
    "Entertainment" to Icons.Default.Movie,
-   "Education" to Icons.Default.School,
-   "Travel" to Icons.Default.Map,
-   "Healthcare" to Icons.Default.Spa,
    "Housing" to Icons.Default.Apartment,
+   "Education" to Icons.Default.School,
+   "Healthcare" to Icons.Default.Spa,
    "Others" to Icons.Default.Edit,
 )

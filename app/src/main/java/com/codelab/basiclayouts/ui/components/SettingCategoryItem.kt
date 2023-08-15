@@ -16,9 +16,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.codelab.basiclayouts.ui.theme.typography
 
-
-
-
 @Composable
 fun SettingCategoryDisplay(
     modifier: Modifier = Modifier,

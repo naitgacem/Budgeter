@@ -1,4 +1,4 @@
-package com.codelab.basiclayouts.ui.components
+package com.codelab.basiclayouts.data.model
 
 import kotlinx.serialization.Serializable
 

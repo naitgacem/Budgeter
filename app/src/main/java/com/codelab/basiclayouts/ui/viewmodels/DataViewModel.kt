@@ -6,9 +6,9 @@ import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.AP
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.codelab.basiclayouts.Budgeter
-import com.codelab.basiclayouts.data.model.TransactionsRepository
-import com.codelab.basiclayouts.ui.components.DaySummary
-import com.codelab.basiclayouts.ui.components.Transaction
+import com.codelab.basiclayouts.data.TransactionsRepository
+import com.codelab.basiclayouts.data.model.DaySummary
+import com.codelab.basiclayouts.data.model.Transaction
 import kotlinx.coroutines.flow.MutableStateFlow
 import java.text.SimpleDateFormat
 import java.util.Calendar
@@ -20,14 +20,12 @@ class DataViewModel(
     private var _recentTransactions = MutableStateFlow<List<Transaction>>(emptyList())
     val recentTransactions = _recentTransactions
 
-
     init {
         refreshRecentTransactions()
         repository.transactionAddedEvent.observeForever{
             refreshRecentTransactions()
         }
     }
-
 
     private fun refreshRecentTransactions() {
         _recentTransactions.value = emptyList()

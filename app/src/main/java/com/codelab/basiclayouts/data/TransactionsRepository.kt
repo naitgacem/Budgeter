@@ -1,15 +1,15 @@
-package com.codelab.basiclayouts.data.model
+package com.codelab.basiclayouts.data
 
 import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.codelab.basiclayouts.ui.components.DaySummary
+import com.codelab.basiclayouts.data.model.DaySummary
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import java.io.File
 
-class TransactionsRepository(private val context: Context) {
+class TransactionsRepository(context: Context) {
     private var _transactionAddedEvent = MutableLiveData<Unit>()
     val transactionAddedEvent: LiveData<Unit> = _transactionAddedEvent
 
