@@ -20,7 +20,7 @@ fun ContentArea(
 
     val recentTransactionsState = dataViewModel.recentTransactions.collectAsState()
 
-    LazyColumn() {
+    LazyColumn {
         item {
             TopSection(addTransactionNavController = addTransactionNavController)
         }

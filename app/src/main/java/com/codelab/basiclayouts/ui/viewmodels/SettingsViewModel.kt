@@ -1,4 +1,3 @@
 package com.codelab.basiclayouts.ui.viewmodels
 
-class SettingsViewModel {
-}
+class SettingsViewModel

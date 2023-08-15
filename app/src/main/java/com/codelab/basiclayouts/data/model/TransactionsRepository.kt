@@ -1,6 +1,8 @@
 package com.codelab.basiclayouts.data.model
 
 import android.content.Context
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import com.codelab.basiclayouts.ui.components.DaySummary
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
@@ -8,6 +10,10 @@ import kotlinx.serialization.json.Json
 import java.io.File
 
 class TransactionsRepository(private val context: Context) {
+    private var _transactionAddedEvent = MutableLiveData<Unit>()
+    val transactionAddedEvent: LiveData<Unit> = _transactionAddedEvent
+
+
     private val fileDirectory: File = context.filesDir
     fun readDailyTransactionsFromFile(date: String): DaySummary? {
         val json = Json { ignoreUnknownKeys = true }
@@ -39,6 +45,7 @@ class TransactionsRepository(private val context: Context) {
             val jsonString = json.encodeToString(dailyTransactions)
             val file = File(fileDirectory, "${dailyTransactions.date}.json")
             file.writeText(jsonString)
+            _transactionAddedEvent.value = Unit
         }
     }
 

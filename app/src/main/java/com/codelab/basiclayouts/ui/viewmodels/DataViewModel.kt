@@ -20,12 +20,17 @@ class DataViewModel(
     private var _recentTransactions = MutableStateFlow<List<Transaction>>(emptyList())
     val recentTransactions = _recentTransactions
 
+
     init {
         refreshRecentTransactions()
+        repository.transactionAddedEvent.observeForever{
+            refreshRecentTransactions()
+        }
     }
 
 
     private fun refreshRecentTransactions() {
+        _recentTransactions.value = emptyList()
         val calendar = Calendar.getInstance()
         calendar.add(Calendar.DAY_OF_MONTH, +1)
 

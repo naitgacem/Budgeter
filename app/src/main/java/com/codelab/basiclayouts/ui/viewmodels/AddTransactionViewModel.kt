@@ -55,6 +55,8 @@ class AddTransactionViewModel(
         )
 
         val day = DaySummary(
+
+            //hardcoded for now
             year = 2023,
             month = 8,
             day = 15,

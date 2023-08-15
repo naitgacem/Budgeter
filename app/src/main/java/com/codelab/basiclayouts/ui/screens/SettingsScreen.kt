@@ -26,25 +26,22 @@ import com.codelab.basiclayouts.ui.components.SettingsList
 @Composable
 fun SettingsScreen(
 ) {
-        Scaffold(
-            topBar = {
-                TopAppBar(
-                    title = {
-                        Text(
-                            text = stringResource(id = R.string.settings),
-                            style = MaterialTheme.typography.titleMedium
-                        )
-                    },
-
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                title = {
+                    Text(
+                        text = stringResource(id = R.string.settings),
+                        style = MaterialTheme.typography.titleMedium
                     )
-            }
-        ) {
-                paddingValues ->
-            SettingsList(modifier = Modifier.padding(paddingValues))
+                },
+            )
         }
+    ) { paddingValues ->
+        SettingsList(modifier = Modifier.padding(paddingValues))
+    }
 
 }
-
 
 
 data class SettingMenuItem(
@@ -56,32 +53,32 @@ data class SettingMenuItem(
 val settingsMenuItems = listOf(
     SettingMenuItem(
         icon = Icons.Filled.Tune,
-        title = "General" ,
+        title = "General",
         description = "Currency selection, language preferences"
     ),
     SettingMenuItem(
         icon = Icons.Filled.Payments,
-        title = "Income and expenses" ,
+        title = "Income and expenses",
         description = "Income categories, sources, budget limits"
     ),
     SettingMenuItem(
         icon = Icons.Filled.CreditCard,
-        title = "Transactions" ,
+        title = "Transactions",
         description = "Recurring transactions, custom types"
     ),
     SettingMenuItem(
         icon = Icons.Filled.Notifications,
-        title = "Notifications" ,
+        title = "Notifications",
         description = "Budget alerts, bill reminders"
     ),
     SettingMenuItem(
         icon = Icons.Filled.Storage,
-        title = "A Data management" ,
+        title = "A Data management",
         description = "Import, export, and share budget data"
     ),
     SettingMenuItem(
         icon = Icons.Filled.Help,
-        title = "A Support and help" ,
+        title = "A Support and help",
         description = "FAQs, contact, app version"
     ),
 )
