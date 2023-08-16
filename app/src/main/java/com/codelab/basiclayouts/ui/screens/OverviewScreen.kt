@@ -1,4 +1,4 @@
-package com.codelab.basiclayouts.ui.components
+package com.codelab.basiclayouts.ui.screens
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -15,12 +15,17 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.Card
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilledIconButton
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
@@ -30,13 +35,16 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
 import com.codelab.basiclayouts.data.model.Transaction
+import com.codelab.basiclayouts.ui.components.Screen
+import com.codelab.basiclayouts.ui.components.categoryToIconMap
 import com.codelab.basiclayouts.ui.viewmodels.DataViewModel
 
 @Composable
-fun ContentArea(
+fun OverviewScreen(
     modifier: Modifier = Modifier,
-    addTransactionNavController: () -> Unit,
+    navController: NavController,
     dataViewModel: DataViewModel = viewModel(factory = DataViewModel.Factory)
 ) {
 
@@ -44,7 +52,12 @@ fun ContentArea(
 
     LazyColumn {
         item {
-            TopSection(addTransactionNavController = addTransactionNavController)
+            TopSection(
+                addTransactionNavController = {
+                    navController.navigate(Screen.AddTransaction.route)
+                },
+                settingsNavController = { navController.navigate((Screen.Settings.route))}
+            )
         }
         item {
             Spacer(modifier = Modifier.height(40.dp))
@@ -96,21 +109,25 @@ fun ItemDisplay(modifier: Modifier = Modifier, transaction: Transaction){
 @Composable
 fun TopSection(
     modifier: Modifier = Modifier,
-    addTransactionNavController: () -> Unit
+    addTransactionNavController: () -> Unit,
+    settingsNavController : () -> Unit,
 ) {
-    Card(
-        modifier = modifier
-            .fillMaxWidth()
-            .height(IntrinsicSize.Min)
-    ) {
-        Row {
-            Budget(
-                modifier
-                    .weight(1f)
-                    .height(132.dp)
+    Column {
+        TopBar(settingsNavController)
+        Card(
+            modifier = modifier
+                .fillMaxWidth()
+                .height(IntrinsicSize.Min)
+        ) {
+            Row {
+                Budget(
+                    modifier
+                        .weight(1f)
+                        .height(132.dp)
 
-            )
-            Operations(modifier.weight(1f), addTransactionNavController)
+                )
+                Operations(modifier.weight(1f), addTransactionNavController)
+            }
         }
     }
 }
@@ -175,4 +192,26 @@ fun Budget(modifier: Modifier = Modifier) {
 
     }
 
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun TopBar(navController: () -> Unit) {
+
+    TopAppBar(title = {
+        Text(
+            text = "budgeter", textAlign = TextAlign.Center
+        )
+    }, navigationIcon = {
+        Icon(
+            imageVector = Icons.Filled.Person, contentDescription = null
+        )
+    }, actions = {
+        IconButton(onClick = navController) {
+            Icon(
+                imageVector = Icons.Filled.Settings,
+                contentDescription = "Localized description"
+            )
+        }
+    })
 }

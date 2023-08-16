@@ -11,6 +11,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.codelab.basiclayouts.data.model.DaySummary
+import com.codelab.basiclayouts.ui.screens.ItemDisplay
 
 @Composable
 fun DayDisplay(

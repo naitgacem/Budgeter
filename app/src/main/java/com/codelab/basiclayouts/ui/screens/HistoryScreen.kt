@@ -10,7 +10,9 @@ import androidx.compose.ui.Modifier
 fun  HistoryScreen(
 
 ) {
-    Surface(modifier = Modifier.fillMaxSize()) {
+    Surface(
+        modifier = Modifier.fillMaxSize()
+    ) {
         Text("test")
     }
 }
