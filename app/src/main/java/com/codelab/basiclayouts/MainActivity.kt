@@ -9,6 +9,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.codelab.basiclayouts.ui.screens.AddTransactionScreen
+import com.codelab.basiclayouts.ui.screens.HistoryScreen
 import com.codelab.basiclayouts.ui.screens.HomeScreen
 import com.codelab.basiclayouts.ui.screens.SettingsScreen
 
@@ -26,7 +27,8 @@ class MainActivity : ComponentActivity() {
                 ) {
                     HomeScreen(
                         navigateToSettings = { navController.navigate("settings") },
-                        navigateToAddTransaction = { navController.navigate("add_transaction") }
+                        navigateToAddTransaction = { navController.navigate("add_transaction") },
+                        navigateToHistory = { navController.navigate("history") },
                     )
                 }
                 composable(
@@ -40,6 +42,12 @@ class MainActivity : ComponentActivity() {
                     route = "add_transaction"
                 ) {
                     AddTransactionScreen()
+                }
+                composable(
+                    route = "history"
+
+                ){
+                    HistoryScreen()
                 }
             }
         }

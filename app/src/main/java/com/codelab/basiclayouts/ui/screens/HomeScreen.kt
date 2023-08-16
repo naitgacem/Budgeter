@@ -1,18 +1,18 @@
 package com.codelab.basiclayouts.ui.screens
 
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.Scaffold
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.SwapVert
+import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
@@ -25,12 +25,14 @@ import com.codelab.basiclayouts.ui.components.ContentArea
 fun HomeScreen(
     modifier: Modifier = Modifier,
     navigateToSettings: () -> Unit,
-    navigateToAddTransaction: () -> Unit
+    navigateToAddTransaction: () -> Unit,
+    navigateToHistory: () -> Unit,
+
 ) {
 
         Scaffold(
             topBar = { TopBar(navigateToSettings) },
-            bottomBar = { NavBar() }
+            bottomBar = { NavBar(navigateToHistory = navigateToHistory) }
         ) { paddingValues ->
             ContentArea(
                 Modifier.padding(paddingValues),
@@ -69,8 +71,11 @@ fun TopBar(navController: () -> Unit) {
 }
 
 @Composable
-fun NavBar(modifier: Modifier = Modifier) {
-    NavigationBar {
+fun NavBar(
+    modifier: Modifier = Modifier,
+    navigateToHistory: () -> Unit,
+           ) {
+    BottomAppBar {
         NavigationBarItem(modifier = modifier,
             selected = true,
             onClick = { /*TODO*/ },
@@ -88,7 +93,7 @@ fun NavBar(modifier: Modifier = Modifier) {
         )
         NavigationBarItem(modifier = modifier,
             selected = false,
-            onClick = { /*TODO*/ },
+            onClick = navigateToHistory,
             icon = { Icon(imageVector = Icons.Filled.SwapVert, contentDescription = null) }
         )
         NavigationBarItem(modifier = modifier,
