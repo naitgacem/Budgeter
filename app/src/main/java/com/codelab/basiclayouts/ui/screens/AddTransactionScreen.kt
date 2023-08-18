@@ -114,7 +114,10 @@ fun AddTransactionContent(
         item {
             Spacer(modifier = Modifier.height(24.dp))
             SaveButton(
-                saveEntry = { addTransactionViewModel.saveTransaction()}
+                saveEntry = {
+                    addTransactionViewModel.updateId(state.selectedDateMillis)
+                    addTransactionViewModel.saveTransaction()
+                }
             )
         }
     }

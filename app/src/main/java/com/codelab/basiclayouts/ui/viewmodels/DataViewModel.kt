@@ -7,12 +7,8 @@ import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.codelab.basiclayouts.Budgeter
 import com.codelab.basiclayouts.data.TransactionsRepository
-import com.codelab.basiclayouts.data.model.DaySummary
 import com.codelab.basiclayouts.data.model.Transaction
 import kotlinx.coroutines.flow.MutableStateFlow
-import java.text.SimpleDateFormat
-import java.util.Calendar
-import java.util.Locale
 
 class DataViewModel(
     private val repository: TransactionsRepository
@@ -28,29 +24,11 @@ class DataViewModel(
     }
 
     private fun refreshRecentTransactions() {
-        _recentTransactions.value = emptyList()
-        val calendar = Calendar.getInstance()
-        calendar.add(Calendar.DAY_OF_MONTH, +1)
-
-        for (i in 0..6) {
-            calendar.add(Calendar.DAY_OF_MONTH, -1)
-            val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
-            val formattedDate = dateFormat.format(calendar.time)
-
-            val day: DaySummary? = loadDayTransaction(formattedDate)
-            if (day != null) {
-                _recentTransactions.value = _recentTransactions.value + day.spending
-            }
-        }
+        _recentTransactions.value = repository.readAllTransactionsFromDatabase()
     }
 
-    private fun loadDayTransaction(date: String): DaySummary? {
-        return repository.readDailyTransactionsFromFile(date)
-    }
 
-    fun saveDailyTransactions(dailyTransactions: DaySummary?) {
-        repository.writeDailyTransactionsToFile(dailyTransactions)
-    }
+
 
     companion object {
         val Factory: ViewModelProvider.Factory = viewModelFactory {

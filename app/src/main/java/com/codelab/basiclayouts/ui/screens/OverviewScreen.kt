@@ -31,11 +31,13 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavController
+import androidx.navigation.NavHostController
+import com.codelab.basiclayouts.R
 import com.codelab.basiclayouts.data.model.Transaction
 import com.codelab.basiclayouts.ui.components.Screen
 import com.codelab.basiclayouts.ui.components.categoryToIconMap
@@ -44,35 +46,31 @@ import com.codelab.basiclayouts.ui.viewmodels.DataViewModel
 @Composable
 fun OverviewScreen(
     modifier: Modifier = Modifier,
-    navController: NavController,
-    dataViewModel: DataViewModel = viewModel(factory = DataViewModel.Factory)
+    overviewNavController: NavHostController,
+    dataViewModel: DataViewModel = viewModel(factory = DataViewModel.Factory),
 ) {
-
     val recentTransactionsState = dataViewModel.recentTransactions.collectAsState()
 
     LazyColumn {
         item {
             TopSection(
                 addTransactionNavController = {
-                    navController.navigate(Screen.AddTransaction.route)
+                    overviewNavController.navigate(Screen.AddTransaction.route)
                 },
-                settingsNavController = { navController.navigate((Screen.Settings.route))}
+                settingsNavController = { overviewNavController.navigate(Screen.Settings.route) }
             )
         }
         item {
             Spacer(modifier = Modifier.height(40.dp))
         }
-
         items(recentTransactionsState.value) { day ->
             ItemDisplay(transaction = day)
         }
     }
 }
 
-
 @Composable
-fun ItemDisplay(modifier: Modifier = Modifier, transaction: Transaction){
-
+fun ItemDisplay(modifier: Modifier = Modifier, transaction: Transaction) {
     Row(
         modifier = modifier
             .padding(vertical = 2.dp)
@@ -94,15 +92,12 @@ fun ItemDisplay(modifier: Modifier = Modifier, transaction: Transaction){
             modifier = modifier
                 .padding(horizontal = 8.dp)
                 .weight(.7f)
-
-
         )
         Text(
             text = transaction.amount.toString(),
             textAlign = TextAlign.Center,
             modifier = modifier.width(40.dp)
         )
-
     }
 }
 
@@ -110,7 +105,7 @@ fun ItemDisplay(modifier: Modifier = Modifier, transaction: Transaction){
 fun TopSection(
     modifier: Modifier = Modifier,
     addTransactionNavController: () -> Unit,
-    settingsNavController : () -> Unit,
+    settingsNavController: () -> Unit,
 ) {
     Column {
         TopBar(settingsNavController)
@@ -135,9 +130,8 @@ fun TopSection(
 @Composable
 fun Operations(
     modifier: Modifier = Modifier,
-    addTransactionNavController: () -> Unit
+    addTransactionNavController: () -> Unit,
 ) {
-
     Column(
         modifier = modifier
             .fillMaxWidth()
@@ -147,14 +141,12 @@ fun Operations(
     ) {
         FilledIconButton(
             onClick = {},
-
             modifier = modifier
                 .padding(8.dp)
                 .width(120.dp)
                 .height(50.dp)
-
         ) {
-            Text("Deposit")
+            Text(stringResource(R.string.deposit))
         }
         FilledIconButton(
             onClick = addTransactionNavController,
@@ -163,7 +155,7 @@ fun Operations(
                 .width(120.dp)
                 .height(50.dp)
         ) {
-            Text("Withdraw")
+            Text(stringResource(R.string.withdraw))
         }
     }
 }
@@ -180,38 +172,37 @@ fun Budget(modifier: Modifier = Modifier) {
         Text(
             text = "500",
             style = MaterialTheme.typography.headlineMedium,
-
-            )
+        )
         Text(
             text = "DZD",
             fontFamily = FontFamily.Monospace,
             style = MaterialTheme.typography.labelMedium,
-
-
-            )
-
+        )
     }
-
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TopBar(navController: () -> Unit) {
-
-    TopAppBar(title = {
-        Text(
-            text = "budgeter", textAlign = TextAlign.Center
-        )
-    }, navigationIcon = {
-        Icon(
-            imageVector = Icons.Filled.Person, contentDescription = null
-        )
-    }, actions = {
-        IconButton(onClick = navController) {
-            Icon(
-                imageVector = Icons.Filled.Settings,
-                contentDescription = "Localized description"
+fun TopBar(navigateToSettings: () -> Unit) {
+    TopAppBar(
+        title = {
+            Text(
+                text = stringResource(R.string.budgeter),
+                textAlign = TextAlign.Center,
             )
+        },
+        navigationIcon = {
+            Icon(
+                imageVector = Icons.Filled.Person, contentDescription = null
+            )
+        },
+        actions = {
+            IconButton(onClick = navigateToSettings) {
+                Icon(
+                    imageVector = Icons.Filled.Settings,
+                    contentDescription = null
+                )
+            }
         }
-    })
+    )
 }

@@ -6,12 +6,10 @@ import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.codelab.basiclayouts.Budgeter
 import com.codelab.basiclayouts.data.TransactionsRepository
-import com.codelab.basiclayouts.data.model.DaySummary
 import com.codelab.basiclayouts.data.model.Transaction
 import com.codelab.basiclayouts.ui.components.categoryToIconMap
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import java.util.Calendar
 
 class AddTransactionViewModel(
     private val repository: TransactionsRepository
@@ -28,6 +26,8 @@ class AddTransactionViewModel(
     private var _category = MutableStateFlow<String>("")
     val category: StateFlow<String> = _category
 
+    private var id = MutableStateFlow<Long>(0)
+
 
     fun updateAmount(newAmount: String){
         _amount.value = newAmount.toIntOrNull()
@@ -35,7 +35,9 @@ class AddTransactionViewModel(
     fun updateDescription(description: String){
         _description.value = description
     }
-
+    fun updateId(timestamp: Long?){
+        id.value = timestamp ?: 0
+    }
     fun updateCategory(category: String){
         _category.value = category
     }
@@ -43,22 +45,12 @@ class AddTransactionViewModel(
 
     fun saveTransaction(){
         val transaction = Transaction(
-            Calendar.getInstance().timeInMillis,
+            id = id.value,
             amount = _amount.value ?: 0,
             title = _description.value ?: "",
             category = _category.value
         )
-
-        val day = DaySummary(
-
-            //hardcoded for now
-            year = 2023,
-            month = 8,
-            day = 15,
-            spending = listOf(transaction),
-            date = "2023-08-15"
-        )
-        repository.addEntry(day)
+        repository.writeTransactionToDatabase(transaction)
 
     }
 
