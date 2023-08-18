@@ -10,6 +10,7 @@ import com.codelab.basiclayouts.data.model.Transaction
 import com.codelab.basiclayouts.ui.components.categoryToIconMap
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import java.util.Calendar
 
 class AddTransactionViewModel(
     private val repository: TransactionsRepository
@@ -26,7 +27,7 @@ class AddTransactionViewModel(
     private var _category = MutableStateFlow<String>("")
     val category: StateFlow<String> = _category
 
-    private var id = MutableStateFlow<Long>(0)
+    private var dateAndTime = MutableStateFlow<Long>(0)
 
 
     fun updateAmount(newAmount: String){
@@ -36,7 +37,7 @@ class AddTransactionViewModel(
         _description.value = description
     }
     fun updateId(timestamp: Long?){
-        id.value = timestamp ?: 0
+        dateAndTime.value = timestamp ?: 0
     }
     fun updateCategory(category: String){
         _category.value = category
@@ -45,10 +46,11 @@ class AddTransactionViewModel(
 
     fun saveTransaction(){
         val transaction = Transaction(
-            id = id.value,
+            dateAndTime = dateAndTime.value,
             amount = _amount.value ?: 0,
             title = _description.value ?: "",
-            category = _category.value
+            category = _category.value,
+            id = Calendar.getInstance().timeInMillis
         )
         repository.writeTransactionToDatabase(transaction)
 

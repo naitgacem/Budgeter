@@ -28,10 +28,10 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.codelab.basiclayouts.ui.components.Screen
 import com.codelab.basiclayouts.ui.components.navBarVisibleIn
-import com.codelab.basiclayouts.ui.screens.AddTransactionScreen
 import com.codelab.basiclayouts.ui.screens.OverviewScreen
 import com.codelab.basiclayouts.ui.screens.SettingsScreen
 import com.codelab.basiclayouts.ui.screens.TransactionsScreen
+import com.codelab.basiclayouts.ui.screens.WithdrawScreen
 
 class MainActivity : ComponentActivity() {
 
@@ -63,8 +63,8 @@ class MainActivity : ComponentActivity() {
                     composable(route = Screen.Settings.route){
                         SettingsScreen()
                     }
-                    composable(route = Screen.AddTransaction.route){
-                        AddTransactionScreen()
+                    composable(route = Screen.Withdraw.route){
+                        WithdrawScreen(navHostController = navController)
                     }
                 }
             }

@@ -41,18 +41,25 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavHostController
 import com.codelab.basiclayouts.ui.components.categoryToIconMap
 import com.codelab.basiclayouts.ui.theme.typography
 import com.codelab.basiclayouts.ui.viewmodels.AddTransactionViewModel
 import java.util.Calendar
 
 @Composable
-fun AddTransactionScreen(
+fun WithdrawScreen(
     modifier: Modifier = Modifier,
+    navHostController: NavHostController,
 
     ) {
     Scaffold(
-        topBar = { TopBar() }
+        topBar = {
+            TopBar(navigateToWithdraw = {
+                navHostController.popBackStack()
+            }
+            )
+        }
     ) { paddingValues ->
         AddTransactionContent(
             modifier = Modifier.padding(paddingValues),
@@ -65,7 +72,7 @@ fun AddTransactionScreen(
 @Composable
 fun AddTransactionContent(
     modifier: Modifier = Modifier,
-    addTransactionViewModel: AddTransactionViewModel = viewModel(factory = AddTransactionViewModel.Factory)
+    addTransactionViewModel: AddTransactionViewModel = viewModel(factory = AddTransactionViewModel.Factory),
 ) {
     val amount by addTransactionViewModel.amount.collectAsState()
     val description by addTransactionViewModel.description.collectAsState()
@@ -126,17 +133,18 @@ fun AddTransactionContent(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DateSelect(state: DatePickerState) {
-        DatePicker(
-            modifier = Modifier,
-            showModeToggle = true,
-            state = state,
-        )
+    DatePicker(
+        modifier = Modifier,
+        showModeToggle = true,
+        state = state,
+    )
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun TopBar(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    navigateToWithdraw: () -> Unit,
 ) {
     TopAppBar(
         title = {
@@ -144,7 +152,7 @@ private fun TopBar(
         actions = {
             IconButton(
                 modifier = modifier.weight(.1f),
-                onClick = { /*TODO*/ },
+                onClick = navigateToWithdraw,
             ) {
                 Icon(
                     imageVector = Icons.Default.ArrowBack,
@@ -169,7 +177,7 @@ private fun TopBar(
 fun InsertAmount(
     modifier: Modifier = Modifier,
     value: Int?,
-    updateAmount: (String) -> Unit
+    updateAmount: (String) -> Unit,
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically
@@ -201,7 +209,7 @@ fun InsertAmount(
 fun InsertDescription(
     modifier: Modifier = Modifier,
     value: String?,
-    updateDescription: (String) -> Unit
+    updateDescription: (String) -> Unit,
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically
@@ -225,7 +233,7 @@ fun InsertDescription(
 @Composable
 fun SaveButton(
     modifier: Modifier = Modifier,
-    saveEntry: () -> Unit
+    saveEntry: () -> Unit,
 ) {
     Row(
         modifier = Modifier
@@ -255,7 +263,8 @@ private fun TitleBar(modifier: Modifier = Modifier) {
     Spacer(modifier = Modifier.height(16.dp))
 }
 
-@OptIn(ExperimentalLayoutApi::class,
+@OptIn(
+    ExperimentalLayoutApi::class,
     ExperimentalMaterial3Api::class
 )
 @Composable
@@ -263,7 +272,7 @@ private fun InsertCategory(
     modifier: Modifier = Modifier,
     menuItems: List<String>,
     selectedCategory: String,
-    updateCategory: (String) -> Unit
+    updateCategory: (String) -> Unit,
 ) {
     Column(
         modifier = modifier.padding(horizontal = 16.dp)

@@ -8,7 +8,7 @@ sealed class Screen(val route: String, @StringRes val resourceId: Int, val isNav
     object Overview : Screen("overview", R.string.overview)
     object Settings : Screen("settings", R.string.settings, false)
     object Profile : Screen("profile", R.string.profile)
-    object AddTransaction : Screen("add_transaction", R.string.add_transaction, false)
+    object Withdraw : Screen("add_transaction", R.string.add_transaction, false)
     object Search : Screen("search", R.string.search)
     object Transactions : Screen("transactions", R.string.transactions)
 }

@@ -54,10 +54,10 @@ fun OverviewScreen(
     LazyColumn {
         item {
             TopSection(
-                addTransactionNavController = {
-                    overviewNavController.navigate(Screen.AddTransaction.route)
+                navigateToWithdraw = {
+                    overviewNavController.navigate(Screen.Withdraw.route)
                 },
-                settingsNavController = { overviewNavController.navigate(Screen.Settings.route) }
+                navigateToSettings = { overviewNavController.navigate(Screen.Settings.route) }
             )
         }
         item {
@@ -104,11 +104,11 @@ fun ItemDisplay(modifier: Modifier = Modifier, transaction: Transaction) {
 @Composable
 fun TopSection(
     modifier: Modifier = Modifier,
-    addTransactionNavController: () -> Unit,
-    settingsNavController: () -> Unit,
+    navigateToWithdraw: () -> Unit,
+    navigateToSettings: () -> Unit,
 ) {
     Column {
-        TopBar(settingsNavController)
+        TopBar(navigateToSettings)
         Card(
             modifier = modifier
                 .fillMaxWidth()
@@ -121,7 +121,7 @@ fun TopSection(
                         .height(132.dp)
 
                 )
-                Operations(modifier.weight(1f), addTransactionNavController)
+                Operations(modifier.weight(1f), navigateToWithdraw)
             }
         }
     }
