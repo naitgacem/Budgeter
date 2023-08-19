@@ -8,9 +8,10 @@ import com.codelab.basiclayouts.data.model.Transaction
 
 @Dao
 interface TransactionDao {
-    @Query("SELECT * FROM `transaction` order by id desc")
+    @Query("SELECT * FROM `transaction` order by date desc")
     fun getAll(): List<Transaction>
-
+    @Query("SELECT * FROM `transaction` where id = :id ")
+    fun loadTransaction(id: String): Transaction
     @Insert
     fun insertAll(vararg transaction: Transaction)
 

@@ -9,55 +9,56 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.Scaffold
-import androidx.compose.material.Surface
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.CreditCard
 import androidx.compose.material.icons.filled.Help
 import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material.icons.filled.Payments
 import androidx.compose.material.icons.filled.Storage
 import androidx.compose.material.icons.filled.Tune
-import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import com.codelab.basiclayouts.R
-import com.codelab.basiclayouts.ui.theme.typography
 
-@Preview
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SettingsScreen(
+    navController: NavController
 ) {
-    Surface(
-        color = MaterialTheme.colorScheme.primary
-    ) {
-        Scaffold(
-            topBar = {
-                TopAppBar(
-                    title = {
-                        Text(
-                            text = stringResource(id = R.string.settings),
-                            style = MaterialTheme.typography.titleMedium
-                        )
-                    },
-                )
-            }
-        ) { paddingValues ->
-            SettingsList(modifier = Modifier.padding(paddingValues))
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                title = {
+                    Text(
+                        text = stringResource(id = R.string.settings),
+                        style = MaterialTheme.typography.titleLarge
+                    )
+                },
+                navigationIcon = {
+                    IconButton(
+                        onClick = {navController.popBackStack()}
+                    ) {
+                        Icon(Icons.Filled.ArrowBack, contentDescription = null)
+                    }
+                },
+            )
         }
+    ) { paddingValues ->
+        SettingsList(modifier = Modifier.padding(paddingValues))
     }
 
 }
@@ -88,45 +89,40 @@ fun SettingCategoryDisplay(
     title: String,
     description: String,
 ) {
-    Button(
-        modifier = modifier
-            .padding(vertical = 4.dp, horizontal = 8.dp)
+    Row(
+        horizontalArrangement = Arrangement.Start,
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = Modifier
+            .padding(vertical = 8.dp, horizontal = 16.dp)
             .fillMaxWidth()
             .height(72.dp)
-            .clip(RectangleShape),
-        onClick = {},
+    ) {
+        Icon(
+            imageVector = icon,
+            contentDescription = "",
+            modifier = modifier
+                .size(width = 40.dp, height = 40.dp)
+                .padding(all = 8.dp)
+        )
+        Column {
+            Text(
+                text = title,
+                textAlign = TextAlign.Left,
 
-        ) {
-        Row(
-            horizontalArrangement = Arrangement.Start,
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Icon(
-                imageVector = icon,
-                contentDescription = "",
+                style = MaterialTheme.typography.bodyLarge,
                 modifier = modifier
-                    .size(width = 40.dp, height = 40.dp)
-                    .padding(all = 8.dp)
+                    .padding(horizontal = 8.dp)
+
             )
-            Column {
-                Text(
-                    text = title,
-                    textAlign = TextAlign.Left,
-
-                    style = typography.h2,
-                    modifier = modifier
-                        .padding(horizontal = 8.dp)
-
-                )
-                Text(
-                    modifier = modifier
-                        .padding(horizontal = 8.dp),
-                    text = description,
-                    style = typography.caption
-                )
-            }
+            Text(
+                modifier = modifier
+                    .padding(horizontal = 8.dp),
+                text = description,
+                style = MaterialTheme.typography.bodySmall
+            )
         }
     }
+
 }
 
 

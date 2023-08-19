@@ -22,6 +22,9 @@ class DataViewModel(
             refreshRecentTransactions()
         }
     }
+    fun loadTransaction(id: String): Transaction{
+        return repository.loadTransaction(id)
+    }
 
     private fun refreshRecentTransactions() {
         _recentTransactions.value = repository.readAllTransactionsFromDatabase()

@@ -30,6 +30,7 @@ import com.codelab.basiclayouts.ui.components.Screen
 import com.codelab.basiclayouts.ui.components.navBarVisibleIn
 import com.codelab.basiclayouts.ui.screens.OverviewScreen
 import com.codelab.basiclayouts.ui.screens.SettingsScreen
+import com.codelab.basiclayouts.ui.screens.TransactionDetailsScreen
 import com.codelab.basiclayouts.ui.screens.TransactionsScreen
 import com.codelab.basiclayouts.ui.screens.WithdrawScreen
 
@@ -61,10 +62,15 @@ class MainActivity : ComponentActivity() {
                         TransactionsScreen()
                     }
                     composable(route = Screen.Settings.route){
-                        SettingsScreen()
+                        SettingsScreen(navController = navController)
                     }
                     composable(route = Screen.Withdraw.route){
                         WithdrawScreen(navHostController = navController)
+                    }
+                    composable(route = Screen.TransactionDetails.route){
+                        backStackEntry -> TransactionDetailsScreen(
+                        id = backStackEntry.arguments?.getString("id") ?: ""
+                        )
                     }
                 }
             }

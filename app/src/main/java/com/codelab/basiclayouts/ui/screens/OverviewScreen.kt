@@ -1,5 +1,6 @@
 package com.codelab.basiclayouts.ui.screens
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
@@ -51,7 +52,10 @@ fun OverviewScreen(
 ) {
     val recentTransactionsState = dataViewModel.recentTransactions.collectAsState()
 
-    LazyColumn {
+    LazyColumn(
+        modifier = modifier
+    ) {
+
         item {
             TopSection(
                 navigateToWithdraw = {
@@ -64,18 +68,33 @@ fun OverviewScreen(
             Spacer(modifier = Modifier.height(40.dp))
         }
         items(recentTransactionsState.value) { day ->
-            ItemDisplay(transaction = day)
+            ItemDisplay(
+                transaction = day,
+                navigateToItem = {
+                    overviewNavController.navigate(
+                        Screen.TransactionDetails.route.replace(
+                            oldValue = "{id}",
+                            newValue = day.id.toString()
+                        )
+                    )
+                }
+            )
         }
     }
 }
 
 @Composable
-fun ItemDisplay(modifier: Modifier = Modifier, transaction: Transaction) {
+fun ItemDisplay(
+    modifier: Modifier = Modifier,
+    transaction: Transaction,
+    navigateToItem: () -> Unit,
+) {
+
     Row(
         modifier = modifier
-            .padding(vertical = 2.dp)
-            .padding(all = 8.dp)
-            .fillMaxWidth(),
+            .fillMaxWidth()
+            .clickable(onClick = navigateToItem)
+            .padding(horizontal = 16.dp, vertical = 8.dp),
         verticalAlignment = Alignment.CenterVertically
 
     ) {
@@ -91,12 +110,14 @@ fun ItemDisplay(modifier: Modifier = Modifier, transaction: Transaction) {
             textAlign = TextAlign.Left,
             modifier = modifier
                 .padding(horizontal = 8.dp)
-                .weight(.7f)
+                .weight(.6f),
+            style = MaterialTheme.typography.bodyLarge
         )
         Text(
-            text = transaction.amount.toString(),
-            textAlign = TextAlign.Center,
-            modifier = modifier.width(40.dp)
+            text = transaction.amount.toString() + " DA",
+            textAlign = TextAlign.End,
+            modifier = modifier.weight(.35f),
+            style = MaterialTheme.typography.bodyMedium
         )
     }
 }
@@ -140,7 +161,7 @@ fun Operations(
         verticalArrangement = Arrangement.SpaceBetween
     ) {
         FilledIconButton(
-            onClick = {},
+            onClick = { },
             modifier = modifier
                 .padding(8.dp)
                 .width(120.dp)
@@ -174,7 +195,7 @@ fun Budget(modifier: Modifier = Modifier) {
             style = MaterialTheme.typography.headlineMedium,
         )
         Text(
-            text = "DZD",
+            text = "DA",
             fontFamily = FontFamily.Monospace,
             style = MaterialTheme.typography.labelMedium,
         )

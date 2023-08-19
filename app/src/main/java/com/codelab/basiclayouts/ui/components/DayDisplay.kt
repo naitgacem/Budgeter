@@ -11,7 +11,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.codelab.basiclayouts.data.model.DaySummary
-import com.codelab.basiclayouts.ui.screens.ItemDisplay
 
 @Composable
 fun DayDisplay(
@@ -28,7 +27,7 @@ fun DayDisplay(
             DisplayDate(day = day.day, month = day.month, year = day.year)
             HorizontalDivider(thickness = 1.dp)
             for (item in day.spending) {
-                ItemDisplay(transaction = item)
+                //ItemDisplay(transaction = item)
                 HorizontalDivider(thickness = Dp.Hairline)
             }
         }

@@ -18,4 +18,8 @@ class TransactionsRepository(private val db: TransactionDatabase) {
         return db.transactionDao().getAll()
     }
 
+    fun loadTransaction(id: String) : Transaction{
+        return db.transactionDao().loadTransaction(id)
+    }
+
 }
