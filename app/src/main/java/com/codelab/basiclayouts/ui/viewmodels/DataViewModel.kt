@@ -11,27 +11,38 @@ import com.codelab.basiclayouts.data.model.Transaction
 import kotlinx.coroutines.flow.MutableStateFlow
 
 class DataViewModel(
-    private val repository: TransactionsRepository
+    private val repository: TransactionsRepository,
 ) : ViewModel() {
     private var _recentTransactions = MutableStateFlow<List<Transaction>>(emptyList())
     val recentTransactions = _recentTransactions
 
+    private var _allTransactions = MutableStateFlow<List<Transaction>>(emptyList())
+    val allTransactions = _allTransactions
+
+    private var _balance = MutableStateFlow(0)
+    val balance = _balance
+
     init {
         refreshRecentTransactions()
-        repository.transactionAddedEvent.observeForever{
+        loadAllTransactions()
+        repository.transactionAddedEvent.observeForever {
             refreshRecentTransactions()
+            loadAllTransactions()
         }
     }
-    fun loadTransaction(id: String): Transaction{
+
+    fun loadTransaction(id: Long): Transaction {
         return repository.loadTransaction(id)
     }
 
     private fun refreshRecentTransactions() {
-        _recentTransactions.value = repository.readAllTransactionsFromDatabase()
+        _recentTransactions.value = repository.readRecentTransactionsFromDatabase()
+        _balance.value = repository.readBalance()
     }
 
-
-
+    private fun loadAllTransactions() {
+        _allTransactions.value = repository.readAllTransactionsFromDatabase()
+    }
 
     companion object {
         val Factory: ViewModelProvider.Factory = viewModelFactory {
@@ -43,6 +54,4 @@ class DataViewModel(
             }
         }
     }
-
-
 }

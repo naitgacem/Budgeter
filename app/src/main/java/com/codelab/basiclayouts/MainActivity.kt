@@ -5,9 +5,9 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Analytics
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Person
-import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.SwapVert
 import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.Icon
@@ -28,6 +28,9 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.codelab.basiclayouts.ui.components.Screen
 import com.codelab.basiclayouts.ui.components.navBarVisibleIn
+import com.codelab.basiclayouts.ui.screens.AnalyticsScreen
+import com.codelab.basiclayouts.ui.screens.DepositScreen
+import com.codelab.basiclayouts.ui.screens.GoalsScreen
 import com.codelab.basiclayouts.ui.screens.OverviewScreen
 import com.codelab.basiclayouts.ui.screens.SettingsScreen
 import com.codelab.basiclayouts.ui.screens.TransactionDetailsScreen
@@ -55,22 +58,32 @@ class MainActivity : ComponentActivity() {
                     startDestination = Screen.Overview.route,
                     modifier = Modifier.padding(paddingValues),
                 ) {
-                    composable(route = Screen.Overview.route){
+                    composable(route = Screen.Overview.route) {
                         OverviewScreen(overviewNavController = navController)
                     }
                     composable(route = Screen.Transactions.route) {
-                        TransactionsScreen()
+                        TransactionsScreen(navController = navController)
                     }
-                    composable(route = Screen.Settings.route){
+                    composable(route = Screen.Settings.route) {
                         SettingsScreen(navController = navController)
                     }
-                    composable(route = Screen.Withdraw.route){
+                    composable(route = Screen.Withdraw.route) {
                         WithdrawScreen(navHostController = navController)
                     }
-                    composable(route = Screen.TransactionDetails.route){
-                        backStackEntry -> TransactionDetailsScreen(
-                        id = backStackEntry.arguments?.getString("id") ?: ""
+                    composable(route = Screen.TransactionDetails.route) { backStackEntry ->
+                        TransactionDetailsScreen(
+                            id = backStackEntry.arguments?.getString("id") ?: "",
+                            navController = navController
                         )
+                    }
+                    composable(route = Screen.Analytics.route){
+                        AnalyticsScreen(navController = navController)
+                    }
+                    composable(route = Screen.Goals.route){
+                        GoalsScreen(navController = navController)
+                    }
+                    composable(route = Screen.Deposit.route){
+                        DepositScreen(navHostController = navController)
                     }
                 }
             }
@@ -127,16 +140,16 @@ fun NavBar(
 
 val items = listOf(
     Screen.Overview,
-    Screen.Search,
+    Screen.Analytics,
     Screen.Transactions,
-    Screen.Profile,
+    Screen.Goals,
 )
 
 val iconMap = mapOf(
-    Screen.Search.resourceId to Icons.Filled.Search,
+    Screen.Analytics.resourceId to Icons.Filled.Analytics,
     Screen.Transactions.resourceId to Icons.Filled.SwapVert,
     Screen.Overview.resourceId to Icons.Filled.Home,
-    Screen.Profile.resourceId to Icons.Filled.Person,
+    Screen.Goals.resourceId to Icons.Filled.Person,
 )
 
 

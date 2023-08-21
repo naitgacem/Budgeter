@@ -5,29 +5,21 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.AttachMoney
-import androidx.compose.material.icons.filled.Description
 import androidx.compose.material.icons.filled.ErrorOutline
 import androidx.compose.material.icons.filled.MoreVert
-import androidx.compose.material3.Button
-import androidx.compose.material3.DatePicker
-import androidx.compose.material3.DatePickerState
 import androidx.compose.material3.DisplayMode
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.InputChip
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
@@ -37,18 +29,16 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.codelab.basiclayouts.ui.components.categoryToIconMap
 import com.codelab.basiclayouts.ui.theme.typography
-import com.codelab.basiclayouts.ui.viewmodels.WithdrawViewModel
+import com.codelab.basiclayouts.ui.viewmodels.DepositViewModel
 import java.util.Calendar
 
 @Composable
-fun WithdrawScreen(
+fun DepositScreen(
     modifier: Modifier = Modifier,
     navHostController: NavHostController,
 
@@ -61,7 +51,7 @@ fun WithdrawScreen(
             )
         }
     ) { paddingValues ->
-        AddTransactionContent(
+        DepositContent(
             modifier = Modifier.padding(paddingValues)
         ) { navHostController.popBackStack() }
     }
@@ -69,14 +59,14 @@ fun WithdrawScreen(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AddTransactionContent(
+fun DepositContent(
     modifier: Modifier = Modifier,
-    withdrawViewModel: WithdrawViewModel = viewModel(factory = WithdrawViewModel.Factory),
+    depositViewModel: DepositViewModel = viewModel(factory = DepositViewModel.Factory),
     exitAfterSave: () -> Boolean,
 ) {
-    val amount by withdrawViewModel.amount.collectAsState()
-    val description by withdrawViewModel.description.collectAsState()
-    val category by withdrawViewModel.category.collectAsState()
+    val amount by depositViewModel.amount.collectAsState()
+    val description by depositViewModel.description.collectAsState()
+    val category by depositViewModel.category.collectAsState()
 
     val state = rememberDatePickerState(
         initialDisplayMode = DisplayMode.Input,
@@ -94,14 +84,14 @@ fun AddTransactionContent(
         item {
             InsertAmount(
                 value = amount,
-                updateAmount = { withdrawViewModel.updateAmount(it) }
+                updateAmount = { depositViewModel.updateAmount(it) }
             )
         }
         item {
             InsertDescription(
                 value = description,
                 updateDescription = {
-                    withdrawViewModel.updateDescription(it)
+                    depositViewModel.updateDescription(it)
                 }
             )
         }
@@ -113,17 +103,17 @@ fun AddTransactionContent(
 
         item {
             InsertCategory(
-                menuItems = withdrawViewModel.menuItems,
+                menuItems = depositViewModel.menuItems,
                 selectedCategory = category,
-                updateCategory = { withdrawViewModel.updateCategory(it) }
+                updateCategory = { depositViewModel.updateCategory(it) }
             )
         }
         item {
             Spacer(modifier = Modifier.height(24.dp))
             SaveButton(
                 saveEntry = {
-                    withdrawViewModel.updateId(state.selectedDateMillis)
-                    withdrawViewModel.saveTransaction()
+                    depositViewModel.updateId(state.selectedDateMillis)
+                    depositViewModel.saveTransaction()
                     exitAfterSave.invoke()
                 }
             )
@@ -131,15 +121,7 @@ fun AddTransactionContent(
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun DateSelect(state: DatePickerState) {
-    DatePicker(
-        modifier = Modifier,
-        showModeToggle = true,
-        state = state,
-    )
-}
+
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -174,90 +156,12 @@ private fun TopBar(
 }
 
 @Composable
-fun InsertAmount(
-    modifier: Modifier = Modifier,
-    value: Int?,
-    updateAmount: (String) -> Unit,
-) {
-    Row(
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Icon(
-            modifier = modifier.weight(.1f),
-            imageVector = Icons.Default.AttachMoney, contentDescription = ""
-        )
-        OutlinedTextField(
-            modifier = modifier
-                .weight(.9f)
-                .fillMaxWidth()
-                .padding(horizontal = 16.dp),
-            label = { Text("Amount") },
-            value = value?.toString() ?: "",
-            onValueChange = updateAmount,
-            placeholder = {
-                Text(text = "0")
-            },
-            keyboardOptions = KeyboardOptions.Default.copy(
-                keyboardType = KeyboardType.Number,
-                imeAction = ImeAction.Next
-            )
-        )
-    }
-}
-
-@Composable
-fun InsertDescription(
-    modifier: Modifier = Modifier,
-    value: String?,
-    updateDescription: (String) -> Unit,
-) {
-    Row(
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Icon(
-            modifier = modifier.weight(.1f),
-            imageVector = Icons.Default.Description, contentDescription = ""
-        )
-        OutlinedTextField(
-            modifier = modifier
-                .weight(.9f)
-                .fillMaxWidth()
-                .padding(horizontal = 16.dp),
-            label = { Text("Description") },
-            value = value ?: "",
-            onValueChange = updateDescription,
-        )
-    }
-}
-
-@Composable
-fun SaveButton(
-    modifier: Modifier = Modifier,
-    saveEntry: () -> Unit,
-) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(bottom = 32.dp, top = 32.dp),
-        horizontalArrangement = Arrangement.Center,
-    ) {
-        Button(
-            onClick = saveEntry
-        ) {
-            Text(
-                text = "Save"
-            )
-        }
-    }
-}
-
-@Composable
 private fun TitleBar(modifier: Modifier = Modifier) {
     Text(
         modifier = modifier
             .fillMaxWidth()
             .padding(horizontal = 8.dp),
-        text = "Add a transaction",
+        text = "Add a deposit",
         style = typography.h1
     )
     Spacer(modifier = Modifier.height(16.dp))

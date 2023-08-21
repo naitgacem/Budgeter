@@ -12,7 +12,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import java.util.Calendar
 
-class AddTransactionViewModel(
+class WithdrawViewModel(
     private val repository: TransactionsRepository
 ) : ViewModel() {
 
@@ -27,7 +27,7 @@ class AddTransactionViewModel(
     private var _category = MutableStateFlow<String>("")
     val category: StateFlow<String> = _category
 
-    private var dateAndTime = MutableStateFlow<Long>(0)
+    private var date = MutableStateFlow<Long>(0)
 
 
     fun updateAmount(newAmount: String){
@@ -37,7 +37,7 @@ class AddTransactionViewModel(
         _description.value = description
     }
     fun updateId(timestamp: Long?){
-        dateAndTime.value = timestamp ?: 0
+        date.value = timestamp ?: 0
     }
     fun updateCategory(category: String){
         _category.value = category
@@ -46,8 +46,8 @@ class AddTransactionViewModel(
 
     fun saveTransaction(){
         val transaction = Transaction(
-            dateAndTime = dateAndTime.value,
-            amount = _amount.value ?: 0,
+            date = date.value,
+            amount = _amount.value?.let { value -> -1 * value } ?: 0,
             title = _description.value ?: "",
             category = _category.value,
             id = Calendar.getInstance().timeInMillis
@@ -60,7 +60,7 @@ class AddTransactionViewModel(
         val Factory: ViewModelProvider.Factory = viewModelFactory {
             initializer {
                 val myRepository = (this[ViewModelProvider.AndroidViewModelFactory.APPLICATION_KEY] as Budgeter).transactionsRepository
-                AddTransactionViewModel(
+                WithdrawViewModel(
                     repository = myRepository
                 )
             }

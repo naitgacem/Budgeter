@@ -11,9 +11,10 @@ sealed class Screen(
 
     object Overview : Screen("overview", R.string.overview)
     object Settings : Screen("settings", R.string.settings, false)
-    object Profile : Screen("profile", R.string.profile)
-    object Withdraw : Screen("add_transaction", R.string.add_transaction, false)
-    object Search : Screen("search", R.string.search)
+    object Goals : Screen("goals", R.string.goals)
+    object Withdraw : Screen("withdraw", R.string.add_transaction, false)
+    object Deposit : Screen("deposit", R.string.deposit, false)
+    object Analytics : Screen("analytics", R.string.analytics)
     object Transactions : Screen("transactions", R.string.transactions)
     object TransactionDetails : Screen("transactions_details/{id}", R.string.transactions_details, false)
 }

@@ -13,7 +13,7 @@ class Budgeter : Application() {
         val db = Room.databaseBuilder(
             applicationContext,
             TransactionDatabase::class.java, "main_database"
-        ).allowMainThreadQueries().build()
+        ).fallbackToDestructiveMigration().allowMainThreadQueries().build()
         transactionsRepository= TransactionsRepository(db)
 
     }

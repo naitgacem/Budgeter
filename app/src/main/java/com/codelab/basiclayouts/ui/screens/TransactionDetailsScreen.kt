@@ -27,6 +27,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
 import com.codelab.basiclayouts.data.model.Transaction
 import com.codelab.basiclayouts.ui.components.categoryToIconMap
 import com.codelab.basiclayouts.ui.viewmodels.DataViewModel
@@ -38,15 +39,16 @@ import java.util.Date
 fun TransactionDetailsScreen(
     id: String,
     dataViewModel: DataViewModel = viewModel(factory = DataViewModel.Factory),
+    navController: NavController
 ) {
-    val transaction = dataViewModel.loadTransaction(id = id)
+    val transaction = dataViewModel.loadTransaction(id = id.toLong())
     Scaffold(
         topBar = {
             TopAppBar(
                 title = {},
                 navigationIcon = {
                     IconButton(
-                        onClick = {}
+                        onClick = {navController.popBackStack()}
                     ) {
                         Icon(Icons.Filled.ArrowBack, contentDescription = null)
                     }
@@ -98,47 +100,52 @@ fun Header(
                 containerColor = MaterialTheme.colorScheme.surfaceContainer,
             )
         ) {
-            Row(
-                modifier = Modifier
-                    .height(80.dp)
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp, vertical = 8.dp),
-                verticalAlignment = Alignment.CenterVertically,
-            ) {
-                Icon(
-                    imageVector = categoryToIconMap[transaction.category] ?: Icons.Default.Warning,
-                    contentDescription = "",
-                    modifier = Modifier
-                        .weight(.1f)
-                        .fillMaxWidth()
-                        .padding(vertical = 8.dp)
-                )
-                Column(
-                    modifier = Modifier
-                        .weight(.6f),
-
-                    horizontalAlignment = Alignment.Start
-                ) {
-                    Text(
-                        modifier = Modifier
-                            .padding(horizontal = 8.dp),
-                        text = transaction.title,
-                        textAlign = TextAlign.Left,
-                        style = MaterialTheme.typography.titleMedium
-                    )
-                    Text(
-                        modifier = Modifier.padding(horizontal = 8.dp),
-                        textAlign = TextAlign.Left,
-                        text = transaction.amount.toString() + " DA",
-                        style = MaterialTheme.typography.bodyMedium
-                    )
-                }
-                Text(
-                    modifier = Modifier.weight(.3f),
-                    text = SimpleDateFormat("dd/MM/yyyy").format(Date(transaction.dateAndTime)),
-                    style = MaterialTheme.typography.bodyMedium
-                )
-            }
+            HeaderContent(transaction = transaction)
         }
+    }
+}
+
+@Composable
+fun HeaderContent(transaction: Transaction) {
+    Row(
+        modifier = Modifier
+            .height(80.dp)
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp, vertical = 8.dp),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        Icon(
+            imageVector = categoryToIconMap[transaction.category] ?: Icons.Default.Warning,
+            contentDescription = "",
+            modifier = Modifier
+                .weight(.1f)
+                .fillMaxWidth()
+                .padding(vertical = 8.dp)
+        )
+        Column(
+            modifier = Modifier
+                .weight(.6f),
+
+            horizontalAlignment = Alignment.Start
+        ) {
+            Text(
+                modifier = Modifier
+                    .padding(horizontal = 8.dp),
+                text = transaction.title,
+                textAlign = TextAlign.Left,
+                style = MaterialTheme.typography.titleMedium
+            )
+            Text(
+                modifier = Modifier.padding(horizontal = 8.dp),
+                textAlign = TextAlign.Left,
+                text = transaction.amount.toString() + " DA",
+                style = MaterialTheme.typography.bodyMedium
+            )
+        }
+        Text(
+            modifier = Modifier.weight(.3f),
+            text = SimpleDateFormat("dd/MM/yyyy").format(Date(transaction.date)),
+            style = MaterialTheme.typography.bodyMedium
+        )
     }
 }

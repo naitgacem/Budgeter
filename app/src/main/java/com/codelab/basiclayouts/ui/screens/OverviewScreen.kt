@@ -51,15 +51,19 @@ fun OverviewScreen(
     dataViewModel: DataViewModel = viewModel(factory = DataViewModel.Factory),
 ) {
     val recentTransactionsState = dataViewModel.recentTransactions.collectAsState()
-
+    val balance = dataViewModel.balance.collectAsState()
     LazyColumn(
         modifier = modifier
     ) {
 
         item {
             TopSection(
+                balance = balance.value,
                 navigateToWithdraw = {
                     overviewNavController.navigate(Screen.Withdraw.route)
+                },
+                navigateToDeposit = {
+                    overviewNavController.navigate(Screen.Deposit.route)
                 },
                 navigateToSettings = { overviewNavController.navigate(Screen.Settings.route) }
             )
@@ -125,8 +129,10 @@ fun ItemDisplay(
 @Composable
 fun TopSection(
     modifier: Modifier = Modifier,
+    balance: Int,
     navigateToWithdraw: () -> Unit,
     navigateToSettings: () -> Unit,
+    navigateToDeposit: () -> Unit,
 ) {
     Column {
         TopBar(navigateToSettings)
@@ -139,10 +145,11 @@ fun TopSection(
                 Budget(
                     modifier
                         .weight(1f)
-                        .height(132.dp)
+                        .height(132.dp),
+                    balance = balance,
 
                 )
-                Operations(modifier.weight(1f), navigateToWithdraw)
+                Operations(modifier.weight(1f), navigateToWithdraw, navigateToDeposit)
             }
         }
     }
@@ -151,7 +158,8 @@ fun TopSection(
 @Composable
 fun Operations(
     modifier: Modifier = Modifier,
-    addTransactionNavController: () -> Unit,
+    navigateToWithdraw: () -> Unit,
+    navigateToDeposit: () -> Unit,
 ) {
     Column(
         modifier = modifier
@@ -161,7 +169,7 @@ fun Operations(
         verticalArrangement = Arrangement.SpaceBetween
     ) {
         FilledIconButton(
-            onClick = { },
+            onClick = navigateToDeposit,
             modifier = modifier
                 .padding(8.dp)
                 .width(120.dp)
@@ -170,7 +178,7 @@ fun Operations(
             Text(stringResource(R.string.deposit))
         }
         FilledIconButton(
-            onClick = addTransactionNavController,
+            onClick = navigateToWithdraw,
             modifier = modifier
                 .padding(8.dp)
                 .width(120.dp)
@@ -182,7 +190,10 @@ fun Operations(
 }
 
 @Composable
-fun Budget(modifier: Modifier = Modifier) {
+fun Budget(
+    modifier: Modifier = Modifier,
+    balance: Int
+) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center,
@@ -191,7 +202,7 @@ fun Budget(modifier: Modifier = Modifier) {
             .height(IntrinsicSize.Min)
     ) {
         Text(
-            text = "500",
+            text = balance.toString(),
             style = MaterialTheme.typography.headlineMedium,
         )
         Text(
