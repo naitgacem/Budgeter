@@ -8,13 +8,13 @@ import com.codelab.basiclayouts.data.model.Transaction
 
 @Dao
 interface TransactionDao {
-    @Query("SELECT * FROM `transaction` order by date desc")
+    @Query("SELECT * FROM `transaction` order by date desc, id desc")
     fun getAll(): List<Transaction>
 
     @Query("SELECT * FROM `transaction` where id = :id ")
     fun loadTransaction(id: Long): Transaction
 
-    @Query("SELECT * FROM `transaction` where date >= :date")
+    @Query("SELECT * FROM `transaction` where date >= :date order by date desc, id desc")
     fun loadNewerThan(date: Long): List<Transaction>
 
     @Query("SELECT * FROM `transaction` where (date > :date) or (date == :date and id > :id)")

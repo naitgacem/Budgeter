@@ -7,7 +7,6 @@ import androidx.lifecycle.viewmodel.viewModelFactory
 import com.codelab.basiclayouts.Budgeter
 import com.codelab.basiclayouts.data.TransactionsRepository
 import com.codelab.basiclayouts.data.model.Transaction
-import com.codelab.basiclayouts.ui.components.categoryToIconMap
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import java.util.Calendar
@@ -16,9 +15,7 @@ class DepositViewModel(
     private val repository: TransactionsRepository
 ) : ViewModel() {
 
-    val menuItems = categoryToIconMap.keys.toList()
-
-    private var _amount = MutableStateFlow<Int?>(0)
+    private var _amount = MutableStateFlow<Int?>(null)
     val amount: StateFlow<Int?> = _amount
 
     private var _description = MutableStateFlow<String?>("")
@@ -39,10 +36,6 @@ class DepositViewModel(
     fun updateId(timestamp: Long?){
         date.value = timestamp ?: 0
     }
-    fun updateCategory(category: String){
-        _category.value = category
-    }
-
 
     fun saveTransaction(){
         val transaction = Transaction(

@@ -19,7 +19,8 @@ interface BalanceDao {
             "order by date desc, id desc limit 1")
     fun loadPredecessor(date: Long, id: Long): Balance?
 
-    @Query("select * from `balance` where (date > :date) or (date == :date and id > :id) ")
+    @Query("select * from `balance` where (date > :date) or (date == :date and id > :id) " +
+            "order by date asc, id asc")
     fun loadNewerThan(date: Long, id: Long): List<Balance>
 
     @Query("select amount from `balance` order by date desc,  id desc limit 1")

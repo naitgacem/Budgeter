@@ -15,28 +15,22 @@ class TransactionsRepository(private val db: TransactionDatabase) {
 
     fun writeTransactionToDatabase(transaction: Transaction) {
         transactionDao.insert(transaction)
-        val predecessor = balanceDao.loadPredecessor(transaction.date, transaction.id)
-        var previousAmount = predecessor?.amount ?: 0
+        var predecessor = balanceDao.loadPredecessor(date = transaction.date, id = transaction.id)
+            ?.amount ?: 0
 
-        if(predecessor == null){
-            balanceDao.insert(
-            Balance(transaction.id, transaction.date, transaction.amount)
-            )
-            previousAmount = transaction.amount
-        } else {
-            balanceDao.insert(
-                Balance(transaction.id, transaction.date, predecessor.amount + transaction.amount )
-            )
-            previousAmount = transaction.amount + predecessor.amount
-        }
+
+        balanceDao.insert(
+            Balance(transaction.id, transaction.date, predecessor + transaction.amount)
+        )
+        predecessor += transaction.amount
 
         val newerBalances = balanceDao.loadNewerThan(
             transaction.date, transaction.id
         )
 
-        for (balance in newerBalances.reversed()) {
-            previousAmount += (transactionDao.loadTransaction(balance.id)).amount
-            balanceDao.updateBalance(balance.copy(amount = previousAmount ))
+        for (balance in newerBalances) {
+            predecessor += (transactionDao.loadTransaction(balance.id)).amount
+            balanceDao.updateBalance(balance.copy(amount = predecessor ))
         }
         _transactionAddedEvent.value = Unit
     }
@@ -47,10 +41,6 @@ class TransactionsRepository(private val db: TransactionDatabase) {
 
     fun readBalance(): Int {
         return balanceDao.loadLastBalance() ?: 0
-    }
-
-    fun readBalance(transaction: Transaction): Int {
-        return balanceDao.loadBalance(transaction.id)
     }
 
     fun readRecentTransactionsFromDatabase(): List<Transaction> {

@@ -16,6 +16,8 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowUpward
+import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.Warning
@@ -88,7 +90,7 @@ fun OverviewScreen(
 }
 
 @Composable
-fun ItemDisplay(
+private fun ItemDisplay(
     modifier: Modifier = Modifier,
     transaction: Transaction,
     navigateToItem: () -> Unit,
@@ -103,7 +105,13 @@ fun ItemDisplay(
 
     ) {
         Icon(
-            imageVector = categoryToIconMap[transaction.category] ?: Icons.Filled.Warning,
+            imageVector = if (transaction.amount == 0) {
+                Icons.Default.Edit
+            } else if (transaction.amount > 0) {
+                Icons.Default.ArrowUpward
+            } else {
+                categoryToIconMap[transaction.category] ?: Icons.Filled.Warning
+            },
             contentDescription = "",
             modifier = modifier
                 .size(width = 40.dp, height = 40.dp)
@@ -127,7 +135,7 @@ fun ItemDisplay(
 }
 
 @Composable
-fun TopSection(
+private fun TopSection(
     modifier: Modifier = Modifier,
     balance: Int,
     navigateToWithdraw: () -> Unit,
@@ -148,7 +156,7 @@ fun TopSection(
                         .height(132.dp),
                     balance = balance,
 
-                )
+                    )
                 Operations(modifier.weight(1f), navigateToWithdraw, navigateToDeposit)
             }
         }
@@ -156,7 +164,7 @@ fun TopSection(
 }
 
 @Composable
-fun Operations(
+private fun Operations(
     modifier: Modifier = Modifier,
     navigateToWithdraw: () -> Unit,
     navigateToDeposit: () -> Unit,
@@ -190,9 +198,9 @@ fun Operations(
 }
 
 @Composable
-fun Budget(
+private fun Budget(
     modifier: Modifier = Modifier,
-    balance: Int
+    balance: Int,
 ) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -215,7 +223,7 @@ fun Budget(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TopBar(navigateToSettings: () -> Unit) {
+private fun TopBar(navigateToSettings: () -> Unit) {
     TopAppBar(
         title = {
             Text(

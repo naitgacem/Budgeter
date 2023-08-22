@@ -8,7 +8,9 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.ArrowUpward
 import androidx.compose.material.icons.filled.AttachFile
+import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.Card
@@ -115,7 +117,13 @@ fun HeaderContent(transaction: Transaction) {
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Icon(
-            imageVector = categoryToIconMap[transaction.category] ?: Icons.Default.Warning,
+            imageVector = if (transaction.amount == 0) {
+                Icons.Default.Edit
+            } else if (transaction.amount > 0) {
+                Icons.Default.ArrowUpward
+            } else {
+                categoryToIconMap[transaction.category] ?: Icons.Filled.Warning
+            },
             contentDescription = "",
             modifier = Modifier
                 .weight(.1f)

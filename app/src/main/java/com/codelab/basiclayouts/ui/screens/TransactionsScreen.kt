@@ -12,6 +12,8 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Divider
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowUpward
+import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.Card
@@ -104,7 +106,7 @@ fun TransactionsScreen(
 }
 
 @Composable
-fun ItemContent(
+private fun ItemContent(
     transaction: Transaction,
     navigateToItem: () -> Unit,
 ) {
@@ -117,7 +119,13 @@ fun ItemContent(
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Icon(
-            imageVector = categoryToIconMap[transaction.category] ?: Icons.Default.Warning,
+            imageVector = if (transaction.amount == 0) {
+                Icons.Default.Edit
+            } else if (transaction.amount > 0) {
+                Icons.Default.ArrowUpward
+            } else {
+                categoryToIconMap[transaction.category] ?: Icons.Filled.Warning
+            },
             contentDescription = "",
             modifier = Modifier
                 .weight(.1f)
@@ -153,7 +161,7 @@ fun ItemContent(
     }
 }
 
-fun arrangeIntoDays(transactions: List<Transaction>): List<Day> {
+private fun arrangeIntoDays(transactions: List<Transaction>): List<Day> {
     val listOfDays = mutableListOf<Day>()
     val groupOfDays = transactions.groupBy { it.date }
     for (day in groupOfDays.entries) {
@@ -165,38 +173,7 @@ fun arrangeIntoDays(transactions: List<Transaction>): List<Day> {
     return listOfDays
 }
 
-data class Day(
+private data class Day(
     val date: String,
     val transactions: List<Transaction>,
-)
-
-val listOfTransactions = listOf(
-    Transaction(
-        id = 110,
-        date = 100,
-        title = "Train",
-        amount = 50,
-        category = "Transportation"
-    ),
-    Transaction(
-        id = 120,
-        date = 100,
-        title = "Coffee",
-        amount = 30,
-        category = "Food"
-    ),
-    Transaction(
-        id = 140,
-        date = 100,
-        title = "Photo copy",
-        amount = 20,
-        category = "Education"
-    ),
-    Transaction(
-        id = 150,
-        date = 100,
-        title = "Pizza",
-        amount = 100,
-        category = "Food"
-    )
 )

@@ -27,6 +27,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.InputChip
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -43,22 +44,41 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.codelab.basiclayouts.ui.components.categoryToIconMap
-import com.codelab.basiclayouts.ui.theme.typography
 import com.codelab.basiclayouts.ui.viewmodels.WithdrawViewModel
 import java.util.Calendar
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun WithdrawScreen(
-    modifier: Modifier = Modifier,
     navHostController: NavHostController,
-
-    ) {
+) {
     Scaffold(
         topBar = {
-            TopBar(navigateToOverview = {
-                navHostController.popBackStack()
-            }
+            TopAppBar(
+                title = {
+                },
+                navigationIcon = {
+                    IconButton(
+                        onClick = { navHostController.popBackStack() },
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.ArrowBack,
+                            contentDescription = ""
+                        )
+                    }
+                },
+                actions = {
+                    IconButton(
+                        onClick = { /*TODO*/ }
+                    ) {
+                        Icon(
+                            imageVector = Icons.Filled.MoreVert,
+                            contentDescription = ""
+                        )
+                    }
+                }
             )
+
         }
     ) { paddingValues ->
         AddTransactionContent(
@@ -69,7 +89,7 @@ fun WithdrawScreen(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AddTransactionContent(
+private fun AddTransactionContent(
     modifier: Modifier = Modifier,
     withdrawViewModel: WithdrawViewModel = viewModel(factory = WithdrawViewModel.Factory),
     exitAfterSave: () -> Boolean,
@@ -89,7 +109,16 @@ fun AddTransactionContent(
             .fillMaxWidth()
     ) {
         item {
-            TitleBar()
+            Text(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 8.dp),
+                text = "Add a transaction",
+                style = MaterialTheme.typography.headlineMedium
+            )
+        }
+        item {
+            Spacer(modifier = Modifier.height(16.dp))
         }
         item {
             InsertAmount(
@@ -105,7 +134,6 @@ fun AddTransactionContent(
                 }
             )
         }
-
         item {
             DateSelect(state)
             Spacer(modifier = Modifier.height(16.dp))
@@ -113,7 +141,7 @@ fun AddTransactionContent(
 
         item {
             InsertCategory(
-                menuItems = withdrawViewModel.menuItems,
+                menuItems = withdrawViewModel.categories,
                 selectedCategory = category,
                 updateCategory = { withdrawViewModel.updateCategory(it) }
             )
@@ -133,7 +161,7 @@ fun AddTransactionContent(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DateSelect(state: DatePickerState) {
+private fun DateSelect(state: DatePickerState) {
     DatePicker(
         modifier = Modifier,
         showModeToggle = true,
@@ -141,40 +169,8 @@ fun DateSelect(state: DatePickerState) {
     )
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun TopBar(
-    modifier: Modifier = Modifier,
-    navigateToOverview: () -> Unit,
-) {
-    TopAppBar(
-        title = {
-        },
-        navigationIcon = {
-            IconButton(
-                onClick = navigateToOverview,
-            ) {
-                Icon(
-                    imageVector = Icons.Default.ArrowBack,
-                    contentDescription = ""
-                )
-            }
-        },
-        actions = {
-            IconButton(
-                onClick = { /*TODO*/ }
-            ) {
-                Icon(
-                    imageVector = Icons.Filled.MoreVert,
-                    contentDescription = ""
-                )
-            }
-        }
-    )
-}
-
-@Composable
-fun InsertAmount(
+private fun InsertAmount(
     modifier: Modifier = Modifier,
     value: Int?,
     updateAmount: (String) -> Unit,
@@ -194,9 +190,6 @@ fun InsertAmount(
             label = { Text("Amount") },
             value = value?.toString() ?: "",
             onValueChange = updateAmount,
-            placeholder = {
-                Text(text = "0")
-            },
             keyboardOptions = KeyboardOptions.Default.copy(
                 keyboardType = KeyboardType.Number,
                 imeAction = ImeAction.Next
@@ -206,7 +199,7 @@ fun InsertAmount(
 }
 
 @Composable
-fun InsertDescription(
+private fun InsertDescription(
     modifier: Modifier = Modifier,
     value: String?,
     updateDescription: (String) -> Unit,
@@ -231,8 +224,7 @@ fun InsertDescription(
 }
 
 @Composable
-fun SaveButton(
-    modifier: Modifier = Modifier,
+private fun SaveButton(
     saveEntry: () -> Unit,
 ) {
     Row(
@@ -249,18 +241,6 @@ fun SaveButton(
             )
         }
     }
-}
-
-@Composable
-private fun TitleBar(modifier: Modifier = Modifier) {
-    Text(
-        modifier = modifier
-            .fillMaxWidth()
-            .padding(horizontal = 8.dp),
-        text = "Add a transaction",
-        style = typography.h1
-    )
-    Spacer(modifier = Modifier.height(16.dp))
 }
 
 @OptIn(

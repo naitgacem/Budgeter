@@ -16,9 +16,9 @@ class WithdrawViewModel(
     private val repository: TransactionsRepository
 ) : ViewModel() {
 
-    val menuItems = categoryToIconMap.keys.toList()
+    val categories = categoryToIconMap.keys.toList()
 
-    private var _amount = MutableStateFlow<Int?>(0)
+    private var _amount = MutableStateFlow<Int?>(null)
     val amount: StateFlow<Int?> = _amount
 
     private var _description = MutableStateFlow<String?>("")
