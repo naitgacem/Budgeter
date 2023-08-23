@@ -67,7 +67,6 @@ fun TransactionDetailsScreen(
                         Icon(Icons.Filled.MoreVert, contentDescription = null)
                     }
                 }
-
             )
         }
     ) { paddingValues ->

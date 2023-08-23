@@ -107,12 +107,12 @@ private fun AddTransactionContent(
         verticalArrangement = Arrangement.spacedBy(8.dp),
         modifier = modifier
             .fillMaxWidth()
+
     ) {
         item {
             Text(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 8.dp),
+                    .padding(horizontal = 16.dp),
                 text = "Add a transaction",
                 style = MaterialTheme.typography.headlineMedium
             )
@@ -175,18 +175,15 @@ private fun InsertAmount(
     value: Int?,
     updateAmount: (String) -> Unit,
 ) {
-    Row(
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Icon(
-            modifier = modifier.weight(.1f),
-            imageVector = Icons.Default.AttachMoney, contentDescription = ""
-        )
         OutlinedTextField(
             modifier = modifier
-                .weight(.9f)
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp),
+            leadingIcon = {
+                Icon(
+                    imageVector = Icons.Default.AttachMoney, contentDescription = ""
+                )
+            },
             label = { Text("Amount") },
             value = value?.toString() ?: "",
             onValueChange = updateAmount,
@@ -195,32 +192,27 @@ private fun InsertAmount(
                 imeAction = ImeAction.Next
             )
         )
-    }
 }
 
 @Composable
 private fun InsertDescription(
-    modifier: Modifier = Modifier,
     value: String?,
     updateDescription: (String) -> Unit,
 ) {
-    Row(
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Icon(
-            modifier = modifier.weight(.1f),
-            imageVector = Icons.Default.Description, contentDescription = ""
-        )
         OutlinedTextField(
-            modifier = modifier
-                .weight(.9f)
+            modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp),
+            leadingIcon = {
+                Icon(
+                    imageVector = Icons.Default.Description, contentDescription = ""
+                )
+            },
             label = { Text("Description") },
             value = value ?: "",
             onValueChange = updateDescription,
         )
-    }
+
 }
 
 @Composable

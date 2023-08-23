@@ -43,7 +43,6 @@ import java.util.Calendar
 @Composable
 fun DepositScreen(
     navHostController: NavHostController,
-
     ) {
     Scaffold(
         topBar = {
