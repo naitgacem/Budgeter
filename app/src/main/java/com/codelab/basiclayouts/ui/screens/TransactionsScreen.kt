@@ -115,7 +115,7 @@ private fun ItemContent(
             .height(80.dp)
             .fillMaxWidth()
             .padding(horizontal = 16.dp)
-            .clickable  (onClick = navigateToItem) ,
+            .clickable(onClick = navigateToItem) ,
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Icon(
@@ -143,13 +143,15 @@ private fun ItemContent(
                     .padding(horizontal = 8.dp),
                 text = transaction.title,
                 textAlign = TextAlign.Left,
-                style = MaterialTheme.typography.bodyLarge
+                style = MaterialTheme.typography.bodyLarge,
+                maxLines = 1,
             )
             Text(
                 modifier = Modifier.padding(horizontal = 8.dp),
                 textAlign = TextAlign.Left,
                 text = transaction.amount.toString() + " DA",
-                style = MaterialTheme.typography.bodyMedium
+                style = MaterialTheme.typography.bodyMedium,
+                maxLines = 1,
             )
         }
         Text(

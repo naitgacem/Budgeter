@@ -17,7 +17,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowUpward
 import androidx.compose.material.icons.filled.Edit
-import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.filled.Savings
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.Card
@@ -64,13 +64,16 @@ fun OverviewScreen(
             TopAppBar(
                 title = {
                     Text(
+                        modifier = Modifier.padding(start = 16.dp),
                         text = stringResource(R.string.budgeter),
                         textAlign = TextAlign.Center,
-                    )
+                        style = MaterialTheme.typography.titleLarge,
+
+                        )
                 },
                 navigationIcon = {
                     Icon(
-                        imageVector = Icons.Filled.Person, contentDescription = null
+                        imageVector = Icons.Filled.Savings, contentDescription = null
                     )
                 },
                 actions = {
@@ -117,7 +120,7 @@ private fun OverviewScreenContent(
                     containerColor = MaterialTheme.colorScheme.surfaceContainer,
                     contentColor = MaterialTheme.colorScheme.onSurface,
                 ),
-
+                elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
                 ) {
                 Row(
                     modifier = Modifier
@@ -270,6 +273,7 @@ private fun Budget(
             containerColor = MaterialTheme.colorScheme.surface,
             contentColor = MaterialTheme.colorScheme.onSurface,
         ),
+        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
     ) {
         Column(
             modifier = Modifier

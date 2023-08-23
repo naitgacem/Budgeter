@@ -1,11 +1,14 @@
 package com.codelab.basiclayouts.ui.screens
 
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.ArrowUpward
@@ -25,6 +28,7 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -70,19 +74,18 @@ fun TransactionDetailsScreen(
             )
         }
     ) { paddingValues ->
-        Header(
+        TransactionDetailsContent(
             modifier = Modifier
                 .padding(horizontal = 8.dp)
                 .padding(paddingValues),
             transaction = transaction
         )
-
     }
 
 }
 
 @Composable
-fun Header(
+fun TransactionDetailsContent(
     modifier: Modifier = Modifier,
     transaction: Transaction,
 ) {
@@ -102,6 +105,30 @@ fun Header(
             )
         ) {
             HeaderContent(transaction = transaction)
+        }
+        Text(
+            modifier = Modifier.padding(start = 32.dp, top = 32.dp),
+            text = "Description",
+            style = MaterialTheme.typography.titleLarge
+        )
+        Box(
+            modifier = Modifier
+                .padding(start = 24.dp, end = 24.dp)
+                .border(
+                    width = Dp.Hairline,
+                    color = Color.LightGray,
+                    shape = RoundedCornerShape(10.dp)
+                )
+                .fillMaxWidth(),
+        ) {
+            Text(
+                modifier = Modifier
+                    .padding(top = 10.dp, start = 16.dp),
+                text = transaction.title,
+                textAlign = TextAlign.Left,
+                minLines = 8,
+                style = MaterialTheme.typography.bodyLarge
+            )
         }
     }
 }
@@ -136,17 +163,10 @@ fun HeaderContent(transaction: Transaction) {
             horizontalAlignment = Alignment.Start
         ) {
             Text(
-                modifier = Modifier
-                    .padding(horizontal = 8.dp),
-                text = transaction.title,
-                textAlign = TextAlign.Left,
-                style = MaterialTheme.typography.titleMedium
-            )
-            Text(
                 modifier = Modifier.padding(horizontal = 8.dp),
                 textAlign = TextAlign.Left,
                 text = transaction.amount.toString() + " DA",
-                style = MaterialTheme.typography.bodyMedium
+                style = MaterialTheme.typography.titleMedium
             )
         }
         Text(
