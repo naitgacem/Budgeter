@@ -10,6 +10,7 @@ import com.codelab.basiclayouts.data.TransactionsRepository
 import com.codelab.basiclayouts.data.model.Transaction
 import kotlinx.coroutines.flow.MutableStateFlow
 
+
 class DataViewModel(
     private val repository: TransactionsRepository,
 ) : ViewModel() {

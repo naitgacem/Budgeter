@@ -117,7 +117,7 @@ fun TransactionDetailsContent(
                 .border(
                     width = Dp.Hairline,
                     color = Color.LightGray,
-                    shape = RoundedCornerShape(10.dp)
+                    shape = RoundedCornerShape(15.dp)
                 )
                 .fillMaxWidth(),
         ) {

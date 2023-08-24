@@ -21,7 +21,7 @@ class DepositViewModel(
     private var _description = MutableStateFlow<String?>("")
     val description: StateFlow<String?> = _description
 
-    private var _category = MutableStateFlow<String>("")
+    private var _category = MutableStateFlow("")
     val category: StateFlow<String> = _category
 
     private var date = MutableStateFlow<Long>(0)
