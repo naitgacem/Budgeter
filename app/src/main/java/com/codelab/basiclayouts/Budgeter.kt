@@ -14,7 +14,10 @@ class Budgeter : Application() {
         db = Room.databaseBuilder(
             applicationContext,
             TransactionDatabase::class.java, "main_database"
-        ).allowMainThreadQueries().build()
+        )
+            .allowMainThreadQueries()
+            .createFromAsset("database/prepackaged_database.db")
+            .build()
         transactionsRepository = TransactionsRepository(db)
 
     }
