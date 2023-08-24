@@ -26,9 +26,13 @@ class DataViewModel(
     init {
         refreshRecentTransactions()
         loadAllTransactions()
+        refreshBalance()
         repository.transactionAddedEvent.observeForever {
             refreshRecentTransactions()
             loadAllTransactions()
+        }
+        repository.balanceUpdatedEvent.observeForever {
+            refreshBalance()
         }
     }
 
@@ -38,6 +42,9 @@ class DataViewModel(
 
     private fun refreshRecentTransactions() {
         _recentTransactions.value = repository.readRecentTransactionsFromDatabase()
+    }
+
+    private fun refreshBalance() {
         _balance.value = repository.readBalance()
     }
 

@@ -10,14 +10,24 @@ class TransactionsRepository(private val db: TransactionDatabase) {
     private var _transactionAddedEvent = MutableLiveData<Unit>()
     val transactionAddedEvent: LiveData<Unit> = _transactionAddedEvent
 
+    private var _balanceUpdatedEvent = MutableLiveData<Unit>()
+    val balanceUpdatedEvent: LiveData<Unit> = _balanceUpdatedEvent
+
+
     private val transactionDao = db.transactionDao()
     private val balanceDao = db.balanceDao()
 
     fun writeTransactionToDatabase(transaction: Transaction) {
         transactionDao.insert(transaction)
+        updateBalance(transaction)
+        _transactionAddedEvent.postValue(Unit)
+    }
+
+    private fun updateBalance(
+        transaction: Transaction,
+    ) {
         var predecessor = balanceDao.loadPredecessor(date = transaction.date, id = transaction.id)
             ?.amount ?: 0
-
 
         balanceDao.insert(
             Balance(transaction.id, transaction.date, predecessor + transaction.amount)
@@ -30,9 +40,9 @@ class TransactionsRepository(private val db: TransactionDatabase) {
 
         for (balance in newerBalances) {
             predecessor += (transactionDao.loadTransaction(balance.id)).amount
-            balanceDao.updateBalance(balance.copy(amount = predecessor ))
+            balanceDao.updateBalance(balance.copy(amount = predecessor))
         }
-        _transactionAddedEvent.value = Unit
+        _balanceUpdatedEvent.postValue(Unit)
     }
 
     fun readAllTransactionsFromDatabase(): List<Transaction> {
@@ -41,6 +51,10 @@ class TransactionsRepository(private val db: TransactionDatabase) {
 
     fun readBalance(): Int {
         return balanceDao.loadLastBalance() ?: 0
+    }
+
+    fun readBalance(id: Long): Int {
+        return balanceDao.loadBalance(id)
     }
 
     fun readRecentTransactionsFromDatabase(): List<Transaction> {
