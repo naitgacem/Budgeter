@@ -36,7 +36,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.codelab.basiclayouts.data.model.Transaction
 import com.codelab.basiclayouts.ui.components.categoryToIconMap
-import com.codelab.basiclayouts.ui.viewmodels.DataViewModel
+import com.codelab.basiclayouts.ui.viewmodels.TransactionDetailsViewModel
 import java.text.SimpleDateFormat
 import java.util.Date
 
@@ -44,10 +44,10 @@ import java.util.Date
 @Composable
 fun TransactionDetailsScreen(
     id: String,
-    dataViewModel: DataViewModel = viewModel(factory = DataViewModel.Factory),
-    navController: NavController
+    transactionDetailsViewModel: TransactionDetailsViewModel = viewModel(factory = TransactionDetailsViewModel.Factory),
+    navController: NavController,
 ) {
-    val transaction = dataViewModel.loadTransaction(id = id.toLong())
+    val transaction = transactionDetailsViewModel.loadTransaction(id = id.toLong())
     Scaffold(
         topBar = {
             TopAppBar(

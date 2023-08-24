@@ -89,6 +89,7 @@ class MainActivity : ComponentActivity() {
             }
         }
     }
+
 }
 
 
@@ -132,9 +133,7 @@ fun NavBar(
                 }
             )
         }
-
     }
-
 }
 
 

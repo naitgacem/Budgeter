@@ -35,7 +35,7 @@ import androidx.navigation.NavController
 import com.codelab.basiclayouts.data.model.Transaction
 import com.codelab.basiclayouts.ui.components.Screen
 import com.codelab.basiclayouts.ui.components.categoryToIconMap
-import com.codelab.basiclayouts.ui.viewmodels.DataViewModel
+import com.codelab.basiclayouts.ui.viewmodels.TransactionsViewModel
 import java.text.SimpleDateFormat
 import java.util.Date
 
@@ -45,7 +45,7 @@ import java.util.Date
 fun TransactionsScreen(
     modifier: Modifier = Modifier,
     navController: NavController,
-    dataViewModel: DataViewModel = viewModel(factory = DataViewModel.Factory),
+    dataViewModel: TransactionsViewModel = viewModel(factory = TransactionsViewModel.Factory),
 ) {
     val listOfAllTransactions by dataViewModel.allTransactions.collectAsState()
     val listOfDays = arrangeIntoDays(listOfAllTransactions)

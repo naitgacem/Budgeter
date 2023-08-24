@@ -7,15 +7,17 @@ import com.codelab.basiclayouts.data.TransactionsRepository
 
 class Budgeter : Application() {
     lateinit var transactionsRepository: TransactionsRepository
+    lateinit var db: TransactionDatabase
     override fun onCreate() {
         super.onCreate()
 
-        val db = Room.databaseBuilder(
+        db = Room.databaseBuilder(
             applicationContext,
             TransactionDatabase::class.java, "main_database"
-        ).fallbackToDestructiveMigration().allowMainThreadQueries().build()
-        transactionsRepository= TransactionsRepository(db)
+        ).allowMainThreadQueries().build()
+        transactionsRepository = TransactionsRepository(db)
 
     }
+
 
 }

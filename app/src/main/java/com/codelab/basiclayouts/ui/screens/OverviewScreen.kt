@@ -48,16 +48,16 @@ import com.codelab.basiclayouts.R
 import com.codelab.basiclayouts.data.model.Transaction
 import com.codelab.basiclayouts.ui.components.Screen
 import com.codelab.basiclayouts.ui.components.categoryToIconMap
-import com.codelab.basiclayouts.ui.viewmodels.DataViewModel
+import com.codelab.basiclayouts.ui.viewmodels.OverviewViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun OverviewScreen(
     overviewNavController: NavHostController,
-    dataViewModel: DataViewModel = viewModel(factory = DataViewModel.Factory),
+    overviewViewModel: OverviewViewModel = viewModel(factory = OverviewViewModel.Factory),
 ) {
-    val recentTransactions by dataViewModel.recentTransactions.collectAsState()
-    val balance by dataViewModel.balance.collectAsState()
+    val recentTransactions by overviewViewModel.recentTransactions.collectAsState()
+    val balance by overviewViewModel.balance.collectAsState()
 
     Scaffold(
         topBar = {
