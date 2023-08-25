@@ -1,29 +1,26 @@
 package com.codelab.basiclayouts.data
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
+import androidx.annotation.WorkerThread
 import com.codelab.basiclayouts.data.model.Balance
 import com.codelab.basiclayouts.data.model.Transaction
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.withContext
 import java.util.Calendar
 
+@WorkerThread
 class TransactionsRepository(private val db: TransactionDatabase) {
-    private var _transactionAddedEvent = MutableLiveData<Unit>()
-    val transactionAddedEvent: LiveData<Unit> = _transactionAddedEvent
-
-    private var _balanceUpdatedEvent = MutableLiveData<Unit>()
-    val balanceUpdatedEvent: LiveData<Unit> = _balanceUpdatedEvent
-
 
     private val transactionDao = db.transactionDao()
     private val balanceDao = db.balanceDao()
 
-    fun writeTransactionToDatabase(transaction: Transaction) {
+
+    suspend fun writeTransactionToDatabase(transaction: Transaction) {
         transactionDao.insert(transaction)
         updateBalance(transaction)
-        _transactionAddedEvent.postValue(Unit)
     }
 
-    private fun updateBalance(
+    private suspend fun updateBalance(
         transaction: Transaction,
     ) {
         var predecessor = balanceDao.loadPredecessor(date = transaction.date, id = transaction.id)
@@ -39,31 +36,36 @@ class TransactionsRepository(private val db: TransactionDatabase) {
         )
 
         for (balance in newerBalances) {
-            predecessor += (transactionDao.loadTransaction(balance.id)).amount
+            predecessor += (transactionDao.loadTransaction(balance.id))?.amount ?: 0
             balanceDao.updateBalance(balance.copy(amount = predecessor))
         }
-        _balanceUpdatedEvent.postValue(Unit)
     }
 
-    fun readAllTransactionsFromDatabase(): List<Transaction> {
-        return db.transactionDao().getAll()
+    suspend fun readAllTransactionsFromDatabase(): Flow<List<Transaction>> {
+        return withContext(Dispatchers.IO) {
+            db.transactionDao().getAll()
+        }
     }
 
-    fun readBalance(): Int {
-        return balanceDao.loadLastBalance() ?: 0
+    suspend fun readBalance(): Flow<Int?> {
+        return withContext(Dispatchers.IO) {
+            balanceDao.loadLastBalance()
+        }
     }
 
-    fun readBalance(id: Long): Int {
+    suspend fun readBalance(id: Long): Int {
         return balanceDao.loadBalance(id)
     }
 
-    fun readRecentTransactionsFromDatabase(): List<Transaction> {
+    suspend fun readRecentTransactionsFromDatabase(): Flow<List<Transaction>> {
         val oneWeekAgo = Calendar.getInstance()
         oneWeekAgo.add(Calendar.DAY_OF_WEEK, -7)
-        return db.transactionDao().loadNewerThan(oneWeekAgo.timeInMillis)
+        return withContext(Dispatchers.IO) {
+            db.transactionDao().loadNewerThan(oneWeekAgo.timeInMillis)
+        }
     }
 
-    fun loadTransaction(id: Long): Transaction {
+    suspend fun loadTransaction(id: Long): Transaction? {
         return db.transactionDao().loadTransaction(id)
     }
 

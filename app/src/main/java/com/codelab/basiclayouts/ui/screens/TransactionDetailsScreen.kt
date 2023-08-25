@@ -26,6 +26,8 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -47,14 +49,16 @@ fun TransactionDetailsScreen(
     transactionDetailsViewModel: TransactionDetailsViewModel = viewModel(factory = TransactionDetailsViewModel.Factory),
     navController: NavController,
 ) {
-    val transaction = transactionDetailsViewModel.loadTransaction(id = id.toLong())
+    transactionDetailsViewModel.loadTransaction(id = id.toLong())
+    val transaction by transactionDetailsViewModel.transaction.collectAsState()
+
     Scaffold(
         topBar = {
             TopAppBar(
                 title = {},
                 navigationIcon = {
                     IconButton(
-                        onClick = {navController.popBackStack()}
+                        onClick = { navController.popBackStack() }
                     ) {
                         Icon(Icons.Filled.ArrowBack, contentDescription = null)
                     }
@@ -78,7 +82,7 @@ fun TransactionDetailsScreen(
             modifier = Modifier
                 .padding(horizontal = 8.dp)
                 .padding(paddingValues),
-            transaction = transaction
+            transaction = transaction ?: Transaction(0, 0, "", 0, "")
         )
     }
 

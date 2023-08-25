@@ -4,6 +4,7 @@ import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.codelab.basiclayouts.data.model.Transaction
+import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
@@ -23,7 +24,7 @@ class TransactionsRepositoryTest {
     }
 
     @Test
-    fun writeTransactionToDatabase() {
+    fun writeTransactionToDatabase() = runTest {
         val transaction = Transaction(1, 100, "test tx", 69, "Groceries")
         val transactionsRepository = TransactionsRepository(db)
 
@@ -31,12 +32,12 @@ class TransactionsRepositoryTest {
 
         val readTransaction = transactionsRepository.loadTransaction(1)
 
-        assert(transaction.amount == readTransaction.amount)
+        assert(transaction.amount == readTransaction!!.amount)
         assertEquals(transaction.title, readTransaction.title)
     }
 
     @Test
-    fun updateBalance() {
+    fun updateBalance() = runTest {
         val transactionsRepository = TransactionsRepository(db)
 
         transactionsRepository.writeTransactionToDatabase(

@@ -2,6 +2,7 @@ package com.codelab.basiclayouts.ui.viewmodels
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.codelab.basiclayouts.Budgeter
@@ -10,6 +11,7 @@ import com.codelab.basiclayouts.data.model.Transaction
 import com.codelab.basiclayouts.ui.components.categoryToIconMap
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.launch
 import java.util.Calendar
 
 class WithdrawViewModel(
@@ -44,7 +46,7 @@ class WithdrawViewModel(
     }
 
 
-    fun saveTransaction(){
+    fun saveTransaction() {
         val transaction = Transaction(
             date = date.value,
             amount = _amount.value?.let { value -> -1 * value } ?: 0,
@@ -52,7 +54,9 @@ class WithdrawViewModel(
             category = _category.value,
             id = Calendar.getInstance().timeInMillis
         )
-        repository.writeTransactionToDatabase(transaction)
+        viewModelScope.launch {
+            repository.writeTransactionToDatabase(transaction)
+        }
 
     }
 

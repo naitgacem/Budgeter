@@ -3,12 +3,14 @@ package com.codelab.basiclayouts.ui.viewmodels
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
+import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.codelab.basiclayouts.Budgeter
 import com.codelab.basiclayouts.data.TransactionsRepository
 import com.codelab.basiclayouts.data.model.Transaction
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.launch
 
 
 class OverviewViewModel(
@@ -23,20 +25,22 @@ class OverviewViewModel(
     init {
         refreshRecentTransactions()
         refreshBalance()
-        repository.transactionAddedEvent.observeForever {
-            refreshRecentTransactions()
-        }
-        repository.balanceUpdatedEvent.observeForever {
-            refreshBalance()
-        }
     }
 
     private fun refreshRecentTransactions() {
-        _recentTransactions.value = repository.readRecentTransactionsFromDatabase()
+        viewModelScope.launch {
+            repository.readRecentTransactionsFromDatabase().collect { transactions ->
+                _recentTransactions.value = transactions
+            }
+        }
     }
 
     private fun refreshBalance() {
-        _balance.value = repository.readBalance()
+        viewModelScope.launch {
+            repository.readBalance().collect { it ->
+                _balance.value = it ?: 0
+            }
+        }
     }
 
     companion object {

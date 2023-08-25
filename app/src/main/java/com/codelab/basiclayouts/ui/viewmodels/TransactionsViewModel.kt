@@ -3,12 +3,14 @@ package com.codelab.basiclayouts.ui.viewmodels
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
+import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.codelab.basiclayouts.Budgeter
 import com.codelab.basiclayouts.data.TransactionsRepository
 import com.codelab.basiclayouts.data.model.Transaction
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.launch
 
 
 class TransactionsViewModel(
@@ -19,15 +21,13 @@ class TransactionsViewModel(
     val allTransactions = _allTransactions
 
     init {
-        loadAllTransactions()
-        repository.transactionAddedEvent.observeForever {
-            loadAllTransactions()
+        viewModelScope.launch {
+            repository.readAllTransactionsFromDatabase().collect { transactions ->
+                _allTransactions.value = transactions
+            }
         }
     }
 
-    private fun loadAllTransactions() {
-        _allTransactions.value = repository.readAllTransactionsFromDatabase()
-    }
 
     companion object {
         val Factory: ViewModelProvider.Factory = viewModelFactory {

@@ -2,6 +2,7 @@ package com.codelab.basiclayouts.ui.viewmodels
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.codelab.basiclayouts.Budgeter
@@ -9,6 +10,7 @@ import com.codelab.basiclayouts.data.TransactionsRepository
 import com.codelab.basiclayouts.data.model.Transaction
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.launch
 import java.util.Calendar
 
 class DepositViewModel(
@@ -37,7 +39,7 @@ class DepositViewModel(
         date.value = timestamp ?: 0
     }
 
-    fun saveTransaction(){
+    fun saveTransaction() {
         val transaction = Transaction(
             date = date.value,
             amount = _amount.value ?: 0,
@@ -45,7 +47,9 @@ class DepositViewModel(
             category = _category.value,
             id = Calendar.getInstance().timeInMillis
         )
-        repository.writeTransactionToDatabase(transaction)
+        viewModelScope.launch {
+            repository.writeTransactionToDatabase(transaction)
+        }
 
     }
 

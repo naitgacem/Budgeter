@@ -152,7 +152,10 @@ private fun OverviewScreenContent(
             )
         }
 
-        items(recentTransactions) { day ->
+        items(
+            key = { it.id },
+            items = recentTransactions,
+        ) { day ->
             ItemDisplay(
                 transaction = day,
                 navigateToItem = {

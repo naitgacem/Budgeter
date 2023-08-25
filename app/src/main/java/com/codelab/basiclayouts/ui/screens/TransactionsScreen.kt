@@ -45,9 +45,9 @@ import java.util.Date
 fun TransactionsScreen(
     modifier: Modifier = Modifier,
     navController: NavController,
-    dataViewModel: TransactionsViewModel = viewModel(factory = TransactionsViewModel.Factory),
+    transactionsViewModel: TransactionsViewModel = viewModel(factory = TransactionsViewModel.Factory),
 ) {
-    val listOfAllTransactions by dataViewModel.allTransactions.collectAsState()
+    val listOfAllTransactions by transactionsViewModel.allTransactions.collectAsState()
     val listOfDays = arrangeIntoDays(listOfAllTransactions)
 
     LazyColumn(
@@ -75,20 +75,27 @@ fun TransactionsScreen(
             ) {
             }
         }
-        items(listOfDays) { day ->
+        items(
+            items = listOfDays,
+        ) { day ->
             Text(
-                modifier = modifier.padding(start = 28.dp),
+                modifier = modifier.padding(start = 24.dp),
                 text = day.date,
                 style = MaterialTheme.typography.bodyLarge
             )
-            Card {
+            Card(
+                modifier = Modifier.padding(horizontal = 10.dp)
+            ) {
                 for (transaction in day.transactions) {
                     ItemContent(
                         transaction = transaction,
                         navigateToItem = {
                             navController.navigate(
                                 Screen.TransactionDetails.route
-                                    .replace(oldValue = "{id}", newValue = transaction.id.toString())
+                                    .replace(
+                                        oldValue = "{id}",
+                                        newValue = transaction.id.toString()
+                                    )
                             )
                         }
                     )

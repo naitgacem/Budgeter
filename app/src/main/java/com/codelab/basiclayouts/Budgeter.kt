@@ -15,7 +15,6 @@ class Budgeter : Application() {
             applicationContext,
             TransactionDatabase::class.java, "main_database"
         )
-            .allowMainThreadQueries()
             .createFromAsset("database/prepackaged_database.db")
             .build()
         transactionsRepository = TransactionsRepository(db)
