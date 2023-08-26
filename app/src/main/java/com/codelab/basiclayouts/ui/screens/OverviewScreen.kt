@@ -59,6 +59,7 @@ fun OverviewScreen(
     val recentTransactions by overviewViewModel.recentTransactions.collectAsState()
     val balance by overviewViewModel.balance.collectAsState()
 
+
     Scaffold(
         topBar = {
             TopAppBar(

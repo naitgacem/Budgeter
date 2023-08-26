@@ -37,7 +37,7 @@ class OverviewViewModel(
 
     private fun refreshBalance() {
         viewModelScope.launch {
-            repository.readBalance().collect { it ->
+            repository.readBalance().collect {
                 _balance.value = it ?: 0
             }
         }
