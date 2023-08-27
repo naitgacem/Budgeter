@@ -15,7 +15,8 @@ class Budgeter : Application() {
             applicationContext,
             TransactionDatabase::class.java, "main_database"
         )
-            .createFromAsset("database/prepackaged_database.db")
+            .fallbackToDestructiveMigration()
+            //.createFromAsset("database/prepackaged_database.db")
             .build()
         transactionsRepository = TransactionsRepository(db)
 

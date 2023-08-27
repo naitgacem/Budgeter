@@ -65,29 +65,25 @@ class MainActivity : ComponentActivity() {
                     composable(
                         route = Screen.Overview.route,
                         enterTransition = { fadeIn() },
-                    ) {
-                        OverviewScreen(overviewNavController = navController)
-                    }
+                    ) { OverviewScreen(overviewNavController = navController) }
+
                     composable(
                         route = Screen.Transactions.route,
                         enterTransition = { fadeIn() },
-                    ) {
-                        TransactionsScreen(navController = navController)
-                    }
+                    ) { TransactionsScreen(navController = navController) }
+
                     composable(
                         route = Screen.Settings.route,
                         enterTransition = { slideInHorizontally { it } },
                         exitTransition = { slideOutHorizontally { it } },
-                    ) {
-                        SettingsScreen(navController = navController)
-                    }
+                    ) { SettingsScreen(navController = navController) }
+
                     composable(
                         enterTransition = { slideInHorizontally { it } },
                         exitTransition = { slideOutHorizontally { it } },
                         route = Screen.Withdraw.route,
-                    ) {
-                        WithdrawScreen(navHostController = navController)
-                    }
+                    ) { WithdrawScreen(navHostController = navController) }
+
                     composable(
                         route = Screen.TransactionDetails.route,
                         enterTransition = { scaleIn() },
@@ -97,26 +93,25 @@ class MainActivity : ComponentActivity() {
                             navController = navController
                         )
                     }
+
                     composable(route = Screen.Analytics.route) {
                         AnalyticsScreen(navController = navController)
                     }
+
                     composable(route = Screen.Goals.route) {
                         GoalsScreen(navController = navController)
                     }
+
                     composable(
                         enterTransition = { slideInHorizontally { it } },
                         exitTransition = { slideOutHorizontally { it } },
                         route = Screen.Deposit.route,
-                    ) {
-                        DepositScreen(navHostController = navController)
-                    }
+                    ) { DepositScreen(navHostController = navController) }
                 }
             }
         }
     }
-
 }
-
 
 @Composable
 fun NavBar(
@@ -150,9 +145,9 @@ fun NavBar(
                             saveState = true
                         }
                         // Avoid multiple copies of the same destination when
-                        // reselecting the same item
+                        // re-selecting the same item
                         launchSingleTop = true
-                        // Restore state when reselecting a previously selected item
+                        // Restore state when re-selecting a previously selected item
                         restoreState = true
                     }
                 }

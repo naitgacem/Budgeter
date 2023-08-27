@@ -37,6 +37,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.codelab.basiclayouts.data.model.Transaction
+import com.codelab.basiclayouts.ui.components.Category
 import com.codelab.basiclayouts.ui.components.categoryToIconMap
 import com.codelab.basiclayouts.ui.viewmodels.TransactionDetailsViewModel
 import java.text.SimpleDateFormat
@@ -82,7 +83,7 @@ fun TransactionDetailsScreen(
             modifier = Modifier
                 .padding(horizontal = 8.dp)
                 .padding(paddingValues),
-            transaction = transaction ?: Transaction(0, 0, "", 0, "")
+            transaction = transaction ?: Transaction(0, 0, "", 0, Category.Others)
         )
     }
 

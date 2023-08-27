@@ -8,6 +8,7 @@ import androidx.lifecycle.viewmodel.viewModelFactory
 import com.codelab.basiclayouts.Budgeter
 import com.codelab.basiclayouts.data.TransactionsRepository
 import com.codelab.basiclayouts.data.model.Transaction
+import com.codelab.basiclayouts.ui.components.Category
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -22,9 +23,6 @@ class DepositViewModel(
 
     private var _description = MutableStateFlow<String?>("")
     val description: StateFlow<String?> = _description
-
-    private var _category = MutableStateFlow("")
-    val category: StateFlow<String> = _category
 
     private var date = MutableStateFlow<Long>(0)
 
@@ -44,7 +42,7 @@ class DepositViewModel(
             date = date.value,
             amount = _amount.value ?: 0,
             title = _description.value ?: "",
-            category = _category.value,
+            category = Category.Deposit,
             id = Calendar.getInstance().timeInMillis
         )
         viewModelScope.launch {

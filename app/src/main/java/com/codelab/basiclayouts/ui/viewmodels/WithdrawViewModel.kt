@@ -8,7 +8,7 @@ import androidx.lifecycle.viewmodel.viewModelFactory
 import com.codelab.basiclayouts.Budgeter
 import com.codelab.basiclayouts.data.TransactionsRepository
 import com.codelab.basiclayouts.data.model.Transaction
-import com.codelab.basiclayouts.ui.components.categoryToIconMap
+import com.codelab.basiclayouts.ui.components.Category
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -18,7 +18,7 @@ class WithdrawViewModel(
     private val repository: TransactionsRepository
 ) : ViewModel() {
 
-    val categories = categoryToIconMap.keys.toList()
+    val categories = Category.values()
 
     private var _amount = MutableStateFlow<Int?>(null)
     val amount: StateFlow<Int?> = _amount
@@ -26,22 +26,25 @@ class WithdrawViewModel(
     private var _description = MutableStateFlow<String?>("")
     val description: StateFlow<String?> = _description
 
-    private var _category = MutableStateFlow("")
-    val category: StateFlow<String> = _category
+    private var _category = MutableStateFlow<Category?>(null)
+    val category = _category
 
     private var date = MutableStateFlow<Long>(0)
 
 
-    fun updateAmount(newAmount: String){
+    fun updateAmount(newAmount: String) {
         _amount.value = newAmount.toIntOrNull()
     }
-    fun updateDescription(description: String){
+
+    fun updateDescription(description: String) {
         _description.value = description
     }
-    fun updateId(timestamp: Long?){
+
+    fun updateId(timestamp: Long?) {
         date.value = timestamp ?: 0
     }
-    fun updateCategory(category: String){
+
+    fun updateCategory(category: Category) {
         _category.value = category
     }
 
@@ -51,7 +54,7 @@ class WithdrawViewModel(
             date = date.value,
             amount = _amount.value?.let { value -> -1 * value } ?: 0,
             title = _description.value ?: "",
-            category = _category.value,
+            category = _category.value ?: Category.Others,
             id = Calendar.getInstance().timeInMillis
         )
         viewModelScope.launch {

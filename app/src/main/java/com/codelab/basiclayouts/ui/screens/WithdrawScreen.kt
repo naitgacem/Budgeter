@@ -43,6 +43,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
+import com.codelab.basiclayouts.ui.components.Category
 import com.codelab.basiclayouts.ui.components.categoryToIconMap
 import com.codelab.basiclayouts.ui.viewmodels.WithdrawViewModel
 import java.util.Calendar
@@ -242,9 +243,9 @@ private fun SaveButton(
 @Composable
 private fun InsertCategory(
     modifier: Modifier = Modifier,
-    menuItems: List<String>,
-    selectedCategory: String,
-    updateCategory: (String) -> Unit,
+    menuItems: Array<Category>,
+    selectedCategory: Category?,
+    updateCategory: (Category) -> Unit,
 ) {
     Column(
         modifier = modifier.padding(horizontal = 16.dp)
@@ -261,7 +262,7 @@ private fun InsertCategory(
                     modifier = Modifier
                         .padding(2.dp)
                         .align(alignment = Alignment.CenterVertically),
-                    label = { Text(element) },
+                    label = { Text(element.name) },
                     onClick = { updateCategory(element) },
                     leadingIcon = {
                         Icon(
