@@ -3,6 +3,10 @@ package com.codelab.basiclayouts
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.scaleIn
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Analytics
@@ -58,31 +62,52 @@ class MainActivity : ComponentActivity() {
                     startDestination = Screen.Overview.route,
                     modifier = Modifier.padding(paddingValues),
                 ) {
-                    composable(route = Screen.Overview.route) {
+                    composable(
+                        route = Screen.Overview.route,
+                        enterTransition = { fadeIn() },
+                    ) {
                         OverviewScreen(overviewNavController = navController)
                     }
-                    composable(route = Screen.Transactions.route) {
+                    composable(
+                        route = Screen.Transactions.route,
+                        enterTransition = { fadeIn() },
+                    ) {
                         TransactionsScreen(navController = navController)
                     }
-                    composable(route = Screen.Settings.route) {
+                    composable(
+                        route = Screen.Settings.route,
+                        enterTransition = { slideInHorizontally { it } },
+                        exitTransition = { slideOutHorizontally { it } },
+                    ) {
                         SettingsScreen(navController = navController)
                     }
-                    composable(route = Screen.Withdraw.route) {
+                    composable(
+                        enterTransition = { slideInHorizontally { it } },
+                        exitTransition = { slideOutHorizontally { it } },
+                        route = Screen.Withdraw.route,
+                    ) {
                         WithdrawScreen(navHostController = navController)
                     }
-                    composable(route = Screen.TransactionDetails.route) { backStackEntry ->
+                    composable(
+                        route = Screen.TransactionDetails.route,
+                        enterTransition = { scaleIn() },
+                    ) { backStackEntry ->
                         TransactionDetailsScreen(
                             id = backStackEntry.arguments?.getString("id") ?: "",
                             navController = navController
                         )
                     }
-                    composable(route = Screen.Analytics.route){
+                    composable(route = Screen.Analytics.route) {
                         AnalyticsScreen(navController = navController)
                     }
-                    composable(route = Screen.Goals.route){
+                    composable(route = Screen.Goals.route) {
                         GoalsScreen(navController = navController)
                     }
-                    composable(route = Screen.Deposit.route){
+                    composable(
+                        enterTransition = { slideInHorizontally { it } },
+                        exitTransition = { slideOutHorizontally { it } },
+                        route = Screen.Deposit.route,
+                    ) {
                         DepositScreen(navHostController = navController)
                     }
                 }

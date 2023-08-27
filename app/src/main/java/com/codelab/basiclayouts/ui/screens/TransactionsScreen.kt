@@ -21,6 +21,7 @@ import androidx.compose.material3.DockedSearchBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -50,65 +51,67 @@ fun TransactionsScreen(
     val listOfAllTransactions by transactionsViewModel.allTransactions.collectAsState()
     val listOfDays = arrangeIntoDays(listOfAllTransactions)
 
-    LazyColumn(
-        modifier = modifier.fillMaxSize()
-    ) {
-        item {
-            DockedSearchBar(
-                modifier = Modifier.padding(
-                    start = 16.dp,
-                    end = 16.dp,
-                    top = 16.dp,
-                    bottom = 20.dp
-                ),
-                query = "Search a transaction",
-                onQueryChange = {},
-                onSearch = {},
-                active = false,
-                onActiveChange = {},
-                trailingIcon = {
-                    Icon(
-                        imageVector = Icons.Filled.Search,
-                        contentDescription = null
-                    )
-                }
-            ) {
-            }
-        }
-        items(
-            items = listOfDays,
-        ) { day ->
-            Text(
-                modifier = modifier.padding(start = 24.dp),
-                text = day.date,
-                style = MaterialTheme.typography.bodyLarge
-            )
-            Card(
-                modifier = Modifier.padding(horizontal = 10.dp)
-            ) {
-                for (transaction in day.transactions) {
-                    ItemContent(
-                        transaction = transaction,
-                        navigateToItem = {
-                            navController.navigate(
-                                Screen.TransactionDetails.route
-                                    .replace(
-                                        oldValue = "{id}",
-                                        newValue = transaction.id.toString()
-                                    )
-                            )
-                        }
-                    )
-                    Divider(
-                        thickness = Dp.Hairline,
-                        modifier = Modifier.padding(horizontal = 20.dp),
-                        startIndent = 30.dp
-                    )
+    Surface {
+        LazyColumn(
+            modifier = modifier.fillMaxSize()
+        ) {
+            item {
+                DockedSearchBar(
+                    modifier = Modifier.padding(
+                        start = 16.dp,
+                        end = 16.dp,
+                        top = 16.dp,
+                        bottom = 20.dp
+                    ),
+                    query = "Search a transaction",
+                    onQueryChange = {},
+                    onSearch = {},
+                    active = false,
+                    onActiveChange = {},
+                    trailingIcon = {
+                        Icon(
+                            imageVector = Icons.Filled.Search,
+                            contentDescription = null
+                        )
+                    }
+                ) {
                 }
             }
-            Spacer(modifier = modifier.height(12.dp))
-        }
+            items(
+                items = listOfDays,
+            ) { day ->
+                Text(
+                    modifier = modifier.padding(start = 24.dp),
+                    text = day.date,
+                    style = MaterialTheme.typography.bodyLarge
+                )
+                Card(
+                    modifier = Modifier.padding(horizontal = 10.dp)
+                ) {
+                    for (transaction in day.transactions) {
+                        ItemContent(
+                            transaction = transaction,
+                            navigateToItem = {
+                                navController.navigate(
+                                    Screen.TransactionDetails.route
+                                        .replace(
+                                            oldValue = "{id}",
+                                            newValue = transaction.id.toString()
+                                        )
+                                )
+                            }
+                        )
+                        Divider(
+                            thickness = Dp.Hairline,
+                            modifier = Modifier.padding(horizontal = 20.dp),
+                            startIndent = 30.dp
+                        )
+                    }
+                }
+                Spacer(modifier = modifier.height(12.dp))
+            }
 
+        }
     }
 }
 

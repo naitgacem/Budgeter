@@ -1,6 +1,7 @@
 package com.codelab.basiclayouts.ui.screens
 
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
@@ -20,6 +21,7 @@ import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Savings
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.Warning
+import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -29,11 +31,13 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -60,44 +64,46 @@ fun OverviewScreen(
     val balance by overviewViewModel.balance.collectAsState()
 
 
-    Scaffold(
-        topBar = {
-            TopAppBar(
-                title = {
-                    Text(
-                        modifier = Modifier.padding(start = 16.dp),
-                        text = stringResource(R.string.budgeter),
-                        textAlign = TextAlign.Center,
-                        style = MaterialTheme.typography.titleLarge,
+    Surface {
+        Scaffold(
+            topBar = {
+                TopAppBar(
+                    title = {
+                        Text(
+                            modifier = Modifier.padding(start = 16.dp),
+                            text = stringResource(R.string.budgeter),
+                            textAlign = TextAlign.Center,
+                            style = MaterialTheme.typography.titleLarge,
 
-                        )
-                },
-                navigationIcon = {
-                    Icon(
-                        imageVector = Icons.Filled.Savings, contentDescription = null
-                    )
-                },
-                actions = {
-                    IconButton(
-                        onClick = {
-                            overviewNavController.navigate(Screen.Settings.route)
-                        }
-                    ) {
+                            )
+                    },
+                    navigationIcon = {
                         Icon(
-                            imageVector = Icons.Filled.Settings,
-                            contentDescription = null
+                            imageVector = Icons.Filled.Savings, contentDescription = null
                         )
+                    },
+                    actions = {
+                        IconButton(
+                            onClick = {
+                                overviewNavController.navigate(Screen.Settings.route)
+                            }
+                        ) {
+                            Icon(
+                                imageVector = Icons.Filled.Settings,
+                                contentDescription = null
+                            )
+                        }
                     }
-                }
+                )
+            }
+        ) { paddingValues ->
+            OverviewScreenContent(
+                modifier = Modifier.padding(paddingValues),
+                balance = balance,
+                recentTransactions = recentTransactions,
+                navController = overviewNavController
             )
         }
-    ) { paddingValues ->
-        OverviewScreenContent(
-            modifier = Modifier.padding(paddingValues),
-            balance = balance,
-            recentTransactions = recentTransactions,
-            navController = overviewNavController
-        )
     }
 }
 
@@ -184,7 +190,14 @@ private fun ItemDisplay(
     Row(
         modifier = modifier
             .fillMaxWidth()
-            .clickable(onClick = navigateToItem)
+            .clickable(
+                interactionSource = remember { MutableInteractionSource() },
+                indication = rememberRipple(
+                    bounded = true,
+                    color = MaterialTheme.colorScheme.tertiary
+                ),
+                onClick = navigateToItem,
+            )
             .padding(horizontal = 16.dp, vertical = 8.dp),
         verticalAlignment = Alignment.CenterVertically
 

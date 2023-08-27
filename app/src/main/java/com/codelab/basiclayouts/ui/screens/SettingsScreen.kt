@@ -22,6 +22,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
@@ -39,26 +40,28 @@ import com.codelab.basiclayouts.R
 fun SettingsScreen(
     navController: NavController
 ) {
-    Scaffold(
-        topBar = {
-            TopAppBar(
-                title = {
-                    Text(
-                        text = stringResource(id = R.string.settings),
-                        style = MaterialTheme.typography.titleLarge
-                    )
-                },
-                navigationIcon = {
-                    IconButton(
-                        onClick = {navController.popBackStack()}
-                    ) {
-                        Icon(Icons.Filled.ArrowBack, contentDescription = null)
-                    }
-                },
-            )
+    Surface {
+        Scaffold(
+            topBar = {
+                TopAppBar(
+                    title = {
+                        Text(
+                            text = stringResource(id = R.string.settings),
+                            style = MaterialTheme.typography.titleLarge
+                        )
+                    },
+                    navigationIcon = {
+                        IconButton(
+                            onClick = { navController.popBackStack() }
+                        ) {
+                            Icon(Icons.Filled.ArrowBack, contentDescription = null)
+                        }
+                    },
+                )
+            }
+        ) { paddingValues ->
+            SettingsList(modifier = Modifier.padding(paddingValues))
         }
-    ) { paddingValues ->
-        SettingsList(modifier = Modifier.padding(paddingValues))
     }
 
 }
