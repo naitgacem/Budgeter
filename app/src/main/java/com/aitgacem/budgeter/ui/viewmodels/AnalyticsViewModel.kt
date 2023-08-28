@@ -24,7 +24,7 @@ class AnalyticsViewModel(
     val allTransactions = _allTransactions
 
     val categoryAndValues = combine(_allTransactions) {
-        group(it[0])
+        group()
     }
 
     init {
@@ -39,7 +39,7 @@ class AnalyticsViewModel(
         }
     }
 
-    private suspend fun group(allTransactions: List<Transaction>): List<CategoryAndValue> {
+    private suspend fun group(): List<CategoryAndValue> {
         val entries = mutableListOf<CategoryAndValue>()
         withContext(Dispatchers.Default) {
             val groups = _allTransactions.value

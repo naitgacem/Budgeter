@@ -51,11 +51,10 @@ class MainActivity : ComponentActivity() {
         setContent {
             val navController = rememberNavController()
             val currentScreen by navController.currentBackStackEntryAsState()
-            val isNavBarVisible = navBarVisibleIn[currentScreen?.destination?.route] == true
             Scaffold(
                 bottomBar = {
                     AnimatedVisibility(
-                        visible = isNavBarVisible,
+                        visible = navBarVisibleIn[currentScreen?.destination?.route] == true,
                         enter = slideInVertically { it },
                     ) {
                         NavBar(navController = navController)
