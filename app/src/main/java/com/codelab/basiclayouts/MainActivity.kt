@@ -3,9 +3,11 @@ package com.codelab.basiclayouts
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.scaleIn
 import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
@@ -49,10 +51,13 @@ class MainActivity : ComponentActivity() {
         setContent {
             val navController = rememberNavController()
             val currentScreen by navController.currentBackStackEntryAsState()
-
+            val isNavBarVisible = navBarVisibleIn[currentScreen?.destination?.route] == true
             Scaffold(
                 bottomBar = {
-                    if (navBarVisibleIn[currentScreen?.destination?.route] == true) {
+                    AnimatedVisibility(
+                        visible = isNavBarVisible,
+                        enter = slideInVertically { it },
+                    ) {
                         NavBar(navController = navController)
                     }
                 }
