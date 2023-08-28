@@ -22,7 +22,7 @@ plugins {
 }
 
 android {
-    namespace "com.codelab.basiclayouts"
+    namespace "com.aitgacem.budgeter"
     compileSdk 34
 
     defaultConfig {
@@ -96,5 +96,6 @@ dependencies {
     implementation "androidx.room:room-runtime:2.5.2"
     annotationProcessor "androidx.room:room-compiler:2.5.2"
     implementation "androidx.room:room-ktx:2.5.2"
+    implementation "com.github.PhilJay:MPAndroidChart:v3.1.0"
     ksp "androidx.room:room-compiler:2.5.2"
 }
