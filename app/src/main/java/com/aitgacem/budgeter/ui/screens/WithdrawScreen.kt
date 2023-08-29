@@ -123,7 +123,7 @@ private fun AddTransactionContent(
         }
         item {
             InsertAmount(
-                value = amount,
+                value = amount ?: "",
                 updateAmount = { withdrawViewModel.updateAmount(it) }
             )
         }
@@ -173,7 +173,7 @@ private fun DateSelect(state: DatePickerState) {
 @Composable
 private fun InsertAmount(
     modifier: Modifier = Modifier,
-    value: Float?,
+    value: String,
     updateAmount: (String) -> Unit,
 ) {
     OutlinedTextField(

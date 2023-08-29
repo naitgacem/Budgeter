@@ -95,7 +95,6 @@ private fun DepositContent(
     )
 
     LazyColumn(
-        //verticalArrangement = Arrangement.spacedBy(8.dp),
         modifier = modifier
             .fillMaxWidth()
     ) {
@@ -111,9 +110,8 @@ private fun DepositContent(
         }
         item {
             InsertAmount(
-                value = amount,
-                updateAmount = { depositViewModel.updateAmount(it) }
-            )
+                value = amount ?: ""
+            ) { depositViewModel.updateAmount(it) }
         }
         item {
             InsertDescription(
@@ -201,7 +199,7 @@ private fun InsertDescription(
 @Composable
 private fun InsertAmount(
     modifier: Modifier = Modifier,
-    value: Float?,
+    value: String,
     updateAmount: (String) -> Unit,
 ) {
     OutlinedTextField(
@@ -214,7 +212,7 @@ private fun InsertAmount(
             )
         },
         label = { Text("Amount") },
-        value = value?.toString() ?: "",
+        value = value,
         onValueChange = updateAmount,
         keyboardOptions = KeyboardOptions.Default.copy(
             keyboardType = KeyboardType.Number,
