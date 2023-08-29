@@ -21,7 +21,6 @@ import androidx.compose.material.icons.filled.ErrorOutline
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material3.Button
 import androidx.compose.material3.DatePicker
-import androidx.compose.material3.DatePickerState
 import androidx.compose.material3.DisplayMode
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -79,7 +78,6 @@ fun WithdrawScreen(
                     }
                 }
             )
-
         }
     ) { paddingValues ->
         AddTransactionContent(
@@ -136,7 +134,11 @@ private fun AddTransactionContent(
             )
         }
         item {
-            DateSelect(state)
+            DatePicker(
+                modifier = Modifier,
+                showModeToggle = true,
+                state = state,
+            )
             Spacer(modifier = Modifier.height(16.dp))
         }
 
@@ -160,15 +162,6 @@ private fun AddTransactionContent(
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-private fun DateSelect(state: DatePickerState) {
-    DatePicker(
-        modifier = Modifier,
-        showModeToggle = true,
-        state = state,
-    )
-}
 
 @Composable
 private fun InsertAmount(
@@ -186,7 +179,7 @@ private fun InsertAmount(
             )
         },
         label = { Text("Amount") },
-        value = value?.toString() ?: "",
+        value = value,
         onValueChange = updateAmount,
         keyboardOptions = KeyboardOptions.Default.copy(
             keyboardType = KeyboardType.Number,

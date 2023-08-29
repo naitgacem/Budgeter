@@ -47,7 +47,6 @@ class WithdrawViewModel(
         _category.value = category
     }
 
-
     fun saveTransaction() {
         val transaction = Transaction(
             date = date.value,
@@ -59,7 +58,6 @@ class WithdrawViewModel(
         viewModelScope.launch {
             repository.writeTransactionToDatabase(transaction)
         }
-
     }
 
     companion object {
