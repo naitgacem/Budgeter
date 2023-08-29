@@ -243,7 +243,7 @@ private fun SaveButton(
 @Composable
 private fun InsertCategory(
     modifier: Modifier = Modifier,
-    menuItems: Array<Category>,
+    menuItems: List<Category>,
     selectedCategory: Category?,
     updateCategory: (Category) -> Unit,
 ) {

@@ -18,7 +18,7 @@ class WithdrawViewModel(
     private val repository: TransactionsRepository,
 ) : ViewModel() {
 
-    val categories = Category.values()
+    val categories = Category.values().filter { it != Category.Deposit }
 
     private var _amount = MutableStateFlow<String?>(null)
     val amount: StateFlow<String?> = _amount
