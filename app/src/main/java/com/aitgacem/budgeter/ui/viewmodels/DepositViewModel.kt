@@ -18,8 +18,8 @@ class DepositViewModel(
     private val repository: TransactionsRepository,
 ) : ViewModel() {
 
-    private var _amount = MutableStateFlow<Int?>(null)
-    val amount: StateFlow<Int?> = _amount
+    private var _amount = MutableStateFlow<Float?>(null)
+    val amount: StateFlow<Float?> = _amount
 
     private var _description = MutableStateFlow<String?>("")
     val description: StateFlow<String?> = _description
@@ -28,7 +28,7 @@ class DepositViewModel(
 
 
     fun updateAmount(newAmount: String) {
-        _amount.value = newAmount.toIntOrNull()
+        _amount.value = newAmount.toFloatOrNull()
     }
 
     fun updateDescription(description: String) {
@@ -42,7 +42,7 @@ class DepositViewModel(
     fun saveTransaction() {
         val transaction = Transaction(
             date = date.value,
-            amount = _amount.value ?: 0,
+            amount = _amount.value ?: 0.toFloat(),
             title = _description.value ?: "",
             category = Category.Deposit,
             id = Calendar.getInstance().timeInMillis

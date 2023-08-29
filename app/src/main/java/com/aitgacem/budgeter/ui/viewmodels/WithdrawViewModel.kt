@@ -20,8 +20,8 @@ class WithdrawViewModel(
 
     val categories = Category.values()
 
-    private var _amount = MutableStateFlow<Int?>(null)
-    val amount: StateFlow<Int?> = _amount
+    private var _amount = MutableStateFlow<Float?>(null)
+    val amount: StateFlow<Float?> = _amount
 
     private var _description = MutableStateFlow<String?>("")
     val description: StateFlow<String?> = _description
@@ -31,9 +31,8 @@ class WithdrawViewModel(
 
     private var date = MutableStateFlow<Long>(0)
 
-
     fun updateAmount(newAmount: String) {
-        _amount.value = newAmount.toIntOrNull()
+        _amount.value = newAmount.toFloatOrNull()
     }
 
     fun updateDescription(description: String) {
@@ -52,7 +51,7 @@ class WithdrawViewModel(
     fun saveTransaction() {
         val transaction = Transaction(
             date = date.value,
-            amount = _amount.value?.let { value -> -1 * value } ?: 0,
+            amount = _amount.value ?: 0.toFloat(),
             title = _description.value ?: "",
             category = _category.value ?: Category.Others,
             id = Calendar.getInstance().timeInMillis

@@ -201,7 +201,7 @@ private fun InsertDescription(
 @Composable
 private fun InsertAmount(
     modifier: Modifier = Modifier,
-    value: Int?,
+    value: Float?,
     updateAmount: (String) -> Unit,
 ) {
     OutlinedTextField(

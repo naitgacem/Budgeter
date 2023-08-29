@@ -13,7 +13,6 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Divider
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowUpward
-import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.Card
@@ -34,6 +33,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.aitgacem.budgeter.data.model.Transaction
+import com.aitgacem.budgeter.ui.components.Category
 import com.aitgacem.budgeter.ui.components.Screen
 import com.aitgacem.budgeter.ui.components.categoryToIconMap
 import com.aitgacem.budgeter.ui.viewmodels.TransactionsViewModel
@@ -129,9 +129,7 @@ private fun ItemContent(
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Icon(
-            imageVector = if (transaction.amount == 0) {
-                Icons.Default.Edit
-            } else if (transaction.amount > 0) {
+            imageVector = if (transaction.category == Category.Deposit) {
                 Icons.Default.ArrowUpward
             } else {
                 categoryToIconMap[transaction.category] ?: Icons.Filled.Warning

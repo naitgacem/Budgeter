@@ -8,5 +8,5 @@ import androidx.room.PrimaryKey
 data class Balance(
     @PrimaryKey val id: Long,
     @ColumnInfo(name = "date") val date: Long,
-    @ColumnInfo(name = "amount") val amount: Int,
+    @ColumnInfo(name = "amount") val amount: Float,
 )

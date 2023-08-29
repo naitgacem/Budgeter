@@ -173,7 +173,7 @@ private fun DateSelect(state: DatePickerState) {
 @Composable
 private fun InsertAmount(
     modifier: Modifier = Modifier,
-    value: Int?,
+    value: Float?,
     updateAmount: (String) -> Unit,
 ) {
     OutlinedTextField(

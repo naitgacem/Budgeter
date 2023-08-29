@@ -10,6 +10,6 @@ data class Transaction(
     @PrimaryKey val id: Long,
     @ColumnInfo(name = "date") val date: Long,
     @ColumnInfo(name = "title") val title: String,
-    @ColumnInfo(name = "amount") val amount: Int,
+    @ColumnInfo(name = "amount") val amount: Float,
     @ColumnInfo(name = "category") val category: Category,
 )

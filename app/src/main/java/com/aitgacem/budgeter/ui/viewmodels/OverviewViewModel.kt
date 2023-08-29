@@ -19,7 +19,7 @@ class OverviewViewModel(
     private var _recentTransactions = MutableStateFlow<List<Transaction>>(emptyList())
     val recentTransactions = _recentTransactions
 
-    private var _balance = MutableStateFlow(0)
+    private var _balance = MutableStateFlow<Float>(0.toFloat())
     val balance = _balance
 
     init {
@@ -38,7 +38,7 @@ class OverviewViewModel(
     private fun refreshBalance() {
         viewModelScope.launch {
             repository.readBalance().collect {
-                _balance.value = it ?: 0
+                _balance.value = it ?: 0.toFloat()
             }
         }
     }

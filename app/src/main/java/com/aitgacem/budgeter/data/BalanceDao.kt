@@ -29,10 +29,10 @@ interface BalanceDao {
     suspend fun loadNewerThan(date: Long, id: Long): List<Balance>
 
     @Query("select amount from `balance` order by date desc,  id desc limit 1")
-    fun loadLastBalance(): Flow<Int?>
+    fun loadLastBalance(): Flow<Float?>
 
     @Query("select amount from `balance` where id = :id")
-    suspend fun loadBalance(id: Long): Int
+    suspend fun loadBalance(id: Long): Float
 
     @Insert
     suspend fun insert(balance: Balance)

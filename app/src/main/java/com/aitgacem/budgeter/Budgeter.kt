@@ -7,7 +7,7 @@ import com.aitgacem.budgeter.data.TransactionsRepository
 
 class Budgeter : Application() {
     lateinit var transactionsRepository: TransactionsRepository
-    lateinit var db: TransactionDatabase
+    private lateinit var db: TransactionDatabase
     override fun onCreate() {
         super.onCreate()
 
@@ -21,8 +21,4 @@ class Budgeter : Application() {
         transactionsRepository = TransactionsRepository(db)
 
     }
-
-// C:\Users\Admin\AndroidStudioProjects\Budgeter\app\src\main\java\com\aitgacem\budgeter\Budgeter.kt
-// C:\Users\Admin\AndroidStudioProjects\Budgeter\app\src\main\AndroidManifest.xml
-
 }

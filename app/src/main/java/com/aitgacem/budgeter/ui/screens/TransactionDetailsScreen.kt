@@ -13,7 +13,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.ArrowUpward
 import androidx.compose.material.icons.filled.AttachFile
-import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.Card
@@ -83,7 +82,7 @@ fun TransactionDetailsScreen(
             modifier = Modifier
                 .padding(horizontal = 8.dp)
                 .padding(paddingValues),
-            transaction = transaction ?: Transaction(0, 0, "", 0, Category.Others)
+            transaction = transaction ?: Transaction(0, 0, "", 0.toFloat(), Category.Others)
         )
     }
 
@@ -148,9 +147,7 @@ fun HeaderContent(transaction: Transaction) {
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Icon(
-            imageVector = if (transaction.amount == 0) {
-                Icons.Default.Edit
-            } else if (transaction.amount > 0) {
+            imageVector = if (transaction.category == Category.Deposit) {
                 Icons.Default.ArrowUpward
             } else {
                 categoryToIconMap[transaction.category] ?: Icons.Filled.Warning

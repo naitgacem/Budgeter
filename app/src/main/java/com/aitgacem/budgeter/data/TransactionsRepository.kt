@@ -2,7 +2,9 @@ package com.aitgacem.budgeter.data
 
 import androidx.annotation.WorkerThread
 import com.aitgacem.budgeter.data.model.Balance
+import com.aitgacem.budgeter.data.model.CategoryAndValue
 import com.aitgacem.budgeter.data.model.Transaction
+import com.aitgacem.budgeter.ui.components.Category
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.withContext
@@ -13,10 +15,11 @@ class TransactionsRepository(private val db: TransactionDatabase) {
 
     private val transactionDao = db.transactionDao()
     private val balanceDao = db.balanceDao()
-
+    private val analyticsDao = db.analyticsDao()
 
     suspend fun writeTransactionToDatabase(transaction: Transaction) {
         transactionDao.insert(transaction)
+        udpateCategoryAndValue(transaction)
         updateBalance(transaction)
     }
 
@@ -24,19 +27,29 @@ class TransactionsRepository(private val db: TransactionDatabase) {
         transaction: Transaction,
     ) {
         var predecessor = balanceDao.loadPredecessor(date = transaction.date, id = transaction.id)
-            ?.amount ?: 0
+            ?.amount ?: 0.toFloat()
 
+        val amount =
+            if (transaction.category == Category.Deposit) transaction.amount else transaction.amount.unaryMinus()
         balanceDao.insert(
-            Balance(transaction.id, transaction.date, predecessor + transaction.amount)
+            Balance(transaction.id, transaction.date, predecessor + amount)
         )
-        predecessor += transaction.amount
+        predecessor += amount
 
         val newerBalances = balanceDao.loadNewerThan(
             transaction.date, transaction.id
         )
 
         for (balance in newerBalances) {
-            predecessor += (transactionDao.loadTransaction(balance.id))?.amount ?: 0
+            val loadedTransaction = transactionDao.loadTransaction(balance.id)
+
+            if (loadedTransaction != null) {
+                if (loadedTransaction.category == Category.Deposit) {
+                    predecessor += loadedTransaction.amount
+                } else {
+                    predecessor -= loadedTransaction.amount
+                }
+            }
             balanceDao.updateBalance(balance.copy(amount = predecessor))
         }
     }
@@ -47,13 +60,13 @@ class TransactionsRepository(private val db: TransactionDatabase) {
         }
     }
 
-    suspend fun readBalance(): Flow<Int?> {
+    suspend fun readBalance(): Flow<Float?> {
         return withContext(Dispatchers.IO) {
             balanceDao.loadLastBalance()
         }
     }
 
-    suspend fun readBalance(id: Long): Int {
+    suspend fun readBalance(id: Long): Float {
         return balanceDao.loadBalance(id)
     }
 
@@ -67,6 +80,32 @@ class TransactionsRepository(private val db: TransactionDatabase) {
 
     suspend fun loadTransaction(id: Long): Transaction? {
         return db.transactionDao().loadTransaction(id)
+    }
+
+    fun getCategoryAndValue(): Flow<List<CategoryAndValue>> {
+        return analyticsDao.getAllData()
+    }
+
+    private suspend fun udpateCategoryAndValue(transaction: Transaction) {
+        if (transaction.category == Category.Deposit) {
+            return
+        }
+        val old = analyticsDao.getCategoryAmount(category = transaction.category.name)
+
+        if (old == null) {
+            analyticsDao.insert(
+                CategoryAndValue(
+                    transaction.category,
+                    transaction.amount
+                )
+            )
+        } else {
+            analyticsDao.updateCategoryAmount(
+                old.copy(
+                    value = old.value + transaction.amount
+                )
+            )
+        }
     }
 
 }

@@ -6,10 +6,10 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.aitgacem.budgeter.data.model.Transaction
 import com.aitgacem.budgeter.ui.components.Category
 import kotlinx.coroutines.test.runTest
-import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
+import kotlin.math.abs
 
 @RunWith(AndroidJUnit4::class)
 class TransactionsRepositoryTest {
@@ -26,15 +26,15 @@ class TransactionsRepositoryTest {
 
     @Test
     fun writeTransactionToDatabase() = runTest {
-        val transaction = Transaction(1, 100, "test tx", 69, Category.Education)
+        val transaction = Transaction(1, 100, "test tx", 69.0f, Category.Education)
         val transactionsRepository = TransactionsRepository(db)
 
         transactionsRepository.writeTransactionToDatabase(transaction)
 
         val readTransaction = transactionsRepository.loadTransaction(1)
 
-        assert(transaction.amount == readTransaction!!.amount)
-        assertEquals(transaction.title, readTransaction.title)
+        assert(readTransaction != null && transaction.amount == readTransaction.amount)
+        assert(readTransaction != null && transaction.title == readTransaction.title)
     }
 
     @Test
@@ -42,26 +42,26 @@ class TransactionsRepositoryTest {
         val transactionsRepository = TransactionsRepository(db)
 
         transactionsRepository.writeTransactionToDatabase(
-            Transaction(1, 100, "test tx", 10, Category.Education)
+            Transaction(1, 100, "test tx", 10f, Category.Education)
         )
         transactionsRepository.writeTransactionToDatabase(
-            Transaction(2, 90, "test tx", 10, Category.Healthcare)
+            Transaction(2, 90, "test tx", 10f, Category.Healthcare)
         )
         transactionsRepository.writeTransactionToDatabase(
-            Transaction(3, 110, "test tx", 10, Category.Entertainment)
+            Transaction(3, 110, "test tx", 10f, Category.Entertainment)
         )
         transactionsRepository.writeTransactionToDatabase(
-            Transaction(4, 95, "test tx", 10, Category.Utilities)
+            Transaction(4, 95, "test tx", 10f, Category.Utilities)
         )
         transactionsRepository.writeTransactionToDatabase(
-            Transaction(5, 105, "test tx", 10, Category.Travel)
+            Transaction(5, 105, "test tx", 10f, Category.Travel)
         )
 
-        assert(transactionsRepository.readBalance(id = 1) == 30)
-        assert(transactionsRepository.readBalance(id = 2) == 10)
-        assert(transactionsRepository.readBalance(id = 3) == 50)
-        assert(transactionsRepository.readBalance(id = 4) == 20)
-        assert(transactionsRepository.readBalance(id = 5) == 40)
+        assert(abs(transactionsRepository.readBalance(id = 1) + 30f) < 0.001)
+        assert(abs(transactionsRepository.readBalance(id = 2) + 10f) < 0.001)
+        assert(abs(transactionsRepository.readBalance(id = 3) + 50f) < 0.001)
+        assert(abs(transactionsRepository.readBalance(id = 4) + 20f) < 0.001)
+        assert(abs(transactionsRepository.readBalance(id = 5) + 40f) < 0.001)
 
     }
 }

@@ -17,7 +17,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowUpward
-import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Savings
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.Warning
@@ -50,9 +49,11 @@ import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import com.aitgacem.budgeter.R
 import com.aitgacem.budgeter.data.model.Transaction
+import com.aitgacem.budgeter.ui.components.Category
 import com.aitgacem.budgeter.ui.components.Screen
 import com.aitgacem.budgeter.ui.components.categoryToIconMap
 import com.aitgacem.budgeter.ui.viewmodels.OverviewViewModel
+import java.text.DecimalFormat
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -109,7 +110,7 @@ fun OverviewScreen(
 @Composable
 private fun OverviewScreenContent(
     modifier: Modifier = Modifier,
-    balance: Int,
+    balance: Float,
     recentTransactions: List<Transaction>,
     navController: NavController,
 ) {
@@ -202,9 +203,7 @@ private fun ItemDisplay(
 
     ) {
         Icon(
-            imageVector = if (transaction.amount == 0) {
-                Icons.Default.Edit
-            } else if (transaction.amount > 0) {
+            imageVector = if (transaction.category == Category.Deposit) {
                 Icons.Default.ArrowUpward
             } else {
                 categoryToIconMap[transaction.category] ?: Icons.Filled.Warning
@@ -274,13 +273,13 @@ private fun Operations(
 @Preview(showBackground = true)
 @Composable
 fun OperationsPreview() {
-    Budget(balance = 500)
+    Budget(balance = 500f)
 }
 
 @Composable
 private fun Budget(
     modifier: Modifier = Modifier,
-    balance: Int,
+    balance: Float,
 ) {
     Card(
         modifier = modifier
@@ -303,7 +302,7 @@ private fun Budget(
                 style = MaterialTheme.typography.titleMedium,
             )
             Text(
-                text = "$balance DA",
+                text = "${DecimalFormat("#.##").format(balance)} DA",
                 style = MaterialTheme.typography.bodyMedium,
             )
         }
