@@ -3,6 +3,7 @@ package com.aitgacem.budgeter.data
 import androidx.annotation.WorkerThread
 import com.aitgacem.budgeter.data.model.Balance
 import com.aitgacem.budgeter.data.model.CategoryAndValue
+import com.aitgacem.budgeter.data.model.DateAndBalance
 import com.aitgacem.budgeter.data.model.Transaction
 import com.aitgacem.budgeter.ui.components.Category
 import kotlinx.coroutines.Dispatchers
@@ -84,6 +85,10 @@ class TransactionsRepository(private val db: TransactionDatabase) {
 
     fun getCategoryAndValue(): Flow<List<CategoryAndValue>> {
         return analyticsDao.getAllData()
+    }
+
+    fun getBalanceByDate(): Flow<List<DateAndBalance>> {
+        return balanceDao.getBalanceByDate()
     }
 
     private suspend fun udpateCategoryAndValue(transaction: Transaction) {

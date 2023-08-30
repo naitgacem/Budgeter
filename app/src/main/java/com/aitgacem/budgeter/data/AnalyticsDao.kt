@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface AnalyticsDao {
-    @Query("select * from `categoryandvalue`")
+    @Query("select * from `categoryandvalue` order by value desc")
     fun getAllData(): Flow<List<CategoryAndValue>>
 
     @Query("select * from `categoryandvalue` where category = :category")

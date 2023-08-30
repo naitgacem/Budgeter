@@ -6,6 +6,7 @@ import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Update
 import com.aitgacem.budgeter.data.model.Balance
+import com.aitgacem.budgeter.data.model.DateAndBalance
 import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -33,6 +34,18 @@ interface BalanceDao {
 
     @Query("select amount from `balance` where id = :id")
     suspend fun loadBalance(id: Long): Float
+
+    @Query(
+        "WITH dateAndMaxId AS (" +
+                "SELECT date, MAX(id) AS max_id " +
+                "FROM balance " +
+                "GROUP BY date" +
+                ") " +
+                "SELECT b1.date, b1.amount " +
+                "FROM balance b1 " +
+                "JOIN dateAndMaxId b2 ON b1.id = b2.max_id"
+    )
+    fun getBalanceByDate(): Flow<List<DateAndBalance>>
 
     @Insert
     suspend fun insert(balance: Balance)
