@@ -33,6 +33,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.aitgacem.budgeter.data.model.Transaction
@@ -46,7 +47,7 @@ import java.util.Date
 @Composable
 fun TransactionDetailsScreen(
     id: String,
-    transactionDetailsViewModel: TransactionDetailsViewModel = viewModel(factory = TransactionDetailsViewModel.Factory),
+    transactionDetailsViewModel: TransactionDetailsViewModel = hiltViewModel(),
     navController: NavController,
 ) {
     transactionDetailsViewModel.loadTransaction(id = id.toLong())

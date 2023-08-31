@@ -9,12 +9,15 @@ import com.aitgacem.budgeter.Budgeter
 import com.aitgacem.budgeter.data.TransactionsRepository
 import com.aitgacem.budgeter.data.model.Transaction
 import com.aitgacem.budgeter.ui.components.Category
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import java.util.Calendar
+import javax.inject.Inject
 
-class DepositViewModel(
+@HiltViewModel
+class DepositViewModel @Inject constructor(
     private val repository: TransactionsRepository,
 ) : ViewModel() {
 
@@ -53,16 +56,5 @@ class DepositViewModel(
     }
 
     companion object {
-        val Factory: ViewModelProvider.Factory = viewModelFactory {
-            initializer {
-                val myRepository =
-                    (this[ViewModelProvider.AndroidViewModelFactory.APPLICATION_KEY] as Budgeter).transactionsRepository
-                DepositViewModel(
-                    repository = myRepository
-                )
-            }
-        }
     }
-
-
 }

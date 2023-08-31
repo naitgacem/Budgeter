@@ -9,12 +9,15 @@ import com.aitgacem.budgeter.Budgeter
 import com.aitgacem.budgeter.data.TransactionsRepository
 import com.aitgacem.budgeter.data.model.Transaction
 import com.aitgacem.budgeter.ui.components.Category
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import java.util.Calendar
+import javax.inject.Inject
 
-class WithdrawViewModel(
+@HiltViewModel
+class WithdrawViewModel @Inject constructor(
     private val repository: TransactionsRepository,
 ) : ViewModel() {
 
@@ -57,18 +60,6 @@ class WithdrawViewModel(
         )
         viewModelScope.launch {
             repository.writeTransactionToDatabase(transaction)
-        }
-    }
-
-    companion object {
-        val Factory: ViewModelProvider.Factory = viewModelFactory {
-            initializer {
-                val myRepository =
-                    (this[ViewModelProvider.AndroidViewModelFactory.APPLICATION_KEY] as Budgeter).transactionsRepository
-                WithdrawViewModel(
-                    repository = myRepository
-                )
-            }
         }
     }
 

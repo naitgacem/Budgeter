@@ -4,21 +4,33 @@ import android.app.Application
 import androidx.room.Room
 import com.aitgacem.budgeter.data.TransactionDatabase
 import com.aitgacem.budgeter.data.TransactionsRepository
+import dagger.Module
+import dagger.Provides
+import dagger.hilt.InstallIn
+import dagger.hilt.android.HiltAndroidApp
+import dagger.hilt.components.SingletonComponent
+import javax.inject.Singleton
 
-class Budgeter : Application() {
-    lateinit var transactionsRepository: TransactionsRepository
-    private lateinit var db: TransactionDatabase
-    override fun onCreate() {
-        super.onCreate()
+@HiltAndroidApp
+class Budgeter : Application()
 
-        db = Room.databaseBuilder(
-            applicationContext,
+@Module
+@InstallIn(SingletonComponent::class)
+object DatabaseModule {
+
+    @Provides
+    fun provideDatabase(application: Application): TransactionDatabase {
+        return Room.databaseBuilder(
+            application,
             TransactionDatabase::class.java, "main_database"
         )
             .fallbackToDestructiveMigration()
-            //.createFromAsset("database/prepackaged_database.db")
             .build()
-        transactionsRepository = TransactionsRepository(db)
+    }
 
+    @Singleton
+    @Provides
+    fun provideTransactionsRepository(application: Application): TransactionsRepository {
+        return TransactionsRepository(provideDatabase(application))
     }
 }

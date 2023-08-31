@@ -34,6 +34,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.aitgacem.budgeter.ui.viewmodels.DepositViewModel
@@ -83,9 +84,10 @@ fun DepositScreen(
 @Composable
 private fun DepositContent(
     modifier: Modifier = Modifier,
-    depositViewModel: DepositViewModel = viewModel(factory = DepositViewModel.Factory),
+    depositViewModel: DepositViewModel = hiltViewModel(),
     exitAfterSave: () -> Boolean,
 ) {
+
     val amount by depositViewModel.amount.collectAsState()
     val description by depositViewModel.description.collectAsState()
 

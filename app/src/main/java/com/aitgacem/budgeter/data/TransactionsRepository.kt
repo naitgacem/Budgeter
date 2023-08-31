@@ -20,7 +20,7 @@ class TransactionsRepository(private val db: TransactionDatabase) {
 
     suspend fun writeTransactionToDatabase(transaction: Transaction) {
         transactionDao.insert(transaction)
-        udpateCategoryAndValue(transaction)
+        updateCategoryAndValue(transaction)
         updateBalance(transaction)
     }
 
@@ -91,7 +91,7 @@ class TransactionsRepository(private val db: TransactionDatabase) {
         return balanceDao.getBalanceByDate()
     }
 
-    private suspend fun udpateCategoryAndValue(transaction: Transaction) {
+    private suspend fun updateCategoryAndValue(transaction: Transaction) {
         if (transaction.category == Category.Deposit) {
             return
         }

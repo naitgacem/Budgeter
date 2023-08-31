@@ -40,6 +40,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.aitgacem.budgeter.ui.components.Category
@@ -90,7 +91,7 @@ fun WithdrawScreen(
 @Composable
 private fun AddTransactionContent(
     modifier: Modifier = Modifier,
-    withdrawViewModel: WithdrawViewModel = viewModel(factory = WithdrawViewModel.Factory),
+    withdrawViewModel: WithdrawViewModel = hiltViewModel(),
     exitAfterSave: () -> Boolean,
 ) {
     val amount by withdrawViewModel.amount.collectAsState()

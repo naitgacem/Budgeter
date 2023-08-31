@@ -25,6 +25,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
@@ -42,7 +44,10 @@ import com.aitgacem.budgeter.ui.screens.SettingsScreen
 import com.aitgacem.budgeter.ui.screens.TransactionDetailsScreen
 import com.aitgacem.budgeter.ui.screens.TransactionsScreen
 import com.aitgacem.budgeter.ui.screens.WithdrawScreen
+import com.aitgacem.budgeter.ui.viewmodels.OverviewViewModel
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -69,7 +74,11 @@ class MainActivity : ComponentActivity() {
                     composable(
                         route = Screen.Overview.route,
                         enterTransition = { fadeIn() },
-                    ) { OverviewScreen(overviewNavController = navController) }
+                    ) {
+                        OverviewScreen(
+                            overviewNavController = navController,
+                        )
+                    }
 
                     composable(
                         route = Screen.Transactions.route,
@@ -110,7 +119,11 @@ class MainActivity : ComponentActivity() {
                         enterTransition = { slideInHorizontally { it } },
                         exitTransition = { slideOutHorizontally { it } },
                         route = Screen.Deposit.route,
-                    ) { DepositScreen(navHostController = navController) }
+                    ) {
+                        DepositScreen(
+                            navHostController = navController
+                        )
+                    }
                 }
             }
         }

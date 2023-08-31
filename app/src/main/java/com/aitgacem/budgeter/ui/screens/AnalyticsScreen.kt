@@ -24,6 +24,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.aitgacem.budgeter.ui.viewmodels.AnalyticsViewModel
@@ -37,7 +38,7 @@ import com.github.mikephil.charting.components.XAxis
 @Composable
 fun AnalyticsScreen(
     navController: NavHostController,
-    analyticsViewModel: AnalyticsViewModel = viewModel(factory = AnalyticsViewModel.Factory),
+    analyticsViewModel: AnalyticsViewModel = hiltViewModel(),
 ) {
     val updateChart: (PieChart) -> Unit = { analyticsViewModel.updatePieChart(it) }
     val updateLineChart: (LineChart) -> Unit = { analyticsViewModel.updateLineChart(it) }

@@ -9,11 +9,13 @@ import androidx.lifecycle.viewmodel.viewModelFactory
 import com.aitgacem.budgeter.Budgeter
 import com.aitgacem.budgeter.data.TransactionsRepository
 import com.aitgacem.budgeter.data.model.Transaction
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-
-class TransactionsViewModel(
+@HiltViewModel
+class TransactionsViewModel @Inject constructor(
     private val repository: TransactionsRepository,
 ) : ViewModel() {
 
@@ -28,15 +30,4 @@ class TransactionsViewModel(
         }
     }
 
-
-    companion object {
-        val Factory: ViewModelProvider.Factory = viewModelFactory {
-            initializer {
-                val myRepository = (this[APPLICATION_KEY] as Budgeter).transactionsRepository
-                TransactionsViewModel(
-                    repository = myRepository
-                )
-            }
-        }
-    }
 }

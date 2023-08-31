@@ -29,6 +29,8 @@ plugins {
     id 'com.diffplug.spotless' version '6.19.0'
     id 'org.jetbrains.kotlin.plugin.serialization' version '1.6.21'
     id 'com.google.devtools.ksp' version '1.8.22-1.0.11' apply false
+    id 'com.google.dagger.hilt.android' version '2.44' apply false
+
 }
 
 subprojects {

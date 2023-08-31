@@ -24,12 +24,15 @@ import com.github.mikephil.charting.data.PieDataSet
 import com.github.mikephil.charting.data.PieEntry
 import com.github.mikephil.charting.formatter.PercentFormatter
 import com.github.mikephil.charting.formatter.ValueFormatter
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Date
+import javax.inject.Inject
 
-class AnalyticsViewModel(
+@HiltViewModel
+class AnalyticsViewModel @Inject constructor(
     private val repository: TransactionsRepository,
 ) : ViewModel() {
     private var allTransactions = MutableStateFlow<List<Transaction>>(emptyList())
@@ -147,9 +150,6 @@ class AnalyticsViewModel(
             valueTextSize = 18f
             valueTypeface = Typeface.DEFAULT
             setDrawValues(false)
-//            colors = com.aitgacem.budgeter.ui.components.colors.map {
-//                it.toArgb()
-//            }
             colors = listOf(
                 Color.Black.toArgb(),
             )
@@ -157,17 +157,6 @@ class AnalyticsViewModel(
         }
     }
 
-    companion object {
-        val Factory: ViewModelProvider.Factory = viewModelFactory {
-            initializer {
-                val repository =
-                    (this[ViewModelProvider.AndroidViewModelFactory.APPLICATION_KEY] as Budgeter).transactionsRepository
-                AnalyticsViewModel(
-                    repository = repository
-                )
-            }
-        }
-    }
 }
 
 
