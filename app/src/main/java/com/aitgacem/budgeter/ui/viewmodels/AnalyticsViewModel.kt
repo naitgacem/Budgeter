@@ -5,11 +5,7 @@ import android.util.Log
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import androidx.lifecycle.viewmodel.initializer
-import androidx.lifecycle.viewmodel.viewModelFactory
-import com.aitgacem.budgeter.Budgeter
 import com.aitgacem.budgeter.data.TransactionsRepository
 import com.aitgacem.budgeter.data.model.CategoryAndValue
 import com.aitgacem.budgeter.data.model.DateAndBalance
@@ -23,7 +19,6 @@ import com.github.mikephil.charting.data.PieData
 import com.github.mikephil.charting.data.PieDataSet
 import com.github.mikephil.charting.data.PieEntry
 import com.github.mikephil.charting.formatter.PercentFormatter
-import com.github.mikephil.charting.formatter.ValueFormatter
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
@@ -63,12 +58,6 @@ class AnalyticsViewModel @Inject constructor(
     private suspend fun loadDayAndData() {
         repository.getBalanceByDate().collect {
             dateAndBalance.value = it
-            var s = ""
-            for (date in dateAndBalance.value) {
-                s =
-                    s + SimpleDateFormat("dd/MM/yyyy").format(Date(date.date)) + " : " + date.amount.toString() + "\n"
-            }
-            Log.d("sss", s)
         }
     }
 
@@ -159,14 +148,3 @@ class AnalyticsViewModel @Inject constructor(
 
 }
 
-
-class MyCustomFormatter(
-) : ValueFormatter() {
-    override fun getFormattedValue(
-        value: Float,
-    ): String {
-        val dateInMillis = value.toLong()
-
-        return SimpleDateFormat("dd/MM").format(Date(dateInMillis))
-    }
-}

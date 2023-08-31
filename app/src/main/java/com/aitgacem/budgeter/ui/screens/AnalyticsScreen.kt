@@ -25,10 +25,9 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.aitgacem.budgeter.ui.viewmodels.AnalyticsViewModel
-import com.aitgacem.budgeter.ui.viewmodels.MyCustomFormatter
+import com.aitgacem.budgeter.ui.viewmodels.utils.DateFormatter
 import com.github.mikephil.charting.charts.LineChart
 import com.github.mikephil.charting.charts.PieChart
 import com.github.mikephil.charting.components.Legend
@@ -138,7 +137,7 @@ fun LineChart(
                 xAxis.setDrawGridLines(false)
                 description.isEnabled = false
                 legend.isEnabled = false
-                xAxis.valueFormatter = MyCustomFormatter()
+                xAxis.valueFormatter = DateFormatter()
                 xAxis.position = XAxis.XAxisPosition.BOTTOM
                 axisRight.isEnabled = false
                 setNoDataText("It is as empty as your life in here lol")

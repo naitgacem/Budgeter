@@ -174,14 +174,14 @@ fun NavBar(
 }
 
 
-val items = listOf(
+private val items = listOf(
     Screen.Overview,
     Screen.Analytics,
     Screen.Transactions,
     Screen.Goals,
 )
 
-val iconMap = mapOf(
+private val iconMap = mapOf(
     Screen.Analytics.resourceId to Icons.Filled.Analytics,
     Screen.Transactions.resourceId to Icons.Filled.SwapVert,
     Screen.Overview.resourceId to Icons.Filled.Home,

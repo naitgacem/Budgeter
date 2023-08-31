@@ -17,7 +17,6 @@ class Budgeter : Application()
 @Module
 @InstallIn(SingletonComponent::class)
 object DatabaseModule {
-
     @Provides
     fun provideDatabase(application: Application): TransactionDatabase {
         return Room.databaseBuilder(
