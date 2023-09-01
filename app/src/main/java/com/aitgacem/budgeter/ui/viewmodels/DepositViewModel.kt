@@ -1,11 +1,7 @@
 package com.aitgacem.budgeter.ui.viewmodels
 
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import androidx.lifecycle.viewmodel.initializer
-import androidx.lifecycle.viewmodel.viewModelFactory
-import com.aitgacem.budgeter.Budgeter
 import com.aitgacem.budgeter.data.TransactionsRepository
 import com.aitgacem.budgeter.data.model.Transaction
 import com.aitgacem.budgeter.ui.components.Category
@@ -21,6 +17,7 @@ class DepositViewModel @Inject constructor(
     private val repository: TransactionsRepository,
 ) : ViewModel() {
 
+
     private var _amount = MutableStateFlow<String?>(null)
     val amount: StateFlow<String?> = _amount
 
@@ -29,6 +26,19 @@ class DepositViewModel @Inject constructor(
 
     private var date = MutableStateFlow<Long>(0)
 
+    private var isUpdate = false
+    private var oldValue: Float? = null
+    private var oldId: Long = 0
+    fun setUpUpdate(id: String) {
+        isUpdate = true
+        viewModelScope.launch {
+            val transaction = repository.loadTransaction(id = id.toLong())
+            oldValue = transaction?.amount
+            oldId = transaction?.id ?: 0
+            _amount.value = transaction?.amount.toString()
+            _description.value = transaction?.title
+        }
+    }
 
     fun updateAmount(newAmount: String) {
         _amount.value = newAmount
@@ -51,10 +61,14 @@ class DepositViewModel @Inject constructor(
             id = Calendar.getInstance().timeInMillis
         )
         viewModelScope.launch {
-            repository.writeTransactionToDatabase(transaction)
+            if (isUpdate) {
+                repository.updateTransaction(
+                    transaction.copy(id = oldId),
+                    oldValue
+                )
+            } else {
+                repository.writeTransactionToDatabase(transaction)
+            }
         }
-    }
-
-    companion object {
     }
 }

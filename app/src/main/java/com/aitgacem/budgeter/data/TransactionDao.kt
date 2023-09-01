@@ -4,6 +4,7 @@ import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
+import androidx.room.Update
 import com.aitgacem.budgeter.data.model.Transaction
 import kotlinx.coroutines.flow.Flow
 
@@ -26,4 +27,7 @@ interface TransactionDao {
 
     @Delete
     suspend fun delete(transaction: Transaction)
+
+    @Update
+    suspend fun update(transaction: Transaction)
 }

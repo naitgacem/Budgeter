@@ -34,6 +34,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.aitgacem.budgeter.ui.components.Screen
 import com.aitgacem.budgeter.ui.components.navBarVisibleIn
 import com.aitgacem.budgeter.ui.screens.AnalyticsScreen
@@ -119,9 +120,15 @@ class MainActivity : ComponentActivity() {
                         enterTransition = { slideInHorizontally { it } },
                         exitTransition = { slideOutHorizontally { it } },
                         route = Screen.Deposit.route,
-                    ) {
+                        arguments = listOf(
+                            navArgument("id") {
+                                nullable = true
+                            }
+                        )
+                    ) { backStackEntry ->
                         DepositScreen(
-                            navHostController = navController
+                            navHostController = navController,
+                            id = backStackEntry.arguments?.getString("id"),
                         )
                     }
                 }

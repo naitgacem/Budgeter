@@ -34,10 +34,10 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.aitgacem.budgeter.data.model.Transaction
 import com.aitgacem.budgeter.ui.components.Category
+import com.aitgacem.budgeter.ui.components.Screen
 import com.aitgacem.budgeter.ui.components.categoryToIconMap
 import com.aitgacem.budgeter.ui.viewmodels.TransactionDetailsViewModel
 import java.text.SimpleDateFormat
@@ -71,7 +71,13 @@ fun TransactionDetailsScreen(
                         Icon(Icons.Filled.AttachFile, contentDescription = null)
                     }
                     IconButton(
-                        onClick = {}
+                        onClick = {
+                            navController.navigate(
+                                Screen.Deposit.route.replace(
+                                    oldValue = "{id}", newValue = id
+                                )
+                            )
+                        }
                     ) {
                         Icon(Icons.Filled.MoreVert, contentDescription = null)
                     }

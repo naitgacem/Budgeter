@@ -44,6 +44,7 @@ import java.util.Calendar
 @Composable
 fun DepositScreen(
     navHostController: NavHostController,
+    id: String? = null,
 ) {
     Scaffold(
         topBar = {
@@ -75,8 +76,11 @@ fun DepositScreen(
 
     ) { paddingValues ->
         DepositContent(
-            modifier = Modifier.padding(paddingValues)
-        ) { navHostController.popBackStack() }
+            modifier = Modifier.padding(paddingValues),
+            id = id,
+        ) {
+            navHostController.popBackStack()
+        }
     }
 }
 
@@ -84,9 +88,13 @@ fun DepositScreen(
 @Composable
 private fun DepositContent(
     modifier: Modifier = Modifier,
+    id: String? = null,
     depositViewModel: DepositViewModel = hiltViewModel(),
     exitAfterSave: () -> Boolean,
 ) {
+    if (id != null) {
+        depositViewModel.setUpUpdate(id)
+    }
 
     val amount by depositViewModel.amount.collectAsState()
     val description by depositViewModel.description.collectAsState()

@@ -13,7 +13,7 @@ sealed class Screen(
     object Settings : Screen("settings", R.string.settings, false)
     object Goals : Screen("goals", R.string.goals)
     object Withdraw : Screen("withdraw", R.string.add_transaction, false)
-    object Deposit : Screen("deposit", R.string.deposit, false)
+    object Deposit : Screen("deposit?id={id}", R.string.deposit, false)
     object Analytics : Screen("analytics", R.string.analytics)
     object Transactions : Screen("transactions", R.string.transactions)
     object TransactionDetails :

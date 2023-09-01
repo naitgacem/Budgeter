@@ -24,17 +24,31 @@ class TransactionsRepository(private val db: TransactionDatabase) {
         updateBalance(transaction)
     }
 
+    suspend fun updateTransaction(transaction: Transaction, oldValue: Float?) {
+        transactionDao.update(transaction)
+        updateCategoryAndValue(transaction, oldValue)
+        updateBalance(transaction, oldValue)
+    }
+
     private suspend fun updateBalance(
         transaction: Transaction,
+        oldValue: Float? = null,
     ) {
         var predecessor = balanceDao.loadPredecessor(date = transaction.date, id = transaction.id)
             ?.amount ?: 0.toFloat()
 
-        val amount =
+        var amount =
             if (transaction.category == Category.Deposit) transaction.amount else transaction.amount.unaryMinus()
-        balanceDao.insert(
-            Balance(transaction.id, transaction.date, predecessor + amount)
-        )
+        if (oldValue != null) {
+            balanceDao.updateBalance(
+                Balance(transaction.id, transaction.date, predecessor + amount)
+            )
+        } else {
+            balanceDao.insert(
+                Balance(transaction.id, transaction.date, predecessor + amount)
+            )
+        }
+
         predecessor += amount
 
         val newerBalances = balanceDao.loadNewerThan(
@@ -91,7 +105,10 @@ class TransactionsRepository(private val db: TransactionDatabase) {
         return balanceDao.getBalanceByDate()
     }
 
-    private suspend fun updateCategoryAndValue(transaction: Transaction) {
+    private suspend fun updateCategoryAndValue(
+        transaction: Transaction,
+        oldValue: Float? = null,
+    ) {
         if (transaction.category == Category.Deposit) {
             return
         }
@@ -107,7 +124,8 @@ class TransactionsRepository(private val db: TransactionDatabase) {
         } else {
             analyticsDao.updateCategoryAmount(
                 old.copy(
-                    value = old.value + transaction.amount
+                    value = oldValue?.let { (old.value + transaction.amount) - oldValue }
+                        ?: (old.value + transaction.amount)
                 )
             )
         }
