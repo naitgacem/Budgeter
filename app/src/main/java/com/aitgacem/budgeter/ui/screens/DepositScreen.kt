@@ -1,6 +1,5 @@
 package com.aitgacem.budgeter.ui.screens
 
-
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -16,7 +15,6 @@ import androidx.compose.material.icons.filled.Description
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material3.Button
 import androidx.compose.material3.DatePicker
-import androidx.compose.material3.DatePickerState
 import androidx.compose.material3.DisplayMode
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -28,6 +26,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
@@ -35,7 +34,6 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.aitgacem.budgeter.ui.viewmodels.DepositViewModel
 import java.util.Calendar
@@ -92,18 +90,20 @@ private fun DepositContent(
     depositViewModel: DepositViewModel = hiltViewModel(),
     exitAfterSave: () -> Boolean,
 ) {
+
+
+    val amount by depositViewModel.amount.collectAsState()
+    val description by depositViewModel.description.collectAsState()
+    val date by depositViewModel.date.collectAsState()
+
     if (id != null) {
         depositViewModel.setUpUpdate(id)
     }
 
-    val amount by depositViewModel.amount.collectAsState()
-    val description by depositViewModel.description.collectAsState()
-
     val state = rememberDatePickerState(
         initialDisplayMode = DisplayMode.Input,
-        initialSelectedDateMillis = Calendar.getInstance().timeInMillis
+        initialSelectedDateMillis = if (id != null) date else Calendar.getInstance().timeInMillis
     )
-
     LazyColumn(
         modifier = modifier
             .fillMaxWidth()
@@ -133,7 +133,11 @@ private fun DepositContent(
         }
 
         item {
-            DateSelect(state)
+            DatePicker(
+                modifier = Modifier,
+                showModeToggle = true,
+                state = state,
+            )
             Spacer(modifier = Modifier.height(16.dp))
         }
 
@@ -141,23 +145,13 @@ private fun DepositContent(
             Spacer(modifier = Modifier.height(24.dp))
             SaveButton(
                 saveEntry = {
-                    depositViewModel.updateId(state.selectedDateMillis)
+                    depositViewModel.updateDate(state.selectedDateMillis)
                     depositViewModel.saveTransaction()
                     exitAfterSave.invoke()
                 }
             )
         }
     }
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-private fun DateSelect(state: DatePickerState) {
-    DatePicker(
-        modifier = Modifier,
-        showModeToggle = true,
-        state = state,
-    )
 }
 
 @Composable

@@ -37,7 +37,7 @@ class TransactionsRepository(private val db: TransactionDatabase) {
         var predecessor = balanceDao.loadPredecessor(date = transaction.date, id = transaction.id)
             ?.amount ?: 0.toFloat()
 
-        var amount =
+        val amount =
             if (transaction.category == Category.Deposit) transaction.amount else transaction.amount.unaryMinus()
         if (oldValue != null) {
             balanceDao.updateBalance(

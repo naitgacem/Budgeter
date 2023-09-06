@@ -9,6 +9,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import java.io.IOException
 import java.util.Calendar
 import javax.inject.Inject
 
@@ -17,26 +18,34 @@ class DepositViewModel @Inject constructor(
     private val repository: TransactionsRepository,
 ) : ViewModel() {
 
-
     private var _amount = MutableStateFlow<String?>(null)
     val amount: StateFlow<String?> = _amount
 
     private var _description = MutableStateFlow<String?>("")
     val description: StateFlow<String?> = _description
 
-    private var date = MutableStateFlow<Long>(0)
+    private var _date = MutableStateFlow<Long>(0)
+    val date: StateFlow<Long> = _date
 
     private var isUpdate = false
+
     private var oldValue: Float? = null
-    private var oldId: Long = 0
+
+    private var oldTransaction: Transaction? = null
+
     fun setUpUpdate(id: String) {
-        isUpdate = true
         viewModelScope.launch {
             val transaction = repository.loadTransaction(id = id.toLong())
-            oldValue = transaction?.amount
-            oldId = transaction?.id ?: 0
-            _amount.value = transaction?.amount.toString()
-            _description.value = transaction?.title
+            if (transaction != null) {
+                oldValue = transaction.amount
+                _amount.value = transaction.amount.toString()
+                _description.value = transaction.title
+                _date.value = transaction.date
+                oldTransaction = transaction
+                isUpdate = true
+            } else {
+                throw IOException("Transaction deleted or corrupt")
+            }
         }
     }
 
@@ -48,27 +57,35 @@ class DepositViewModel @Inject constructor(
         _description.value = description
     }
 
-    fun updateId(timestamp: Long?) {
-        date.value = timestamp ?: 0
+    fun updateDate(timestamp: Long?) {
+        _date.value = timestamp ?: 0
     }
 
     fun saveTransaction() {
-        val transaction = Transaction(
-            date = date.value,
-            amount = _amount.value?.toFloatOrNull() ?: 0.0f,
-            title = _description.value ?: "",
-            category = Category.Deposit,
-            id = Calendar.getInstance().timeInMillis
-        )
-        viewModelScope.launch {
-            if (isUpdate) {
+        if (isUpdate) {
+            viewModelScope.launch {
                 repository.updateTransaction(
-                    transaction.copy(id = oldId),
+                    oldTransaction!!.copy(
+                        date = _date.value,
+                        amount = _amount.value?.toFloatOrNull() ?: 0.0f,
+                        title = _description.value ?: "",
+                    ),
                     oldValue
                 )
-            } else {
+
+            }
+        } else {
+            val transaction = Transaction(
+                date = _date.value,
+                amount = _amount.value?.toFloatOrNull() ?: 0.0f,
+                title = _description.value ?: "",
+                category = Category.Deposit,
+                id = Calendar.getInstance().timeInMillis
+            )
+            viewModelScope.launch {
                 repository.writeTransactionToDatabase(transaction)
             }
         }
+
     }
 }
