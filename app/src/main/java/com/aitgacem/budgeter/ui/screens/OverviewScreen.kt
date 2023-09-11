@@ -45,7 +45,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import com.aitgacem.budgeter.R
@@ -59,7 +58,7 @@ import java.text.DecimalFormat
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun OverviewScreen(
-    overviewNavController: NavHostController,
+    navController: NavHostController,
     overviewViewModel: OverviewViewModel = hiltViewModel(),
 ) {
     val recentTransactions by overviewViewModel.recentTransactions.collectAsState()
@@ -86,7 +85,7 @@ fun OverviewScreen(
                     actions = {
                         IconButton(
                             onClick = {
-                                overviewNavController.navigate(Screen.Settings.route)
+                                navController.navigate(Screen.Settings.route)
                             }
                         ) {
                             Icon(
@@ -102,7 +101,7 @@ fun OverviewScreen(
                 modifier = Modifier.padding(paddingValues),
                 balance = balance,
                 recentTransactions = recentTransactions,
-                navController = overviewNavController
+                navController = navController
             )
         }
     }

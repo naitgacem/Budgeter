@@ -6,20 +6,14 @@ import com.aitgacem.budgeter.R
 sealed class Screen(
     val route: String,
     @StringRes val resourceId: Int,
-    val isNavBarVisible: Boolean = true,
 ) {
 
-    object Overview : Screen("overview", R.string.overview)
-    object Settings : Screen("settings", R.string.settings, false)
+    object Home : Screen("home", R.string.home)
+    object Settings : Screen("settings", R.string.settings)
     object Goals : Screen("goals", R.string.goals)
-    object Withdraw : Screen("withdraw", R.string.add_transaction, false)
-    object Deposit : Screen("deposit?id={id}", R.string.deposit, false)
+    object Withdraw : Screen("withdraw", R.string.add_transaction)
+    object Deposit : Screen("deposit?id={id}", R.string.deposit)
     object Analytics : Screen("analytics", R.string.analytics)
     object Transactions : Screen("transactions", R.string.transactions)
-    object TransactionDetails :
-        Screen("transactions_details/{id}", R.string.transactions_details, false)
+    object TransactionDetails : Screen("transactions_details/{id}", R.string.transactions_details)
 }
-
-val navBarVisibleIn: Map<String, Boolean> = Screen::class.sealedSubclasses
-    .mapNotNull { it.objectInstance }
-    .associate { screen -> screen.route to screen.isNavBarVisible }
