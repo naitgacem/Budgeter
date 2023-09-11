@@ -8,6 +8,7 @@ import com.aitgacem.budgeter.ui.components.Category
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.joinAll
 import kotlinx.coroutines.launch
 import java.io.IOException
 import java.util.Calendar
@@ -33,8 +34,8 @@ class DepositViewModel @Inject constructor(
 
     private var oldTransaction: Transaction? = null
 
-    fun setUpUpdate(id: String) {
-        viewModelScope.launch {
+    suspend fun setUpUpdate(id: String) {
+        val updating = viewModelScope.launch {
             val transaction = repository.loadTransaction(id = id.toLong())
             if (transaction != null) {
                 oldValue = transaction.amount
@@ -47,6 +48,7 @@ class DepositViewModel @Inject constructor(
                 throw IOException("Transaction deleted or corrupt")
             }
         }
+        joinAll(updating)
     }
 
     fun updateAmount(newAmount: String) {

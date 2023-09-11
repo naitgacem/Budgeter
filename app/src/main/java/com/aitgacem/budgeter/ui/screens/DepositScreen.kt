@@ -96,8 +96,10 @@ private fun DepositContent(
     val description by depositViewModel.description.collectAsState()
     val date by depositViewModel.date.collectAsState()
 
-    if (id != null) {
-        depositViewModel.setUpUpdate(id)
+    LaunchedEffect(key1 = id) {
+        if (id != null) {
+            depositViewModel.setUpUpdate(id)
+        }
     }
 
     val state = rememberDatePickerState(
