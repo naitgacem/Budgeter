@@ -1,6 +1,7 @@
 package com.aitgacem.budgeter.data
 
 import androidx.annotation.WorkerThread
+import androidx.room.withTransaction
 import com.aitgacem.budgeter.data.model.Balance
 import com.aitgacem.budgeter.data.model.CategoryAndValue
 import com.aitgacem.budgeter.data.model.DateAndBalance
@@ -19,15 +20,19 @@ class TransactionsRepository(private val db: TransactionDatabase) {
     private val analyticsDao = db.analyticsDao()
 
     suspend fun writeTransactionToDatabase(transaction: Transaction) {
-        transactionDao.insert(transaction)
-        updateCategoryAndValue(transaction)
-        updateBalance(transaction)
+        db.withTransaction {
+            transactionDao.insert(transaction)
+            updateCategoryAndValue(transaction)
+            updateBalance(transaction)
+        }
     }
 
     suspend fun updateTransaction(transaction: Transaction, oldValue: Float?) {
-        transactionDao.update(transaction)
-        updateCategoryAndValue(transaction, oldValue)
-        updateBalance(transaction, oldValue)
+        db.withTransaction {
+            transactionDao.update(transaction)
+            updateCategoryAndValue(transaction, oldValue)
+            updateBalance(transaction, oldValue)
+        }
     }
 
     private suspend fun updateBalance(
@@ -57,7 +62,6 @@ class TransactionsRepository(private val db: TransactionDatabase) {
 
         for (balance in newerBalances) {
             val loadedTransaction = transactionDao.loadTransaction(balance.id)
-
             if (loadedTransaction != null) {
                 if (loadedTransaction.category == Category.Deposit) {
                     predecessor += loadedTransaction.amount
