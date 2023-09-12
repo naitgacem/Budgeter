@@ -64,4 +64,32 @@ class TransactionsRepositoryTest {
         assert(abs(transactionsRepository.readBalance(id = 5) + 40f) < 0.001)
 
     }
+
+    @Test
+    fun fkn_shit() = runTest {
+        val transactionsRepository = TransactionsRepository(db)
+
+        transactionsRepository.writeTransactionToDatabase(
+            Transaction(1, 100, "test tx", 10f, Category.Deposit)
+        )
+        transactionsRepository.writeTransactionToDatabase(
+            Transaction(2, 90, "test tx", 10f, Category.Deposit)
+        )
+        transactionsRepository.writeTransactionToDatabase(
+            Transaction(3, 80, "test tx", 10f, Category.Deposit)
+        )
+        transactionsRepository.writeTransactionToDatabase(
+            Transaction(4, 70, "test tx", 10f, Category.Deposit)
+        )
+        transactionsRepository.writeTransactionToDatabase(
+            Transaction(5, 60, "test tx", 10f, Category.Deposit)
+        )
+
+        assert(abs(transactionsRepository.readBalance(id = 1) - 50f) < 0.001)
+        assert(abs(transactionsRepository.readBalance(id = 2) - 40f) < 0.001)
+        assert(abs(transactionsRepository.readBalance(id = 3) - 30f) < 0.001)
+        assert(abs(transactionsRepository.readBalance(id = 4) - 20f) < 0.001)
+        assert(abs(transactionsRepository.readBalance(id = 5) - 10f) < 0.001)
+
+    }
 }
