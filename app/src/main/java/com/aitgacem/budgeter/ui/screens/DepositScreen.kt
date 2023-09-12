@@ -34,14 +34,19 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import com.aitgacem.budgeter.ui.viewmodels.DepositViewModel
+import com.ramcosta.composedestinations.annotation.Destination
+import com.ramcosta.composedestinations.navigation.DestinationsNavigator
+import com.ramcosta.composedestinations.navigation.EmptyDestinationsNavigator.popBackStack
 import java.util.Calendar
 
+@Destination
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DepositScreen(
-    navHostController: NavHostController,
+    navigator: DestinationsNavigator,
     id: String? = null,
 ) {
     Scaffold(
@@ -51,7 +56,7 @@ fun DepositScreen(
                 },
                 navigationIcon = {
                     IconButton(
-                        onClick = { navHostController.popBackStack() },
+                        onClick = { navigator.popBackStack() },
                     ) {
                         Icon(
                             imageVector = Icons.Default.ArrowBack,
@@ -76,7 +81,7 @@ fun DepositScreen(
         DepositContent(
             modifier = Modifier.padding(paddingValues),
             id = id,
-            exitAfterSave = navHostController::popBackStack
+            exitAfterSave = navigator::popBackStack
         )
     }
 }

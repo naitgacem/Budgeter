@@ -37,10 +37,12 @@ import com.aitgacem.budgeter.ui.components.Category
 import com.aitgacem.budgeter.ui.components.Screen
 import com.aitgacem.budgeter.ui.components.categoryToIconMap
 import com.aitgacem.budgeter.ui.viewmodels.TransactionsViewModel
+import com.ramcosta.composedestinations.annotation.Destination
 import java.text.SimpleDateFormat
 import java.util.Date
 
-
+@HomeNavGraph
+@Destination
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TransactionsScreen(

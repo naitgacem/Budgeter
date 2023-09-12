@@ -13,71 +13,27 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.aitgacem.budgeter.ui.components.Screen
 import com.aitgacem.budgeter.ui.screens.DepositScreen
+import com.aitgacem.budgeter.ui.screens.NavGraphs
 import com.aitgacem.budgeter.ui.screens.home.HomeScreen
 import com.aitgacem.budgeter.ui.screens.SettingsScreen
 import com.aitgacem.budgeter.ui.screens.TransactionDetailsScreen
 import com.aitgacem.budgeter.ui.screens.WithdrawScreen
+import com.aitgacem.budgeter.ui.screens.destinations.OverviewScreenDestination
+import com.aitgacem.budgeter.ui.screens.home.OverviewScreen
+import com.ramcosta.composedestinations.DestinationsNavHost
+import com.ramcosta.composedestinations.manualcomposablecalls.composable
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         setContent {
-            val navController = rememberNavController()
-            NavHost(
-                navController = navController,
-                startDestination = Screen.Home.route,
-            ) {
-                composable(
-                    route = Screen.Home.route,
-                    enterTransition = { fadeIn() },
-                ) {
-                    HomeScreen(topLevelNavHost = navController)
+            DestinationsNavHost(navGraph = NavGraphs.root) {
+                composable(OverviewScreenDestination) {
+                    OverviewScreen(navigator = destinationsNavigator)
                 }
-
-                composable(
-                    route = Screen.TransactionDetails.route,
-                    enterTransition = { scaleIn() },
-                ) { backStackEntry ->
-                    TransactionDetailsScreen(
-                        id = backStackEntry.arguments?.getString("id") ?: "",
-                        navController = navController
-                    )
-                }
-
-                composable(
-                    route = Screen.Settings.route,
-                    enterTransition = { slideInHorizontally { it } },
-                    exitTransition = { slideOutHorizontally { it } },
-                ) { SettingsScreen(navController = navController) }
-
-
-                composable(
-                    enterTransition = { slideInHorizontally { it } },
-                    exitTransition = { slideOutHorizontally { it } },
-                    route = Screen.Deposit.route,
-                    arguments = listOf(
-                        navArgument("id") {
-                            nullable = true
-                        }
-                    )
-                ) { backStackEntry ->
-                    DepositScreen(
-                        navHostController = navController,
-                        id = backStackEntry.arguments?.getString("id"),
-                    )
-                }
-
-                composable(
-                    enterTransition = { slideInHorizontally { it } },
-                    exitTransition = { slideOutHorizontally { it } },
-                    route = Screen.Withdraw.route,
-                ) { WithdrawScreen(navHostController = navController) }
-
-
             }
         }
     }

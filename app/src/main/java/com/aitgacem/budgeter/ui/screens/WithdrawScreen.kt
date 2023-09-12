@@ -42,16 +42,19 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import com.aitgacem.budgeter.ui.components.Category
 import com.aitgacem.budgeter.ui.components.categoryToIconMap
 import com.aitgacem.budgeter.ui.viewmodels.WithdrawViewModel
+import com.ramcosta.composedestinations.annotation.Destination
 import java.util.Calendar
 
+@Destination
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun WithdrawScreen(
-    navHostController: NavHostController,
+    navHostController: NavController,
 ) {
     Scaffold(
         topBar = {

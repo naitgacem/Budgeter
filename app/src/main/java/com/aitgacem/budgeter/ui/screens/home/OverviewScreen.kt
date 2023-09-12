@@ -52,13 +52,22 @@ import com.aitgacem.budgeter.data.model.Transaction
 import com.aitgacem.budgeter.ui.components.Category
 import com.aitgacem.budgeter.ui.components.Screen
 import com.aitgacem.budgeter.ui.components.categoryToIconMap
+import com.aitgacem.budgeter.ui.screens.destinations.DepositScreenDestination
+import com.aitgacem.budgeter.ui.screens.destinations.SettingsScreenDestination
+import com.aitgacem.budgeter.ui.screens.destinations.TransactionDetailsScreenDestination
+import com.aitgacem.budgeter.ui.screens.destinations.WithdrawScreenDestination
 import com.aitgacem.budgeter.ui.viewmodels.OverviewViewModel
+import com.ramcosta.composedestinations.annotation.Destination
+import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import java.text.DecimalFormat
 
+
+@HomeNavGraph
+@Destination
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun OverviewScreen(
-    navController: NavHostController,
+    navigator: DestinationsNavigator,
     overviewViewModel: OverviewViewModel = hiltViewModel(),
 ) {
     val recentTransactions by overviewViewModel.recentTransactions.collectAsState()
@@ -85,7 +94,7 @@ fun OverviewScreen(
                     actions = {
                         IconButton(
                             onClick = {
-                                navController.navigate(Screen.Settings.route)
+                                navigator.navigate(SettingsScreenDestination)
                             }
                         ) {
                             Icon(
@@ -101,7 +110,7 @@ fun OverviewScreen(
                 modifier = Modifier.padding(paddingValues),
                 balance = balance,
                 recentTransactions = recentTransactions,
-                navController = navController
+                navigator = navigator
             )
         }
     }
@@ -112,7 +121,7 @@ private fun OverviewScreenContent(
     modifier: Modifier = Modifier,
     balance: Float,
     recentTransactions: List<Transaction>,
-    navController: NavController,
+    navigator: DestinationsNavigator,
 ) {
     LazyColumn(
         modifier = modifier
@@ -142,8 +151,8 @@ private fun OverviewScreenContent(
                     )
                     Operations(
                         modifier = Modifier.weight(.45f),
-                        navigateToWithdraw = { navController.navigate(Screen.Withdraw.route) },
-                        navigateToDeposit = { navController.navigate(Screen.Deposit.route) }
+                        navigateToWithdraw = { navigator.navigate(WithdrawScreenDestination) },
+                        navigateToDeposit = { }
                     )
                 }
             }
@@ -166,10 +175,6 @@ private fun OverviewScreenContent(
             ItemDisplay(
                 transaction = day,
                 navigateToItem = {
-                    navController.navigate(
-                        Screen.TransactionDetails.route
-                            .replace(oldValue = "{id}", newValue = day.id.toString())
-                    )
                 }
             )
             HorizontalDivider(

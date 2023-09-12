@@ -25,6 +25,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import com.aitgacem.budgeter.ui.viewmodels.AnalyticsViewModel
 import com.aitgacem.budgeter.ui.viewmodels.utils.DateFormatter
@@ -32,11 +33,14 @@ import com.github.mikephil.charting.charts.LineChart
 import com.github.mikephil.charting.charts.PieChart
 import com.github.mikephil.charting.components.Legend
 import com.github.mikephil.charting.components.XAxis
+import com.ramcosta.composedestinations.annotation.Destination
 
+@HomeNavGraph
+@Destination
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun AnalyticsScreen(
-    navController: NavHostController,
+    navController: NavController,
     analyticsViewModel: AnalyticsViewModel = hiltViewModel(),
 ) {
     val updateChart: (PieChart) -> Unit = { analyticsViewModel.updatePieChart(it) }
