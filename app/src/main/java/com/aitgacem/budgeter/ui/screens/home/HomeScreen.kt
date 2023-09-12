@@ -1,12 +1,10 @@
-package com.aitgacem.budgeter.ui.screens
+package com.aitgacem.budgeter.ui.screens.home
 
-import androidx.annotation.StringRes
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.scaleIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Analytics
-import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.SwapVert
@@ -19,7 +17,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination.Companion.hierarchy
@@ -29,8 +26,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.aitgacem.budgeter.R
 import com.aitgacem.budgeter.ui.components.Screen
+import com.aitgacem.budgeter.ui.screens.TransactionDetailsScreen
 
 
 @Composable
@@ -141,3 +138,4 @@ private val iconMap = mapOf(
     Screen.Home.resourceId to Icons.Filled.Home,
     Screen.Goals.resourceId to Icons.Filled.Person,
 )
+

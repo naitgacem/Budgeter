@@ -13,7 +13,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.aitgacem.budgeter.ui.components.Screen
 import com.aitgacem.budgeter.ui.screens.DepositScreen
-import com.aitgacem.budgeter.ui.screens.HomeScreen
+import com.aitgacem.budgeter.ui.screens.home.HomeScreen
 import com.aitgacem.budgeter.ui.screens.SettingsScreen
 import com.aitgacem.budgeter.ui.screens.TransactionDetailsScreen
 import com.aitgacem.budgeter.ui.screens.WithdrawScreen

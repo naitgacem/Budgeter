@@ -76,9 +76,8 @@ fun DepositScreen(
         DepositContent(
             modifier = Modifier.padding(paddingValues),
             id = id,
-        ) {
-            navHostController.popBackStack()
-        }
+            exitAfterSave = navHostController::popBackStack
+        )
     }
 }
 
@@ -145,13 +144,11 @@ private fun DepositContent(
 
         item {
             Spacer(modifier = Modifier.height(24.dp))
-            SaveButton(
-                saveEntry = {
-                    depositViewModel.updateDate(state.selectedDateMillis)
-                    depositViewModel.saveTransaction()
-                    exitAfterSave.invoke()
-                }
-            )
+            SaveButton {
+                depositViewModel.updateDate(state.selectedDateMillis)
+                depositViewModel.saveTransaction()
+                exitAfterSave()
+            }
         }
     }
 }

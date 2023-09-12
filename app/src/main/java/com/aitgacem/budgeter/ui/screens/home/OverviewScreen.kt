@@ -1,4 +1,4 @@
-package com.aitgacem.budgeter.ui.screens
+package com.aitgacem.budgeter.ui.screens.home
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource

@@ -8,6 +8,7 @@ import com.aitgacem.budgeter.data.model.DateAndBalance
 import com.aitgacem.budgeter.data.model.Transaction
 import com.aitgacem.budgeter.ui.components.Category
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.withContext
 import java.util.Calendar
@@ -32,6 +33,7 @@ class TransactionsRepository(private val db: TransactionDatabase) {
             transactionDao.update(transaction)
             updateCategoryAndValue(transaction, oldValue)
             updateBalance(transaction, oldValue)
+            delay(10000)
         }
     }
 

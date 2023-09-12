@@ -1,4 +1,4 @@
-package com.aitgacem.budgeter.ui.screens
+package com.aitgacem.budgeter.ui.screens.home
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
@@ -31,7 +31,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.aitgacem.budgeter.data.model.Transaction
 import com.aitgacem.budgeter.ui.components.Category

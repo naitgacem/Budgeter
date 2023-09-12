@@ -1,4 +1,4 @@
-package com.aitgacem.budgeter.ui.screens
+package com.aitgacem.budgeter.ui.screens.home
 
 import android.view.ViewGroup
 import android.widget.LinearLayout
@@ -35,7 +35,7 @@ import com.github.mikephil.charting.components.XAxis
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AnalyticsScreen(
+internal fun AnalyticsScreen(
     navController: NavHostController,
     analyticsViewModel: AnalyticsViewModel = hiltViewModel(),
 ) {
@@ -70,7 +70,6 @@ fun AnalyticsScreen(
     }
 }
 
-
 @Composable
 fun AnalyticsScreenContent(
     modifier: Modifier = Modifier,
@@ -92,7 +91,7 @@ fun AnalyticsScreenContent(
         }
         item {
             Column(
-                modifier = Modifier
+                modifier = androidx.compose.ui.Modifier
                     .padding(18.dp)
                     .size(320.dp),
                 horizontalAlignment = Alignment.CenterHorizontally,
@@ -105,7 +104,7 @@ fun AnalyticsScreenContent(
         }
         item {
             Column(
-                modifier = Modifier
+                modifier = androidx.compose.ui.Modifier
                     .padding(18.dp)
                     .fillMaxWidth()
                     .height(300.dp),
@@ -152,7 +151,7 @@ fun LineChart(
 }
 
 @Composable
-private fun PieChart(
+fun PieChart(
     updateChart: (chart: PieChart) -> Unit,
 ) {
     AndroidView(
@@ -181,4 +180,3 @@ private fun PieChart(
         updateChart(it)
     }
 }
-
