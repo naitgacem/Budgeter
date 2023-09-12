@@ -47,7 +47,7 @@ import java.util.Calendar
 @Composable
 fun DepositScreen(
     navigator: DestinationsNavigator,
-    id: String? = null,
+    id: String?,
 ) {
     Scaffold(
         topBar = {
