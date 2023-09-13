@@ -34,6 +34,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.aitgacem.budgeter.R
+import com.aitgacem.budgeter.popOnce
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -52,7 +53,7 @@ fun SettingsScreen(
                     },
                     navigationIcon = {
                         IconButton(
-                            onClick = { navController.popBackStack() }
+                            onClick = { navController.popOnce() }
                         ) {
                             Icon(Icons.Filled.ArrowBack, contentDescription = null)
                         }

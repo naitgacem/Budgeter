@@ -1,5 +1,6 @@
 package com.aitgacem.budgeter.ui.viewmodels
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.aitgacem.budgeter.data.TransactionsRepository
@@ -33,19 +34,18 @@ class DepositViewModel @Inject constructor(
 
     private var oldTransaction: Transaction? = null
 
-    fun setUpUpdate(id: String) {
-        viewModelScope.launch {
-            val transaction = repository.loadTransaction(id = id.toLong())
-            if (transaction != null) {
-                oldValue = transaction.amount
-                _amount.value = transaction.amount.toString()
-                _description.value = transaction.title
-                _date.value = transaction.date
-                oldTransaction = transaction
-                isUpdate = true
-            } else {
-                throw IOException("Transaction deleted or corrupt")
-            }
+    suspend fun setUpUpdate(id: String) {
+        val transaction = repository.loadTransaction(id = id.toLong())
+        if (transaction != null) {
+            _date.value = transaction.date
+            oldValue = transaction.amount
+            _amount.value = transaction.amount.toString()
+            _description.value = transaction.title
+            oldTransaction = transaction
+            isUpdate = true
+            Log.d("nabil", "should finish")
+        } else {
+            throw IOException("Transaction deleted or corrupt")
         }
     }
 
@@ -63,6 +63,8 @@ class DepositViewModel @Inject constructor(
 
     fun saveTransaction() {
         if (isUpdate) {
+            Log.d("nabil", "but it works")
+
             viewModelScope.launch {
                 repository.updateTransaction(
                     oldTransaction!!.copy(

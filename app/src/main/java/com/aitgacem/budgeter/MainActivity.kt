@@ -7,6 +7,11 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.scaleIn
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
+import androidx.lifecycle.Lifecycle
+import androidx.navigation.NavBackStackEntry
+import androidx.navigation.NavController
+import androidx.navigation.NavGraph
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -27,6 +32,7 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             val navController = rememberNavController()
+
             NavHost(
                 navController = navController,
                 startDestination = Screen.Home.route,
@@ -82,6 +88,27 @@ class MainActivity : ComponentActivity() {
         }
     }
 }
+
+/**
+ * If the lifecycle is not resumed it means this NavBackStackEntry already processed a nav event.
+ *
+ * This is used to de-duplicate navigation events.
+ */
+fun NavBackStackEntry.lifecycleIsResumed() =
+    this.lifecycle.currentState == Lifecycle.State.RESUMED
+
+fun NavController.navigateOnce(route: String) {
+    if (this.currentBackStackEntry?.lifecycleIsResumed() == true) {
+        this.navigate(route)
+    }
+}
+
+fun NavController.popOnce() {
+    if (this.currentBackStackEntry?.lifecycleIsResumed() == true) {
+        this.popBackStack()
+    }
+}
+
 
 
 

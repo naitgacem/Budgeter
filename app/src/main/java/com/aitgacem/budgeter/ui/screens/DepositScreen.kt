@@ -35,6 +35,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
+import com.aitgacem.budgeter.popOnce
 import com.aitgacem.budgeter.ui.viewmodels.DepositViewModel
 import java.util.Calendar
 
@@ -51,7 +52,7 @@ fun DepositScreen(
                 },
                 navigationIcon = {
                     IconButton(
-                        onClick = { navHostController.popBackStack() },
+                        onClick = { navHostController.popOnce() },
                     ) {
                         Icon(
                             imageVector = Icons.Default.ArrowBack,
@@ -96,13 +97,15 @@ private fun DepositContent(
     val description by depositViewModel.description.collectAsState()
     val date by depositViewModel.date.collectAsState()
 
-    if (id != null) {
-        depositViewModel.setUpUpdate(id)
+    LaunchedEffect(key1 = id) {
+        if (id != null) {
+            depositViewModel.setUpUpdate(id)
+        }
     }
 
     val state = rememberDatePickerState(
         initialDisplayMode = DisplayMode.Input,
-        initialSelectedDateMillis = if (id != null) date else Calendar.getInstance().timeInMillis
+        initialSelectedDateMillis = Calendar.getInstance().timeInMillis
     )
     LazyColumn(
         modifier = modifier

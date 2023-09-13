@@ -39,16 +39,20 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.Lifecycle
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import com.aitgacem.budgeter.R
 import com.aitgacem.budgeter.data.model.Transaction
+import com.aitgacem.budgeter.lifecycleIsResumed
+import com.aitgacem.budgeter.navigateOnce
 import com.aitgacem.budgeter.ui.components.Category
 import com.aitgacem.budgeter.ui.components.Screen
 import com.aitgacem.budgeter.ui.components.categoryToIconMap
@@ -66,6 +70,7 @@ fun OverviewScreen(
 
 
     Surface {
+        val lifecycleOwner = LocalLifecycleOwner.current
         Scaffold(
             topBar = {
                 TopAppBar(
@@ -85,7 +90,7 @@ fun OverviewScreen(
                     actions = {
                         IconButton(
                             onClick = {
-                                navController.navigate(Screen.Settings.route)
+                                navController.navigateOnce(Screen.Settings.route)
                             }
                         ) {
                             Icon(
