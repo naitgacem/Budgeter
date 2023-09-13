@@ -1,6 +1,7 @@
 package com.aitgacem.budgeter.ui.screens.home
 
 import android.annotation.SuppressLint
+import android.util.Log
 import androidx.annotation.StringRes
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Analytics
@@ -19,10 +20,12 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.aitgacem.budgeter.R
 import com.aitgacem.budgeter.ui.screens.NavGraphs
+import com.aitgacem.budgeter.ui.screens.appCurrentDestinationAsState
 import com.aitgacem.budgeter.ui.screens.destinations.AnalyticsScreenDestination
 import com.aitgacem.budgeter.ui.screens.destinations.GoalsScreenDestination
 import com.aitgacem.budgeter.ui.screens.destinations.OverviewScreenDestination
 import com.aitgacem.budgeter.ui.screens.destinations.TransactionsScreenDestination
+import com.aitgacem.budgeter.ui.screens.startAppDestination
 import com.ramcosta.composedestinations.DestinationsNavHost
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.NavGraph
@@ -72,22 +75,32 @@ fun NavBar(
 ) {
     NavigationBar {
         BottomBarDestination.values().forEach { destination ->
-            val isOnBackStack = navController.isRouteOnBackStack(destination.direction)
+
+            val currentDestination = navController.appCurrentDestinationAsState().value
+                ?: NavGraphs.home.startAppDestination
+            val isSelected = currentDestination == destination.direction
+
             NavigationBarItem(
-                selected = isOnBackStack,
+                selected = isSelected,
                 onClick = {
-                    if (isOnBackStack) {
+                    if (isSelected) {
                         navController.popBackStack(destination.direction, false)
                         return@NavigationBarItem
                     }
-
+//                    var s = "we are at  " + navController.currentDestination?.route + " "
+//
+//                    for (str in navController.currentBackStack.value){
+//                        s += str.destination.route
+//                    }
+//                    Log.d("here", s + "\n")
                     navController.navigate(destination.direction) {
-                        popUpTo(NavGraphs.root) {
+                        popUpTo(NavGraphs.home) {
                             saveState = true
                         }
                         launchSingleTop = true
                         restoreState = true
                     }
+
                 },
                 icon = {
                     Icon(

@@ -39,7 +39,6 @@ import androidx.navigation.NavHostController
 import com.aitgacem.budgeter.ui.viewmodels.DepositViewModel
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
-import com.ramcosta.composedestinations.navigation.EmptyDestinationsNavigator.popBackStack
 import java.util.Calendar
 
 @Destination
