@@ -35,12 +35,13 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.aitgacem.budgeter.R
 import com.ramcosta.composedestinations.annotation.Destination
+import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 
 @Destination
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SettingsScreen(
-    navController: NavController,
+    navigator: DestinationsNavigator,
 ) {
     Surface {
         Scaffold(
@@ -54,7 +55,7 @@ fun SettingsScreen(
                     },
                     navigationIcon = {
                         IconButton(
-                            onClick = { navController.popBackStack() }
+                            onClick = { navigator.popBackStack() }
                         ) {
                             Icon(Icons.Filled.ArrowBack, contentDescription = null)
                         }
@@ -117,7 +118,6 @@ fun SettingCategoryDisplay(
                 style = MaterialTheme.typography.bodyLarge,
                 modifier = modifier
                     .padding(horizontal = 8.dp)
-
             )
             Text(
                 modifier = modifier

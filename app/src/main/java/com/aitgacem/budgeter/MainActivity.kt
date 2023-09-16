@@ -18,7 +18,9 @@ import com.aitgacem.budgeter.ui.screens.home.HomeScreen
 import com.aitgacem.budgeter.ui.screens.SettingsScreen
 import com.aitgacem.budgeter.ui.screens.TransactionDetailsScreen
 import com.aitgacem.budgeter.ui.screens.WithdrawScreen
+import com.aitgacem.budgeter.ui.screens.destinations.HomeScreenDestination
 import com.aitgacem.budgeter.ui.screens.destinations.OverviewScreenDestination
+import com.aitgacem.budgeter.ui.screens.destinations.SettingsScreenDestination
 import com.aitgacem.budgeter.ui.screens.home.OverviewScreen
 import com.ramcosta.composedestinations.DestinationsNavHost
 import com.ramcosta.composedestinations.manualcomposablecalls.composable
@@ -30,11 +32,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         setContent {
-            DestinationsNavHost(navGraph = NavGraphs.root) {
-                composable(OverviewScreenDestination) {
-                    OverviewScreen(navigator = destinationsNavigator)
-                }
-            }
+            DestinationsNavHost(navGraph = NavGraphs.root)
         }
     }
 }

@@ -41,6 +41,7 @@ import com.aitgacem.budgeter.ui.components.Screen
 import com.aitgacem.budgeter.ui.components.categoryToIconMap
 import com.aitgacem.budgeter.ui.viewmodels.TransactionDetailsViewModel
 import com.ramcosta.composedestinations.annotation.Destination
+import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import java.text.SimpleDateFormat
 import java.util.Date
 
@@ -48,20 +49,16 @@ import java.util.Date
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TransactionDetailsScreen(
-    id: String,
-    transactionDetailsViewModel: TransactionDetailsViewModel = hiltViewModel(),
-    navController: NavController,
+    navigator: DestinationsNavigator,
+    transaction: Transaction,
 ) {
-    transactionDetailsViewModel.loadTransaction(id = id.toLong())
-    val transaction by transactionDetailsViewModel.transaction.collectAsState()
-
     Scaffold(
         topBar = {
             TopAppBar(
                 title = {},
                 navigationIcon = {
                     IconButton(
-                        onClick = { navController.popBackStack() }
+                        onClick = { navigator.popBackStack() }
                     ) {
                         Icon(Icons.Filled.ArrowBack, contentDescription = null)
                     }
@@ -74,11 +71,7 @@ fun TransactionDetailsScreen(
                     }
                     IconButton(
                         onClick = {
-                            navController.navigate(
-                                Screen.Deposit.route.replace(
-                                    oldValue = "{id}", newValue = id
-                                )
-                            )
+
                         }
                     ) {
                         Icon(Icons.Filled.MoreVert, contentDescription = null)
@@ -91,7 +84,7 @@ fun TransactionDetailsScreen(
             modifier = Modifier
                 .padding(horizontal = 8.dp)
                 .padding(paddingValues),
-            transaction = transaction ?: Transaction(0, 0, "", 0.toFloat(), Category.Others)
+            transaction = transaction
         )
     }
 

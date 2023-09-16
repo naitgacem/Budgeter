@@ -175,6 +175,9 @@ private fun OverviewScreenContent(
             ItemDisplay(
                 transaction = day,
                 navigateToItem = {
+                    navigator.navigate(
+                        TransactionDetailsScreenDestination(transaction = day)
+                    )
                 }
             )
             HorizontalDivider(
