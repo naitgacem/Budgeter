@@ -47,8 +47,8 @@ internal fun AnalyticsScreen(
 ) {
     val updateChart: (PieChart) -> Unit = { analyticsViewModel.updatePieChart(it) }
     val updateLineChart: (LineChart) -> Unit = { analyticsViewModel.updateLineChart(it) }
-
     val all = analyticsViewModel.allTransactions.collectAsState()
+
     Surface(color = MaterialTheme.colorScheme.primary) {
         Scaffold(
             topBar = {
@@ -85,7 +85,6 @@ fun AnalyticsScreenContent(
     updateLineChart: (chart: LineChart) -> Unit,
     updateEvent: State<List<Transaction>>,
 ) {
-    val update = updateEvent.value
     LazyColumn(
         modifier = modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -136,7 +135,6 @@ fun LineChart(
     updateChart: (chart: LineChart) -> Unit,
     updateEvent: State<List<Transaction>>,
 ) {
-    val update = updateEvent.value
     println("heyy line")
     AndroidView(
         factory = { context ->
@@ -163,6 +161,7 @@ fun LineChart(
             .padding(5.dp),
     ) {
         println("heyy updating line here")
+        val update = updateEvent.value
         updateChart.invoke(it)
     }
 }
@@ -172,7 +171,6 @@ fun PieChart(
     updateChart: (chart: PieChart) -> Unit,
     updateEvent: State<List<Transaction>>,
 ) {
-    val update = updateEvent.value
     println("heyy pie")
 
     AndroidView(
@@ -199,6 +197,7 @@ fun PieChart(
             .padding(5.dp),
     ) {
         println("heyy updating pie here")
+        val update = updateEvent.value
         updateChart(it)
     }
 }
