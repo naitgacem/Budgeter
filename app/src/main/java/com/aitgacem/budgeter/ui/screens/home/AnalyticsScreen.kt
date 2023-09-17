@@ -28,7 +28,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import com.aitgacem.budgeter.data.model.Transaction
 import com.aitgacem.budgeter.ui.viewmodels.AnalyticsViewModel
 import com.aitgacem.budgeter.ui.viewmodels.utils.DateFormatter
 import com.github.mikephil.charting.charts.LineChart
@@ -47,7 +46,8 @@ internal fun AnalyticsScreen(
 ) {
     val updateChart: (PieChart) -> Unit = { analyticsViewModel.updatePieChart(it) }
     val updateLineChart: (LineChart) -> Unit = { analyticsViewModel.updateLineChart(it) }
-    val all = analyticsViewModel.allTransactions.collectAsState()
+
+    val updateTrigger = analyticsViewModel.updateTrigger.collectAsState()
 
     Surface(color = MaterialTheme.colorScheme.primary) {
         Scaffold(
@@ -70,7 +70,7 @@ internal fun AnalyticsScreen(
                 modifier = Modifier.padding(paddingValues),
                 updatePieChart = updateChart,
                 updateLineChart = updateLineChart,
-                updateEvent = all,
+                updateEvent = updateTrigger,
             )
 
 
@@ -83,7 +83,7 @@ fun AnalyticsScreenContent(
     modifier: Modifier = Modifier,
     updatePieChart: (chart: PieChart) -> Unit,
     updateLineChart: (chart: LineChart) -> Unit,
-    updateEvent: State<List<Transaction>>,
+    updateEvent: State<List<Any>>,
 ) {
     LazyColumn(
         modifier = modifier.fillMaxSize(),
@@ -133,7 +133,7 @@ fun AnalyticsScreenContent(
 @Composable
 fun LineChart(
     updateChart: (chart: LineChart) -> Unit,
-    updateEvent: State<List<Transaction>>,
+    updateEvent: State<List<Any>>,
 ) {
     println("heyy line")
     AndroidView(
@@ -169,7 +169,7 @@ fun LineChart(
 @Composable
 fun PieChart(
     updateChart: (chart: PieChart) -> Unit,
-    updateEvent: State<List<Transaction>>,
+    updateEvent: State<List<Any>>,
 ) {
     println("heyy pie")
 

@@ -19,7 +19,9 @@ import com.github.mikephil.charting.data.PieDataSet
 import com.github.mikephil.charting.data.PieEntry
 import com.github.mikephil.charting.formatter.PercentFormatter
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -29,6 +31,9 @@ class AnalyticsViewModel @Inject constructor(
     private val repository: TransactionsRepository,
 ) : ViewModel() {
     var allTransactions = MutableStateFlow<List<Transaction>>(emptyList())
+
+    private var _updateTrigger = MutableStateFlow<List<Any>>(emptyList())
+    val updateTrigger = _updateTrigger.asStateFlow()
 
     private val categoryAndValues = MutableStateFlow<List<CategoryAndValue>>(emptyList())
 
@@ -54,12 +59,14 @@ class AnalyticsViewModel @Inject constructor(
 
     private suspend fun loadDayAndData() {
         repository.getBalanceByDate().collect {
+            _updateTrigger.value = _updateTrigger.value + Unit
             dateAndBalance.value = it
         }
     }
 
     private suspend fun loadCategoryAndData() {
         repository.getCategoryAndValue().collect {
+            _updateTrigger.value = _updateTrigger.value + Unit
             categoryAndValues.value = it
         }
     }
