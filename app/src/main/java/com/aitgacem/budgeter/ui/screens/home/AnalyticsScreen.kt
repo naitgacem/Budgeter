@@ -19,6 +19,8 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.State
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
@@ -26,7 +28,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import androidx.navigation.NavHostController
+import com.aitgacem.budgeter.data.model.Transaction
 import com.aitgacem.budgeter.ui.viewmodels.AnalyticsViewModel
 import com.aitgacem.budgeter.ui.viewmodels.utils.DateFormatter
 import com.github.mikephil.charting.charts.LineChart
@@ -46,6 +48,7 @@ internal fun AnalyticsScreen(
     val updateChart: (PieChart) -> Unit = { analyticsViewModel.updatePieChart(it) }
     val updateLineChart: (LineChart) -> Unit = { analyticsViewModel.updateLineChart(it) }
 
+    val all = analyticsViewModel.allTransactions.collectAsState()
     Surface(color = MaterialTheme.colorScheme.primary) {
         Scaffold(
             topBar = {
@@ -67,6 +70,7 @@ internal fun AnalyticsScreen(
                 modifier = Modifier.padding(paddingValues),
                 updatePieChart = updateChart,
                 updateLineChart = updateLineChart,
+                updateEvent = all,
             )
 
 
@@ -79,7 +83,9 @@ fun AnalyticsScreenContent(
     modifier: Modifier = Modifier,
     updatePieChart: (chart: PieChart) -> Unit,
     updateLineChart: (chart: LineChart) -> Unit,
+    updateEvent: State<List<Transaction>>,
 ) {
+    val update = updateEvent.value
     LazyColumn(
         modifier = modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -102,7 +108,8 @@ fun AnalyticsScreenContent(
                 verticalArrangement = Arrangement.Center
             ) {
                 PieChart(
-                    updateChart = updatePieChart
+                    updateChart = updatePieChart,
+                    updateEvent = updateEvent,
                 )
             }
         }
@@ -116,7 +123,8 @@ fun AnalyticsScreenContent(
                 verticalArrangement = Arrangement.Center
             ) {
                 LineChart(
-                    updateChart = updateLineChart
+                    updateChart = updateLineChart,
+                    updateEvent = updateEvent,
                 )
             }
         }
@@ -126,9 +134,13 @@ fun AnalyticsScreenContent(
 @Composable
 fun LineChart(
     updateChart: (chart: LineChart) -> Unit,
+    updateEvent: State<List<Transaction>>,
 ) {
+    val update = updateEvent.value
+    println("heyy line")
     AndroidView(
         factory = { context ->
+            println(context)
             LineChart(context).apply {
                 layoutParams = LinearLayout.LayoutParams(
                     ViewGroup.LayoutParams.MATCH_PARENT,
@@ -150,14 +162,19 @@ fun LineChart(
             .wrapContentSize()
             .padding(5.dp),
     ) {
-        updateChart(it)
+        println("heyy updating line here")
+        updateChart.invoke(it)
     }
 }
 
 @Composable
 fun PieChart(
     updateChart: (chart: PieChart) -> Unit,
+    updateEvent: State<List<Transaction>>,
 ) {
+    val update = updateEvent.value
+    println("heyy pie")
+
     AndroidView(
         factory = { context ->
             PieChart(context).apply {
@@ -171,7 +188,7 @@ fun PieChart(
                 legend.textSize = 14F
                 legend.horizontalAlignment = Legend.LegendHorizontalAlignment.CENTER
                 legend.isWordWrapEnabled = true
-
+                isLogEnabled = true
                 setEntryLabelColor(0)
                 setUsePercentValues(true)
 
@@ -181,6 +198,7 @@ fun PieChart(
             .wrapContentSize()
             .padding(5.dp),
     ) {
+        println("heyy updating pie here")
         updateChart(it)
     }
 }

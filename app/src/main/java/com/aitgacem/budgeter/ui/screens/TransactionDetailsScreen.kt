@@ -11,10 +11,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.ArrowUpward
 import androidx.compose.material.icons.filled.AttachFile
 import androidx.compose.material.icons.filled.MoreVert
-import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -25,21 +23,14 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavController
 import com.aitgacem.budgeter.data.model.Transaction
-import com.aitgacem.budgeter.ui.components.Category
-import com.aitgacem.budgeter.ui.components.Screen
-import com.aitgacem.budgeter.ui.components.categoryToIconMap
-import com.aitgacem.budgeter.ui.viewmodels.TransactionDetailsViewModel
+import com.aitgacem.budgeter.ui.components.toIcon
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import java.text.SimpleDateFormat
@@ -149,11 +140,7 @@ fun HeaderContent(transaction: Transaction) {
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Icon(
-            imageVector = if (transaction.category == Category.Deposit) {
-                Icons.Default.ArrowUpward
-            } else {
-                categoryToIconMap[transaction.category] ?: Icons.Filled.Warning
-            },
+            imageVector = transaction.category.toIcon(),
             contentDescription = "",
             modifier = Modifier
                 .weight(.1f)

@@ -17,7 +17,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.AttachMoney
 import androidx.compose.material.icons.filled.Description
-import androidx.compose.material.icons.filled.ErrorOutline
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material3.Button
 import androidx.compose.material3.DatePicker
@@ -41,11 +40,9 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import androidx.navigation.NavHostController
 import com.aitgacem.budgeter.ui.components.Category
-import com.aitgacem.budgeter.ui.components.categoryToIconMap
+import com.aitgacem.budgeter.ui.components.toIcon
 import com.aitgacem.budgeter.ui.viewmodels.WithdrawViewModel
 import com.ramcosta.composedestinations.annotation.Destination
 import java.util.Calendar
@@ -263,7 +260,7 @@ private fun InsertCategory(
                     onClick = { updateCategory(element) },
                     leadingIcon = {
                         Icon(
-                            imageVector = categoryToIconMap[element] ?: Icons.Default.ErrorOutline,
+                            imageVector = element.toIcon(),
                             contentDescription = "",
                         )
                     },

@@ -16,10 +16,8 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowUpward
 import androidx.compose.material.icons.filled.Savings
 import androidx.compose.material.icons.filled.Settings
-import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -45,13 +43,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavController
-import androidx.navigation.NavHostController
 import com.aitgacem.budgeter.R
 import com.aitgacem.budgeter.data.model.Transaction
-import com.aitgacem.budgeter.ui.components.Category
-import com.aitgacem.budgeter.ui.components.Screen
-import com.aitgacem.budgeter.ui.components.categoryToIconMap
+import com.aitgacem.budgeter.ui.components.toIcon
 import com.aitgacem.budgeter.ui.screens.destinations.DepositScreenDestination
 import com.aitgacem.budgeter.ui.screens.destinations.SettingsScreenDestination
 import com.aitgacem.budgeter.ui.screens.destinations.TransactionDetailsScreenDestination
@@ -211,11 +205,7 @@ private fun ItemDisplay(
 
     ) {
         Icon(
-            imageVector = if (transaction.category == Category.Deposit) {
-                Icons.Default.ArrowUpward
-            } else {
-                categoryToIconMap[transaction.category] ?: Icons.Filled.Warning
-            },
+            imageVector = transaction.category.toIcon(),
             contentDescription = "",
             modifier = modifier
                 .size(width = 40.dp, height = 40.dp)

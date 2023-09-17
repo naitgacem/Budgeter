@@ -1,7 +1,6 @@
 package com.aitgacem.budgeter.ui.viewmodels
 
 import android.graphics.Typeface
-import android.util.Log
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.lifecycle.ViewModel
@@ -21,16 +20,15 @@ import com.github.mikephil.charting.data.PieEntry
 import com.github.mikephil.charting.formatter.PercentFormatter
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import java.text.SimpleDateFormat
-import java.util.Date
 import javax.inject.Inject
 
 @HiltViewModel
 class AnalyticsViewModel @Inject constructor(
     private val repository: TransactionsRepository,
 ) : ViewModel() {
-    private var allTransactions = MutableStateFlow<List<Transaction>>(emptyList())
+    var allTransactions = MutableStateFlow<List<Transaction>>(emptyList())
 
     private val categoryAndValues = MutableStateFlow<List<CategoryAndValue>>(emptyList())
 
@@ -46,7 +44,6 @@ class AnalyticsViewModel @Inject constructor(
         viewModelScope.launch {
             loadDayAndData()
         }
-
     }
 
     private suspend fun loadAllTransactions() {
