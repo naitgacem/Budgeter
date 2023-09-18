@@ -27,11 +27,11 @@ class TransactionsRepository(private val db: TransactionDatabase) {
         }
     }
 
-    suspend fun updateTransaction(transaction: Transaction, oldValue: Float?) {
+    suspend fun updateTransaction(transaction: Transaction, oldTransaction: Transaction?) {
         db.withTransaction {
             transactionDao.update(transaction)
-            updateCategoryAndValue(transaction, oldValue)
-            updateBalance(transaction, oldValue)
+            updateCategoryAndValue(transaction, oldTransaction)
+            updateBalance(transaction, oldTransaction?.amount)
         }
     }
 
@@ -111,8 +111,9 @@ class TransactionsRepository(private val db: TransactionDatabase) {
 
     private suspend fun updateCategoryAndValue(
         transaction: Transaction,
-        oldTransactionAmount: Float? = null,
+        oldTransaction: Transaction? = null
     ) {
+        val oldTransactionAmount: Float? = oldTransaction?.amount
         //TODO fix a bug where if you had one element in a category and you change the category
         if (transaction.category == Category.Deposit) {
             return

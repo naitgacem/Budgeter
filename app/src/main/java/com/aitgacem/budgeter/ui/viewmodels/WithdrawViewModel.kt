@@ -35,11 +35,10 @@ class WithdrawViewModel @Inject constructor(
     private var date = MutableStateFlow<Long>(0)
 
     private var isUpdate = false
-    private var oldValue: Float? = null
-    private var oldTransaction: Transaction? = null
+    private lateinit var oldTransaction: Transaction
     fun setUpUpdate(transaction: Transaction?) {
         if (transaction != null) {
-            oldValue = transaction.amount
+
             _amount.value = transaction.amount.toString()
             _description.value = transaction.title
             _category.value = transaction.category
@@ -69,13 +68,13 @@ class WithdrawViewModel @Inject constructor(
         if (isUpdate) {
             viewModelScope.launch {
                 repository.updateTransaction(
-                    oldTransaction!!.copy(
+                    oldTransaction.copy(
                         date = date.value,
                         amount = _amount.value?.toFloatOrNull() ?: 0.0f,
                         title = _description.value ?: "",
                         category = _category.value ?: Category.Others
                     ),
-                    oldValue
+                    oldTransaction
                 )
             }
         } else {

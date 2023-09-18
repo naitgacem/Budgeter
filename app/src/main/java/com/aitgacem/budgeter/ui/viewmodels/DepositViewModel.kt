@@ -30,13 +30,12 @@ class DepositViewModel @Inject constructor(
 
     private var isUpdate = false
 
-    private var oldValue: Float? = null
+    private lateinit var oldTransaction: Transaction
 
-    private var oldTransaction: Transaction? = null
 
     suspend fun setUpUpdate(transaction: Transaction?) {
         if (transaction != null) {
-            oldValue = transaction.amount
+            oldTransaction = transaction
             _amount.value = transaction.amount.toString()
             _description.value = transaction.title
             _date.value = transaction.date
@@ -62,12 +61,12 @@ class DepositViewModel @Inject constructor(
         if (isUpdate) {
             viewModelScope.launch {
                 repository.updateTransaction(
-                    oldTransaction!!.copy(
+                    oldTransaction.copy(
                         date = _date.value,
                         amount = _amount.value?.toFloatOrNull() ?: 0.0f,
                         title = _description.value ?: "",
                     ),
-                    oldValue
+                    oldTransaction,
                 )
             }
 
