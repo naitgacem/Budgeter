@@ -68,6 +68,9 @@ fun HomeScreen(
             composable(OverviewScreenDestination) {
                 OverviewScreen(navigator = topLevelnavController)
             }
+            composable(TransactionsScreenDestination) {
+                TransactionsScreen(navigator = topLevelnavController)
+            }
         }
     }
 }

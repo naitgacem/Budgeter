@@ -33,7 +33,7 @@ class TransactionsRepository(private val db: TransactionDatabase) {
             transactionDao.update(transaction)
             updateCategoryAndValue(transaction, oldValue)
             updateBalance(transaction, oldValue)
-            delay(10000)
+            //delay(10000)
         }
     }
 

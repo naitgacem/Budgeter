@@ -10,7 +10,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.AttachFile
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material3.Card
@@ -30,7 +30,9 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.aitgacem.budgeter.data.model.Transaction
+import com.aitgacem.budgeter.ui.components.Category
 import com.aitgacem.budgeter.ui.components.toIcon
+import com.aitgacem.budgeter.ui.screens.destinations.DepositScreenDestination
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import java.text.SimpleDateFormat
@@ -51,7 +53,7 @@ fun TransactionDetailsScreen(
                     IconButton(
                         onClick = { navigator.popBackStack() }
                     ) {
-                        Icon(Icons.Filled.ArrowBack, contentDescription = null)
+                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = null)
                     }
                 },
                 actions = {
@@ -62,7 +64,13 @@ fun TransactionDetailsScreen(
                     }
                     IconButton(
                         onClick = {
+                            when (transaction.category) {
+                                Category.Deposit -> {
+                                    navigator.navigate(DepositScreenDestination(oldTransaction = transaction))
+                                }
 
+                                else -> {}
+                            }
                         }
                     ) {
                         Icon(Icons.Filled.MoreVert, contentDescription = null)

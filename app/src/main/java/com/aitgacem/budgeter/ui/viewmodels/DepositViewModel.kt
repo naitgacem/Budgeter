@@ -34,22 +34,17 @@ class DepositViewModel @Inject constructor(
 
     private var oldTransaction: Transaction? = null
 
-    suspend fun setUpUpdate(id: String) {
-        val updating = viewModelScope.launch {
-            val transaction = repository.loadTransaction(id = id.toLong())
-            if (transaction != null) {
-                oldValue = transaction.amount
-                _amount.value = transaction.amount.toString()
-                _description.value = transaction.title
-                _date.value = transaction.date
-                oldTransaction = transaction
-                isUpdate = true
-            } else {
-                throw IOException("Transaction deleted or corrupt")
-            }
+    suspend fun setUpUpdate(transaction: Transaction?) {
+        if (transaction != null) {
+            oldValue = transaction.amount
+            _amount.value = transaction.amount.toString()
+            _description.value = transaction.title
+            _date.value = transaction.date
+            oldTransaction = transaction
+            isUpdate = true
         }
-        joinAll(updating)
     }
+
 
     fun updateAmount(newAmount: String) {
         _amount.value = newAmount
@@ -74,8 +69,8 @@ class DepositViewModel @Inject constructor(
                     ),
                     oldValue
                 )
-
             }
+
         } else {
             val transaction = Transaction(
                 date = _date.value,

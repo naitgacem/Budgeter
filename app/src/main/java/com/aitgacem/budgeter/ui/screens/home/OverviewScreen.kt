@@ -268,12 +268,6 @@ private fun Operations(
     }
 }
 
-@Preview(showBackground = true)
-@Composable
-fun OperationsPreview() {
-    Budget(balance = 500f)
-}
-
 @Composable
 private fun Budget(
     modifier: Modifier = Modifier,

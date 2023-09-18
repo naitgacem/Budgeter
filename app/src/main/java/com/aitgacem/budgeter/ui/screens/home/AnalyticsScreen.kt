@@ -35,13 +35,14 @@ import com.github.mikephil.charting.charts.PieChart
 import com.github.mikephil.charting.components.Legend
 import com.github.mikephil.charting.components.XAxis
 import com.ramcosta.composedestinations.annotation.Destination
+import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 
 @HomeNavGraph
 @Destination
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun AnalyticsScreen(
-    navController: NavController,
+    navigator: DestinationsNavigator,
     analyticsViewModel: AnalyticsViewModel = hiltViewModel(),
 ) {
     val updateChart: (PieChart) -> Unit = { analyticsViewModel.updatePieChart(it) }
@@ -135,10 +136,8 @@ fun LineChart(
     updateChart: (chart: LineChart) -> Unit,
     updateEvent: State<List<Any>>,
 ) {
-    println("heyy line")
     AndroidView(
         factory = { context ->
-            println(context)
             LineChart(context).apply {
                 layoutParams = LinearLayout.LayoutParams(
                     ViewGroup.LayoutParams.MATCH_PARENT,
@@ -160,7 +159,6 @@ fun LineChart(
             .wrapContentSize()
             .padding(5.dp),
     ) {
-        println("heyy updating line here")
         val update = updateEvent.value
         updateChart.invoke(it)
     }
@@ -171,8 +169,6 @@ fun PieChart(
     updateChart: (chart: PieChart) -> Unit,
     updateEvent: State<List<Any>>,
 ) {
-    println("heyy pie")
-
     AndroidView(
         factory = { context ->
             PieChart(context).apply {
@@ -196,7 +192,6 @@ fun PieChart(
             .wrapContentSize()
             .padding(5.dp),
     ) {
-        println("heyy updating pie here")
         val update = updateEvent.value
         updateChart(it)
     }
