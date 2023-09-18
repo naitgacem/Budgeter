@@ -8,7 +8,6 @@ import com.aitgacem.budgeter.data.model.DateAndBalance
 import com.aitgacem.budgeter.data.model.Transaction
 import com.aitgacem.budgeter.ui.components.Category
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.withContext
 import java.util.Calendar
@@ -33,20 +32,20 @@ class TransactionsRepository(private val db: TransactionDatabase) {
             transactionDao.update(transaction)
             updateCategoryAndValue(transaction, oldValue)
             updateBalance(transaction, oldValue)
-            //delay(10000)
         }
     }
 
     private suspend fun updateBalance(
         transaction: Transaction,
-        oldValue: Float? = null,
+        oldTransactionValue: Float? = null,
     ) {
-        var predecessor = balanceDao.loadPredecessor(date = transaction.date, id = transaction.id)
-            ?.amount ?: 0.toFloat()
+        var predecessor =
+            balanceDao.loadPredecessor(date = transaction.date, id = transaction.id)?.amount
+                ?: 0.toFloat()
 
         val amount =
             if (transaction.category == Category.Deposit) transaction.amount else transaction.amount.unaryMinus()
-        if (oldValue != null) {
+        if (oldTransactionValue != null) {
             balanceDao.updateBalance(
                 Balance(transaction.id, transaction.date, predecessor + amount)
             )
@@ -64,12 +63,11 @@ class TransactionsRepository(private val db: TransactionDatabase) {
 
         for (balance in newerBalances) {
             val loadedTransaction = transactionDao.loadTransaction(balance.id)
-            if (loadedTransaction != null) {
-                if (loadedTransaction.category == Category.Deposit) {
-                    predecessor += loadedTransaction.amount
-                } else {
-                    predecessor -= loadedTransaction.amount
-                }
+            require(loadedTransaction != null)
+            if (loadedTransaction.category == Category.Deposit) {
+                predecessor += loadedTransaction.amount
+            } else {
+                predecessor -= loadedTransaction.amount
             }
             balanceDao.updateBalance(balance.copy(amount = predecessor))
         }
@@ -113,25 +111,34 @@ class TransactionsRepository(private val db: TransactionDatabase) {
 
     private suspend fun updateCategoryAndValue(
         transaction: Transaction,
-        oldValue: Float? = null,
+        oldTransactionAmount: Float? = null,
     ) {
+        //TODO fix a bug where if you had one element in a category and you change the category
         if (transaction.category == Category.Deposit) {
             return
         }
-        val old = analyticsDao.getCategoryAmount(category = transaction.category.name)
+        val oldCategoryEntry = analyticsDao.getCategoryAmount(category = transaction.category.name)
 
-        if (old == null) {
+        if (oldCategoryEntry == null) {
             analyticsDao.insert(
                 CategoryAndValue(
-                    transaction.category,
-                    transaction.amount
+                    transaction.category, transaction.amount
                 )
             )
         } else {
             analyticsDao.updateCategoryAmount(
-                old.copy(
-                    value = oldValue?.let { (old.value + transaction.amount) - oldValue }
-                        ?: (old.value + transaction.amount)
+                oldCategoryEntry.copy(
+                    value = if (oldTransactionAmount == null) {
+                        //inserting a transaction
+                        (oldCategoryEntry.value + transaction.amount)
+                    } else {
+                        //updating a transaction
+                        // expression can never go negative,
+                        // old.value is the result of
+                        // oldTransactionAmount + 0 or more other positive numbers
+
+                        oldCategoryEntry.value + (transaction.amount - oldTransactionAmount)
+                    }
                 )
             )
         }

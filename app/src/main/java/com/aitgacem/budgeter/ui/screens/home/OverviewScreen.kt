@@ -145,7 +145,7 @@ private fun OverviewScreenContent(
                     )
                     Operations(
                         modifier = Modifier.weight(.45f),
-                        navigateToWithdraw = { navigator.navigate(WithdrawScreenDestination) },
+                        navigateToWithdraw = { navigator.navigate(WithdrawScreenDestination(null)) },
                         navigateToDeposit = { navigator.navigate(DepositScreenDestination(null)) }
                     )
                 }

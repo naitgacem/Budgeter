@@ -33,6 +33,7 @@ import com.aitgacem.budgeter.data.model.Transaction
 import com.aitgacem.budgeter.ui.components.Category
 import com.aitgacem.budgeter.ui.components.toIcon
 import com.aitgacem.budgeter.ui.screens.destinations.DepositScreenDestination
+import com.aitgacem.budgeter.ui.screens.destinations.WithdrawScreenDestination
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import java.text.SimpleDateFormat
@@ -69,7 +70,9 @@ fun TransactionDetailsScreen(
                                     navigator.navigate(DepositScreenDestination(oldTransaction = transaction))
                                 }
 
-                                else -> {}
+                                else -> {
+                                    navigator.navigate(WithdrawScreenDestination(oldTransaction = transaction))
+                                }
                             }
                         }
                     ) {
