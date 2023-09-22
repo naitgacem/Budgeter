@@ -1,6 +1,5 @@
 package com.aitgacem.budgeter.ui.components
 
-import android.os.Parcel
 import android.os.Parcelable
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Apartment
@@ -14,7 +13,10 @@ import androidx.compose.material.icons.filled.School
 import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.material.icons.filled.Spa
 import androidx.compose.ui.graphics.vector.ImageVector
+import kotlinx.parcelize.Parcelize
 
+
+@Parcelize
 enum class Category : Parcelable {
     Transportation,
     Groceries,
@@ -25,25 +27,7 @@ enum class Category : Parcelable {
     Education,
     Healthcare,
     Others,
-    Deposit;
-
-    override fun writeToParcel(parcel: Parcel, flags: Int) {
-        parcel.writeInt(ordinal)
-    }
-
-    override fun describeContents(): Int {
-        return 0
-    }
-
-    companion object CREATOR : Parcelable.Creator<Category> {
-        override fun createFromParcel(parcel: Parcel): Category {
-            return values()[parcel.readInt()]
-        }
-
-        override fun newArray(size: Int): Array<Category?> {
-            return arrayOfNulls(size)
-        }
-    }
+    Deposit
 }
 
 fun Category.toIcon(): ImageVector {
