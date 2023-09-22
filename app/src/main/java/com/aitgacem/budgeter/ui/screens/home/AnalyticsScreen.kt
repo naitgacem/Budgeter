@@ -101,7 +101,7 @@ fun AnalyticsScreenContent(
         }
         item {
             Column(
-                modifier = androidx.compose.ui.Modifier
+                modifier = Modifier
                     .padding(18.dp)
                     .size(320.dp),
                 horizontalAlignment = Alignment.CenterHorizontally,
@@ -115,7 +115,7 @@ fun AnalyticsScreenContent(
         }
         item {
             Column(
-                modifier = androidx.compose.ui.Modifier
+                modifier = Modifier
                     .padding(18.dp)
                     .fillMaxWidth()
                     .height(300.dp),
@@ -152,7 +152,6 @@ fun LineChart(
                 xAxis.valueFormatter = DateFormatter()
                 xAxis.position = XAxis.XAxisPosition.BOTTOM
                 axisRight.isEnabled = false
-                setNoDataText("It is as empty as your life in here lol")
             }
         },
         modifier = Modifier

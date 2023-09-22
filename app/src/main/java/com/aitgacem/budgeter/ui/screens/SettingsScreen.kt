@@ -11,8 +11,8 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.Help
 import androidx.compose.material.icons.filled.CreditCard
-import androidx.compose.material.icons.filled.Help
 import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material.icons.filled.Payments
 import androidx.compose.material.icons.filled.Storage
@@ -164,7 +164,7 @@ val settingsMenuItems = listOf(
         description = "Import, export, and share budget data"
     ),
     SettingMenuItem(
-        icon = Icons.Filled.Help,
+        icon = Icons.AutoMirrored.Filled.Help,
         title = "Support and help",
         description = "FAQs, contact, app version"
     ),

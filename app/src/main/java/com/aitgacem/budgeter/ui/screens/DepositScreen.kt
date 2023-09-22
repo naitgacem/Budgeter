@@ -91,7 +91,6 @@ fun DepositScreen(
 @Composable
 private fun DepositContent(
     modifier: Modifier = Modifier,
-    id: String? = null,
     oldTransaction: Transaction? = null,
     depositViewModel: DepositViewModel = hiltViewModel(),
     exitAfterSave: () -> Boolean,

@@ -1,7 +1,5 @@
 package com.aitgacem.budgeter.ui.screens.home
 
-import android.annotation.SuppressLint
-import android.util.Log
 import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
@@ -38,7 +36,6 @@ import com.ramcosta.composedestinations.navigation.navigate
 import com.ramcosta.composedestinations.navigation.popBackStack
 import com.ramcosta.composedestinations.navigation.popUpTo
 import com.ramcosta.composedestinations.spec.DirectionDestinationSpec
-import com.ramcosta.composedestinations.utils.isRouteOnBackStack
 
 @RootNavGraph(start = true)
 @NavGraph
@@ -93,12 +90,6 @@ fun NavBar(
                         navController.popBackStack(destination.direction, false)
                         return@NavigationBarItem
                     }
-//                    var s = "we are at  " + navController.currentDestination?.route + " "
-//
-//                    for (str in navController.currentBackStack.value){
-//                        s += str.destination.route
-//                    }
-//                    Log.d("here", s + "\n")
                     navController.navigate(destination.direction) {
                         popUpTo(NavGraphs.home) {
                             saveState = true
