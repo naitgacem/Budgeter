@@ -22,6 +22,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -72,7 +73,7 @@ class AnalyticsViewModel @Inject constructor(
     }
 
     fun updatePieChart(chart: PieChart) {
-        updatePieChartWithData(chart, categoryAndValues.value)
+        updatePieChartWithData(chart, categoryAndValues.value.filter { it.value > 0 })
     }
 
     private fun updatePieChartWithData(

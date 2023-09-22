@@ -30,7 +30,11 @@ class TransactionsRepository(private val db: TransactionDatabase) {
     suspend fun updateTransaction(transaction: Transaction, oldTransaction: Transaction?) {
         db.withTransaction {
             transactionDao.update(transaction)
-            updateCategoryAndValue(transaction, oldTransaction)
+            if (oldTransaction == null) {
+                updateCategoryAndValue(transaction)
+            } else {
+                updateCategoryAndValue(transaction, oldTransaction)
+            }
             updateBalance(transaction, oldTransaction?.amount)
         }
     }
@@ -111,38 +115,67 @@ class TransactionsRepository(private val db: TransactionDatabase) {
 
     private suspend fun updateCategoryAndValue(
         transaction: Transaction,
-        oldTransaction: Transaction? = null
     ) {
-        val oldTransactionAmount: Float? = oldTransaction?.amount
-        //TODO fix a bug where if you had one element in a category and you change the category
         if (transaction.category == Category.Deposit) {
             return
         }
-        val oldCategoryEntry = analyticsDao.getCategoryAmount(category = transaction.category.name)
-
-        if (oldCategoryEntry == null) {
+        val oldCategoryAndValue =
+            analyticsDao.getCategoryAmount(category = transaction.category.name)
+        if (oldCategoryAndValue != null) {
+            analyticsDao.updateCategoryAmount(
+                oldCategoryAndValue.copy(
+                    value = oldCategoryAndValue.value + transaction.amount
+                )
+            )
+        } else {
             analyticsDao.insert(
                 CategoryAndValue(
                     transaction.category, transaction.amount
                 )
             )
-        } else {
-            analyticsDao.updateCategoryAmount(
-                oldCategoryEntry.copy(
-                    value = if (oldTransactionAmount == null) {
-                        //inserting a transaction
-                        (oldCategoryEntry.value + transaction.amount)
-                    } else {
-                        //updating a transaction
-                        // expression can never go negative,
-                        // old.value is the result of
-                        // oldTransactionAmount + 0 or more other positive numbers
-
-                        oldCategoryEntry.value + (transaction.amount - oldTransactionAmount)
-                    }
-                )
-            )
         }
     }
+
+    private suspend fun updateCategoryAndValue(
+        transaction: Transaction,
+        oldTransaction: Transaction,
+    ) {
+        if (transaction.category == Category.Deposit) {
+            return
+        }
+        val oldEntry =
+            analyticsDao.getCategoryAmount(category = oldTransaction.category.name)
+        require(oldEntry != null) //it already exists since we are updating
+
+        if (oldTransaction.category == transaction.category) {
+            val diff = transaction.amount - oldTransaction.amount
+            analyticsDao.updateCategoryAmount(
+                oldEntry.copy(
+                    value = oldEntry.value + diff
+                )
+            )
+        } else {
+            val newEntry =
+                analyticsDao.getCategoryAmount(category = transaction.category.name)
+            analyticsDao.updateCategoryAmount(
+                oldEntry.copy(value = oldEntry.value - transaction.amount)
+            )
+
+            if (newEntry != null) {
+                analyticsDao.updateCategoryAmount(
+                    oldEntry.copy(
+                        value = newEntry.value + transaction.amount
+                    )
+                )
+            } else {
+                analyticsDao.insert(
+                    CategoryAndValue(
+                        transaction.category, transaction.amount
+                    )
+                )
+            }
+        }
+    }
+
 
 }
