@@ -48,6 +48,7 @@ internal fun AnalyticsScreen(
     val updateChart: (PieChart) -> Unit = { analyticsViewModel.updatePieChart(it) }
     val updateLineChart: (LineChart) -> Unit = { analyticsViewModel.updateLineChart(it) }
 
+    //TODO: find a better way to trigger AndroidView to recompose.
     val updateTrigger = analyticsViewModel.updateTrigger.collectAsState()
 
     Surface(color = MaterialTheme.colorScheme.primary) {

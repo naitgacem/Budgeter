@@ -49,6 +49,7 @@ class TransactionsRepository(private val db: TransactionDatabase) {
 
         val amount =
             if (transaction.category == Category.Deposit) transaction.amount else transaction.amount.unaryMinus()
+
         if (oldTransactionValue != null) {
             balanceDao.updateBalance(
                 Balance(transaction.id, transaction.date, predecessor + amount)
@@ -176,6 +177,4 @@ class TransactionsRepository(private val db: TransactionDatabase) {
             }
         }
     }
-
-
 }
