@@ -31,7 +31,6 @@ import javax.inject.Inject
 class AnalyticsViewModel @Inject constructor(
     private val repository: TransactionsRepository,
 ) : ViewModel() {
-    var allTransactions = MutableStateFlow<List<Transaction>>(emptyList())
 
     private var _updateTrigger = MutableStateFlow<List<Any>>(emptyList())
     val updateTrigger = _updateTrigger.asStateFlow()
@@ -42,19 +41,10 @@ class AnalyticsViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
-            loadAllTransactions()
-        }
-        viewModelScope.launch {
             loadCategoryAndData()
         }
         viewModelScope.launch {
             loadDayAndData()
-        }
-    }
-
-    private suspend fun loadAllTransactions() {
-        repository.readAllTransactionsFromDatabase().collect {
-            allTransactions.value = it
         }
     }
 
