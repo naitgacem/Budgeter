@@ -10,9 +10,9 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.Help
 import androidx.compose.material.icons.filled.CreditCard
-import androidx.compose.material.icons.filled.Help
 import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material.icons.filled.Payments
 import androidx.compose.material.icons.filled.Storage
@@ -34,12 +34,14 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.aitgacem.budgeter.R
-import com.aitgacem.budgeter.popOnce
+import com.ramcosta.composedestinations.annotation.Destination
+import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 
+@Destination
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SettingsScreen(
-    navController: NavController,
+    navigator: DestinationsNavigator,
 ) {
     Surface {
         Scaffold(
@@ -53,9 +55,9 @@ fun SettingsScreen(
                     },
                     navigationIcon = {
                         IconButton(
-                            onClick = { navController.popOnce() }
+                            onClick = { navigator.popBackStack() }
                         ) {
-                            Icon(Icons.Filled.ArrowBack, contentDescription = null)
+                            Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = null)
                         }
                     },
                 )
@@ -116,7 +118,6 @@ fun SettingCategoryDisplay(
                 style = MaterialTheme.typography.bodyLarge,
                 modifier = modifier
                     .padding(horizontal = 8.dp)
-
             )
             Text(
                 modifier = modifier
@@ -163,7 +164,7 @@ val settingsMenuItems = listOf(
         description = "Import, export, and share budget data"
     ),
     SettingMenuItem(
-        icon = Icons.Filled.Help,
+        icon = Icons.AutoMirrored.Filled.Help,
         title = "Support and help",
         description = "FAQs, contact, app version"
     ),

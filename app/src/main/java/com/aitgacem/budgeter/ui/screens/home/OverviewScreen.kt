@@ -1,4 +1,4 @@
-package com.aitgacem.budgeter.ui.screens
+package com.aitgacem.budgeter.ui.screens.home
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -16,10 +16,8 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowUpward
 import androidx.compose.material.icons.filled.Savings
 import androidx.compose.material.icons.filled.Settings
-import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -39,30 +37,31 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.Lifecycle
-import androidx.navigation.NavController
-import androidx.navigation.NavHostController
 import com.aitgacem.budgeter.R
 import com.aitgacem.budgeter.data.model.Transaction
-import com.aitgacem.budgeter.lifecycleIsResumed
-import com.aitgacem.budgeter.navigateOnce
-import com.aitgacem.budgeter.ui.components.Category
-import com.aitgacem.budgeter.ui.components.Screen
-import com.aitgacem.budgeter.ui.components.categoryToIconMap
+import com.aitgacem.budgeter.ui.components.toIcon
+import com.aitgacem.budgeter.ui.screens.destinations.DepositScreenDestination
+import com.aitgacem.budgeter.ui.screens.destinations.SettingsScreenDestination
+import com.aitgacem.budgeter.ui.screens.destinations.TransactionDetailsScreenDestination
+import com.aitgacem.budgeter.ui.screens.destinations.WithdrawScreenDestination
 import com.aitgacem.budgeter.ui.viewmodels.OverviewViewModel
+import com.ramcosta.composedestinations.annotation.Destination
+import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import java.text.DecimalFormat
 
+
+@HomeNavGraph
+@Destination
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun OverviewScreen(
-    navController: NavHostController,
+    navigator: DestinationsNavigator,
     overviewViewModel: OverviewViewModel = hiltViewModel(),
 ) {
     val recentTransactions by overviewViewModel.recentTransactions.collectAsState()
@@ -70,7 +69,6 @@ fun OverviewScreen(
 
 
     Surface {
-        val lifecycleOwner = LocalLifecycleOwner.current
         Scaffold(
             topBar = {
                 TopAppBar(
@@ -90,7 +88,7 @@ fun OverviewScreen(
                     actions = {
                         IconButton(
                             onClick = {
-                                navController.navigateOnce(Screen.Settings.route)
+                                navigator.navigate(SettingsScreenDestination)
                             }
                         ) {
                             Icon(
@@ -106,7 +104,7 @@ fun OverviewScreen(
                 modifier = Modifier.padding(paddingValues),
                 balance = balance,
                 recentTransactions = recentTransactions,
-                navController = navController
+                navigator = navigator
             )
         }
     }
@@ -117,7 +115,7 @@ private fun OverviewScreenContent(
     modifier: Modifier = Modifier,
     balance: Float,
     recentTransactions: List<Transaction>,
-    navController: NavController,
+    navigator: DestinationsNavigator,
 ) {
     LazyColumn(
         modifier = modifier
@@ -147,8 +145,8 @@ private fun OverviewScreenContent(
                     )
                     Operations(
                         modifier = Modifier.weight(.45f),
-                        navigateToWithdraw = { navController.navigate(Screen.Withdraw.route) },
-                        navigateToDeposit = { navController.navigate(Screen.Deposit.route) }
+                        navigateToWithdraw = { navigator.navigate(WithdrawScreenDestination(null)) },
+                        navigateToDeposit = { navigator.navigate(DepositScreenDestination(null)) }
                     )
                 }
             }
@@ -171,9 +169,8 @@ private fun OverviewScreenContent(
             ItemDisplay(
                 transaction = day,
                 navigateToItem = {
-                    navController.navigate(
-                        Screen.TransactionDetails.route
-                            .replace(oldValue = "{id}", newValue = day.id.toString())
+                    navigator.navigate(
+                        TransactionDetailsScreenDestination(transaction = day)
                     )
                 }
             )
@@ -208,11 +205,7 @@ private fun ItemDisplay(
 
     ) {
         Icon(
-            imageVector = if (transaction.category == Category.Deposit) {
-                Icons.Default.ArrowUpward
-            } else {
-                categoryToIconMap[transaction.category] ?: Icons.Filled.Warning
-            },
+            imageVector = transaction.category.toIcon(),
             contentDescription = "",
             modifier = modifier
                 .size(width = 40.dp, height = 40.dp)
@@ -273,12 +266,6 @@ private fun Operations(
             )
         }
     }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun OperationsPreview() {
-    Budget(balance = 500f)
 }
 
 @Composable

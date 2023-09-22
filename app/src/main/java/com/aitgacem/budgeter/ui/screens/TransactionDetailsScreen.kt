@@ -10,11 +10,9 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.ArrowUpward
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.AttachFile
 import androidx.compose.material.icons.filled.MoreVert
-import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -25,43 +23,38 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavController
 import com.aitgacem.budgeter.data.model.Transaction
 import com.aitgacem.budgeter.ui.components.Category
-import com.aitgacem.budgeter.ui.components.Screen
-import com.aitgacem.budgeter.ui.components.categoryToIconMap
-import com.aitgacem.budgeter.ui.viewmodels.TransactionDetailsViewModel
+import com.aitgacem.budgeter.ui.components.toIcon
+import com.aitgacem.budgeter.ui.screens.destinations.DepositScreenDestination
+import com.aitgacem.budgeter.ui.screens.destinations.WithdrawScreenDestination
+import com.ramcosta.composedestinations.annotation.Destination
+import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import java.text.SimpleDateFormat
 import java.util.Date
 
+@Destination
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TransactionDetailsScreen(
-    id: String,
-    transactionDetailsViewModel: TransactionDetailsViewModel = hiltViewModel(),
-    navController: NavController,
+    navigator: DestinationsNavigator,
+    transaction: Transaction,
 ) {
-    transactionDetailsViewModel.loadTransaction(id = id.toLong())
-    val transaction by transactionDetailsViewModel.transaction.collectAsState()
-
     Scaffold(
         topBar = {
             TopAppBar(
                 title = {},
                 navigationIcon = {
                     IconButton(
-                        onClick = { navController.popBackStack() }
+                        onClick = { navigator.popBackStack() }
                     ) {
-                        Icon(Icons.Filled.ArrowBack, contentDescription = null)
+                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = null)
                     }
                 },
                 actions = {
@@ -72,11 +65,15 @@ fun TransactionDetailsScreen(
                     }
                     IconButton(
                         onClick = {
-                            navController.navigate(
-                                Screen.Deposit.route.replace(
-                                    oldValue = "{id}", newValue = id
-                                )
-                            )
+                            when (transaction.category) {
+                                Category.Deposit -> {
+                                    navigator.navigate(DepositScreenDestination(oldTransaction = transaction))
+                                }
+
+                                else -> {
+                                    navigator.navigate(WithdrawScreenDestination(oldTransaction = transaction))
+                                }
+                            }
                         }
                     ) {
                         Icon(Icons.Filled.MoreVert, contentDescription = null)
@@ -89,7 +86,7 @@ fun TransactionDetailsScreen(
             modifier = Modifier
                 .padding(horizontal = 8.dp)
                 .padding(paddingValues),
-            transaction = transaction ?: Transaction(0, 0, "", 0.toFloat(), Category.Others)
+            transaction = transaction
         )
     }
 
@@ -154,11 +151,7 @@ fun HeaderContent(transaction: Transaction) {
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Icon(
-            imageVector = if (transaction.category == Category.Deposit) {
-                Icons.Default.ArrowUpward
-            } else {
-                categoryToIconMap[transaction.category] ?: Icons.Filled.Warning
-            },
+            imageVector = transaction.category.toIcon(),
             contentDescription = "",
             modifier = Modifier
                 .weight(.1f)

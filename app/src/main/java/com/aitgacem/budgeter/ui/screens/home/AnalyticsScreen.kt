@@ -1,4 +1,4 @@
-package com.aitgacem.budgeter.ui.screens
+package com.aitgacem.budgeter.ui.screens.home
 
 import android.view.ViewGroup
 import android.widget.LinearLayout
@@ -19,28 +19,37 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.State
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavHostController
+import androidx.navigation.NavController
 import com.aitgacem.budgeter.ui.viewmodels.AnalyticsViewModel
 import com.aitgacem.budgeter.ui.viewmodels.utils.DateFormatter
 import com.github.mikephil.charting.charts.LineChart
 import com.github.mikephil.charting.charts.PieChart
 import com.github.mikephil.charting.components.Legend
 import com.github.mikephil.charting.components.XAxis
+import com.ramcosta.composedestinations.annotation.Destination
+import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 
+@HomeNavGraph
+@Destination
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AnalyticsScreen(
-    navController: NavHostController,
+internal fun AnalyticsScreen(
+    navigator: DestinationsNavigator,
     analyticsViewModel: AnalyticsViewModel = hiltViewModel(),
 ) {
     val updateChart: (PieChart) -> Unit = { analyticsViewModel.updatePieChart(it) }
     val updateLineChart: (LineChart) -> Unit = { analyticsViewModel.updateLineChart(it) }
+
+    //TODO: find a better way to trigger AndroidView to recompose.
+    val updateTrigger = analyticsViewModel.updateTrigger.collectAsState()
 
     Surface(color = MaterialTheme.colorScheme.primary) {
         Scaffold(
@@ -63,6 +72,7 @@ fun AnalyticsScreen(
                 modifier = Modifier.padding(paddingValues),
                 updatePieChart = updateChart,
                 updateLineChart = updateLineChart,
+                updateEvent = updateTrigger,
             )
 
 
@@ -70,12 +80,12 @@ fun AnalyticsScreen(
     }
 }
 
-
 @Composable
 fun AnalyticsScreenContent(
     modifier: Modifier = Modifier,
     updatePieChart: (chart: PieChart) -> Unit,
     updateLineChart: (chart: LineChart) -> Unit,
+    updateEvent: State<List<Any>>,
 ) {
     LazyColumn(
         modifier = modifier.fillMaxSize(),
@@ -99,7 +109,8 @@ fun AnalyticsScreenContent(
                 verticalArrangement = Arrangement.Center
             ) {
                 PieChart(
-                    updateChart = updatePieChart
+                    updateChart = updatePieChart,
+                    updateEvent = updateEvent,
                 )
             }
         }
@@ -113,7 +124,8 @@ fun AnalyticsScreenContent(
                 verticalArrangement = Arrangement.Center
             ) {
                 LineChart(
-                    updateChart = updateLineChart
+                    updateChart = updateLineChart,
+                    updateEvent = updateEvent,
                 )
             }
         }
@@ -123,6 +135,7 @@ fun AnalyticsScreenContent(
 @Composable
 fun LineChart(
     updateChart: (chart: LineChart) -> Unit,
+    updateEvent: State<List<Any>>,
 ) {
     AndroidView(
         factory = { context ->
@@ -140,20 +153,21 @@ fun LineChart(
                 xAxis.valueFormatter = DateFormatter()
                 xAxis.position = XAxis.XAxisPosition.BOTTOM
                 axisRight.isEnabled = false
-                setNoDataText("It is as empty as your life in here lol")
             }
         },
         modifier = Modifier
             .wrapContentSize()
             .padding(5.dp),
     ) {
-        updateChart(it)
+        val update = updateEvent.value
+        updateChart.invoke(it)
     }
 }
 
 @Composable
-private fun PieChart(
+fun PieChart(
     updateChart: (chart: PieChart) -> Unit,
+    updateEvent: State<List<Any>>,
 ) {
     AndroidView(
         factory = { context ->
@@ -168,7 +182,7 @@ private fun PieChart(
                 legend.textSize = 14F
                 legend.horizontalAlignment = Legend.LegendHorizontalAlignment.CENTER
                 legend.isWordWrapEnabled = true
-
+                isLogEnabled = true
                 setEntryLabelColor(0)
                 setUsePercentValues(true)
 
@@ -178,7 +192,7 @@ private fun PieChart(
             .wrapContentSize()
             .padding(5.dp),
     ) {
+        val update = updateEvent.value
         updateChart(it)
     }
 }
-

@@ -14,10 +14,9 @@ import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.AttachMoney
 import androidx.compose.material.icons.filled.Description
-import androidx.compose.material.icons.filled.ErrorOutline
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material3.Button
 import androidx.compose.material3.DatePicker
@@ -33,6 +32,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -41,17 +41,21 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavHostController
+import com.aitgacem.budgeter.data.model.Transaction
 import com.aitgacem.budgeter.ui.components.Category
-import com.aitgacem.budgeter.ui.components.categoryToIconMap
+import com.aitgacem.budgeter.ui.components.toIcon
+import com.aitgacem.budgeter.ui.screens.destinations.HomeScreenDestination
 import com.aitgacem.budgeter.ui.viewmodels.WithdrawViewModel
+import com.ramcosta.composedestinations.annotation.Destination
+import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import java.util.Calendar
 
+@Destination
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun WithdrawScreen(
-    navHostController: NavHostController,
+    navigator: DestinationsNavigator,
+    oldTransaction: Transaction? = null,
 ) {
     Scaffold(
         topBar = {
@@ -60,10 +64,10 @@ fun WithdrawScreen(
                 },
                 navigationIcon = {
                     IconButton(
-                        onClick = { navHostController.popBackStack() },
+                        onClick = { navigator.popBackStack() },
                     ) {
                         Icon(
-                            imageVector = Icons.Default.ArrowBack,
+                            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                             contentDescription = ""
                         )
                     }
@@ -82,8 +86,12 @@ fun WithdrawScreen(
         }
     ) { paddingValues ->
         AddTransactionContent(
-            modifier = Modifier.padding(paddingValues)
-        ) { navHostController.popBackStack() }
+            modifier = Modifier.padding(paddingValues),
+            oldTransaction = oldTransaction,
+            exitAfterSave = {
+                navigator.popBackStack(HomeScreenDestination, inclusive = false)
+            },
+        )
     }
 }
 
@@ -92,15 +100,20 @@ fun WithdrawScreen(
 private fun AddTransactionContent(
     modifier: Modifier = Modifier,
     withdrawViewModel: WithdrawViewModel = hiltViewModel(),
+    oldTransaction: Transaction?,
     exitAfterSave: () -> Boolean,
 ) {
     val amount by withdrawViewModel.amount.collectAsState()
     val description by withdrawViewModel.description.collectAsState()
     val category by withdrawViewModel.category.collectAsState()
 
+    LaunchedEffect(key1 = oldTransaction) {
+        withdrawViewModel.setUpUpdate(oldTransaction)
+    }
+
     val state = rememberDatePickerState(
         initialDisplayMode = DisplayMode.Input,
-        initialSelectedDateMillis = Calendar.getInstance().timeInMillis
+        initialSelectedDateMillis = oldTransaction?.date ?: Calendar.getInstance().timeInMillis
     )
 
     LazyColumn(
@@ -156,7 +169,7 @@ private fun AddTransactionContent(
                 saveEntry = {
                     withdrawViewModel.updateId(state.selectedDateMillis)
                     withdrawViewModel.saveTransaction()
-                    exitAfterSave.invoke()
+                    exitAfterSave()
                 }
             )
         }
@@ -260,7 +273,7 @@ private fun InsertCategory(
                     onClick = { updateCategory(element) },
                     leadingIcon = {
                         Icon(
-                            imageVector = categoryToIconMap[element] ?: Icons.Default.ErrorOutline,
+                            imageVector = element.toIcon(),
                             contentDescription = "",
                         )
                     },

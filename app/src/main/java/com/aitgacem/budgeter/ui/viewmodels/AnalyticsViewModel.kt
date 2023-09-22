@@ -1,7 +1,6 @@
 package com.aitgacem.budgeter.ui.viewmodels
 
 import android.graphics.Typeface
-import android.util.Log
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.lifecycle.ViewModel
@@ -20,17 +19,21 @@ import com.github.mikephil.charting.data.PieDataSet
 import com.github.mikephil.charting.data.PieEntry
 import com.github.mikephil.charting.formatter.PercentFormatter
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import java.text.SimpleDateFormat
-import java.util.Date
 import javax.inject.Inject
 
 @HiltViewModel
 class AnalyticsViewModel @Inject constructor(
     private val repository: TransactionsRepository,
 ) : ViewModel() {
-    private var allTransactions = MutableStateFlow<List<Transaction>>(emptyList())
+
+    private var _updateTrigger = MutableStateFlow<List<Any>>(emptyList())
+    val updateTrigger = _updateTrigger.asStateFlow()
 
     private val categoryAndValues = MutableStateFlow<List<CategoryAndValue>>(emptyList())
 
@@ -38,37 +41,29 @@ class AnalyticsViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
-            loadAllTransactions()
-        }
-        viewModelScope.launch {
             loadCategoryAndData()
         }
         viewModelScope.launch {
             loadDayAndData()
         }
-
-    }
-
-    private suspend fun loadAllTransactions() {
-        repository.readAllTransactionsFromDatabase().collect {
-            allTransactions.value = it
-        }
     }
 
     private suspend fun loadDayAndData() {
         repository.getBalanceByDate().collect {
+            _updateTrigger.value = _updateTrigger.value + Unit
             dateAndBalance.value = it
         }
     }
 
     private suspend fun loadCategoryAndData() {
         repository.getCategoryAndValue().collect {
+            _updateTrigger.value = _updateTrigger.value + Unit
             categoryAndValues.value = it
         }
     }
 
     fun updatePieChart(chart: PieChart) {
-        updatePieChartWithData(chart, categoryAndValues.value)
+        updatePieChartWithData(chart, categoryAndValues.value.filter { it.value > 0 })
     }
 
     private fun updatePieChartWithData(

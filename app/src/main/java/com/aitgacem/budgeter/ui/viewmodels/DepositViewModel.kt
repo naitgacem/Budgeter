@@ -1,6 +1,5 @@
 package com.aitgacem.budgeter.ui.viewmodels
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.aitgacem.budgeter.data.TransactionsRepository
@@ -10,7 +9,6 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
-import java.io.IOException
 import java.util.Calendar
 import javax.inject.Inject
 
@@ -30,24 +28,20 @@ class DepositViewModel @Inject constructor(
 
     private var isUpdate = false
 
-    private var oldValue: Float? = null
+    private lateinit var oldTransaction: Transaction
 
-    private var oldTransaction: Transaction? = null
 
-    suspend fun setUpUpdate(id: String) {
-        val transaction = repository.loadTransaction(id = id.toLong())
+    suspend fun setUpUpdate(transaction: Transaction?) {
         if (transaction != null) {
-            _date.value = transaction.date
-            oldValue = transaction.amount
+            oldTransaction = transaction
             _amount.value = transaction.amount.toString()
             _description.value = transaction.title
+            _date.value = transaction.date
             oldTransaction = transaction
             isUpdate = true
-            Log.d("nabil", "should finish")
-        } else {
-            throw IOException("Transaction deleted or corrupt")
         }
     }
+
 
     fun updateAmount(newAmount: String) {
         _amount.value = newAmount
@@ -63,19 +57,17 @@ class DepositViewModel @Inject constructor(
 
     fun saveTransaction() {
         if (isUpdate) {
-            Log.d("nabil", "but it works")
-
             viewModelScope.launch {
                 repository.updateTransaction(
-                    oldTransaction!!.copy(
+                    oldTransaction.copy(
                         date = _date.value,
                         amount = _amount.value?.toFloatOrNull() ?: 0.0f,
                         title = _description.value ?: "",
                     ),
-                    oldValue
+                    oldTransaction,
                 )
-
             }
+
         } else {
             val transaction = Transaction(
                 date = _date.value,

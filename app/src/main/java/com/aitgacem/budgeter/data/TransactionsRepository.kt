@@ -27,24 +27,30 @@ class TransactionsRepository(private val db: TransactionDatabase) {
         }
     }
 
-    suspend fun updateTransaction(transaction: Transaction, oldValue: Float?) {
+    suspend fun updateTransaction(transaction: Transaction, oldTransaction: Transaction?) {
         db.withTransaction {
             transactionDao.update(transaction)
-            updateCategoryAndValue(transaction, oldValue)
-            updateBalance(transaction, oldValue)
+            if (oldTransaction == null) {
+                updateCategoryAndValue(transaction)
+            } else {
+                updateCategoryAndValue(transaction, oldTransaction)
+            }
+            updateBalance(transaction, oldTransaction?.amount)
         }
     }
 
     private suspend fun updateBalance(
         transaction: Transaction,
-        oldValue: Float? = null,
+        oldTransactionValue: Float? = null,
     ) {
-        var predecessor = balanceDao.loadPredecessor(date = transaction.date, id = transaction.id)
-            ?.amount ?: 0.toFloat()
+        var predecessor =
+            balanceDao.loadPredecessor(date = transaction.date, id = transaction.id)?.amount
+                ?: 0.toFloat()
 
         val amount =
             if (transaction.category == Category.Deposit) transaction.amount else transaction.amount.unaryMinus()
-        if (oldValue != null) {
+
+        if (oldTransactionValue != null) {
             balanceDao.updateBalance(
                 Balance(transaction.id, transaction.date, predecessor + amount)
             )
@@ -62,12 +68,11 @@ class TransactionsRepository(private val db: TransactionDatabase) {
 
         for (balance in newerBalances) {
             val loadedTransaction = transactionDao.loadTransaction(balance.id)
-            if (loadedTransaction != null) {
-                if (loadedTransaction.category == Category.Deposit) {
-                    predecessor += loadedTransaction.amount
-                } else {
-                    predecessor -= loadedTransaction.amount
-                }
+            require(loadedTransaction != null)
+            if (loadedTransaction.category == Category.Deposit) {
+                predecessor += loadedTransaction.amount
+            } else {
+                predecessor -= loadedTransaction.amount
             }
             balanceDao.updateBalance(balance.copy(amount = predecessor))
         }
@@ -111,28 +116,65 @@ class TransactionsRepository(private val db: TransactionDatabase) {
 
     private suspend fun updateCategoryAndValue(
         transaction: Transaction,
-        oldValue: Float? = null,
     ) {
         if (transaction.category == Category.Deposit) {
             return
         }
-        val old = analyticsDao.getCategoryAmount(category = transaction.category.name)
-
-        if (old == null) {
-            analyticsDao.insert(
-                CategoryAndValue(
-                    transaction.category,
-                    transaction.amount
+        val oldCategoryAndValue =
+            analyticsDao.getCategoryAmount(category = transaction.category.name)
+        if (oldCategoryAndValue != null) {
+            analyticsDao.updateCategoryAmount(
+                oldCategoryAndValue.copy(
+                    value = oldCategoryAndValue.value + transaction.amount
                 )
             )
         } else {
-            analyticsDao.updateCategoryAmount(
-                old.copy(
-                    value = oldValue?.let { (old.value + transaction.amount) - oldValue }
-                        ?: (old.value + transaction.amount)
+            analyticsDao.insert(
+                CategoryAndValue(
+                    transaction.category, transaction.amount
                 )
             )
         }
     }
 
+    private suspend fun updateCategoryAndValue(
+        transaction: Transaction,
+        oldTransaction: Transaction,
+    ) {
+        if (transaction.category == Category.Deposit) {
+            return
+        }
+        val oldEntry =
+            analyticsDao.getCategoryAmount(category = oldTransaction.category.name)
+        require(oldEntry != null) //it already exists since we are updating
+
+        if (oldTransaction.category == transaction.category) {
+            val diff = transaction.amount - oldTransaction.amount
+            analyticsDao.updateCategoryAmount(
+                oldEntry.copy(
+                    value = oldEntry.value + diff
+                )
+            )
+        } else {
+            val newEntry =
+                analyticsDao.getCategoryAmount(category = transaction.category.name)
+            analyticsDao.updateCategoryAmount(
+                oldEntry.copy(value = oldEntry.value - transaction.amount)
+            )
+
+            if (newEntry != null) {
+                analyticsDao.updateCategoryAmount(
+                    oldEntry.copy(
+                        value = newEntry.value + transaction.amount
+                    )
+                )
+            } else {
+                analyticsDao.insert(
+                    CategoryAndValue(
+                        transaction.category, transaction.amount
+                    )
+                )
+            }
+        }
+    }
 }

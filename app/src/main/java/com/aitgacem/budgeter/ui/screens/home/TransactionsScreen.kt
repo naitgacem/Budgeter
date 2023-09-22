@@ -1,4 +1,4 @@
-package com.aitgacem.budgeter.ui.screens
+package com.aitgacem.budgeter.ui.screens.home
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
@@ -12,9 +12,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Divider
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowUpward
 import androidx.compose.material.icons.filled.Search
-import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.Card
 import androidx.compose.material3.DockedSearchBar
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -31,22 +29,25 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.ActivityNavigator
 import androidx.navigation.NavController
 import com.aitgacem.budgeter.data.model.Transaction
-import com.aitgacem.budgeter.ui.components.Category
 import com.aitgacem.budgeter.ui.components.Screen
-import com.aitgacem.budgeter.ui.components.categoryToIconMap
+import com.aitgacem.budgeter.ui.components.toIcon
+import com.aitgacem.budgeter.ui.screens.destinations.TransactionDetailsScreenDestination
 import com.aitgacem.budgeter.ui.viewmodels.TransactionsViewModel
+import com.ramcosta.composedestinations.annotation.Destination
+import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import java.text.SimpleDateFormat
 import java.util.Date
 
-
+@HomeNavGraph
+@Destination
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TransactionsScreen(
     modifier: Modifier = Modifier,
-    navController: NavController,
+    navigator: DestinationsNavigator,
     transactionsViewModel: TransactionsViewModel = hiltViewModel(),
 ) {
     val listOfAllTransactions by transactionsViewModel.allTransactions.collectAsState()
@@ -93,13 +94,7 @@ fun TransactionsScreen(
                         ItemContent(
                             transaction = transaction,
                             navigateToItem = {
-                                navController.navigate(
-                                    Screen.TransactionDetails.route
-                                        .replace(
-                                            oldValue = "{id}",
-                                            newValue = transaction.id.toString()
-                                        )
-                                )
+                                navigator.navigate(TransactionDetailsScreenDestination(transaction = transaction))
                             }
                         )
                         Divider(
@@ -130,11 +125,7 @@ private fun ItemContent(
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Icon(
-            imageVector = if (transaction.category == Category.Deposit) {
-                Icons.Default.ArrowUpward
-            } else {
-                categoryToIconMap[transaction.category] ?: Icons.Filled.Warning
-            },
+            imageVector = transaction.category.toIcon(),
             contentDescription = "",
             modifier = Modifier
                 .weight(.1f)

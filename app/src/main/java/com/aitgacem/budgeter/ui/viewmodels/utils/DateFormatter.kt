@@ -4,8 +4,7 @@ import com.github.mikephil.charting.formatter.ValueFormatter
 import java.text.SimpleDateFormat
 import java.util.Date
 
-class DateFormatter(
-) : ValueFormatter() {
+class DateFormatter : ValueFormatter() {
     override fun getFormattedValue(
         value: Float,
     ): String {

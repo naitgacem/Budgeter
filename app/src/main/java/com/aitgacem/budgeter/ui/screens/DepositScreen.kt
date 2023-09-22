@@ -9,7 +9,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.AttachMoney
 import androidx.compose.material.icons.filled.Description
 import androidx.compose.material.icons.filled.MoreVert
@@ -34,16 +34,19 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavHostController
-import com.aitgacem.budgeter.popOnce
+import com.aitgacem.budgeter.data.model.Transaction
+import com.aitgacem.budgeter.ui.screens.destinations.HomeScreenDestination
 import com.aitgacem.budgeter.ui.viewmodels.DepositViewModel
+import com.ramcosta.composedestinations.annotation.Destination
+import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import java.util.Calendar
 
+@Destination
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DepositScreen(
-    navHostController: NavHostController,
-    id: String? = null,
+    navigator: DestinationsNavigator,
+    oldTransaction: Transaction? = null,
 ) {
     Scaffold(
         topBar = {
@@ -52,10 +55,10 @@ fun DepositScreen(
                 },
                 navigationIcon = {
                     IconButton(
-                        onClick = { navHostController.popOnce() },
+                        onClick = { navigator.popBackStack() },
                     ) {
                         Icon(
-                            imageVector = Icons.Default.ArrowBack,
+                            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                             contentDescription = ""
                         )
                     }
@@ -76,10 +79,11 @@ fun DepositScreen(
     ) { paddingValues ->
         DepositContent(
             modifier = Modifier.padding(paddingValues),
-            id = id,
-        ) {
-            navHostController.popBackStack()
-        }
+            oldTransaction = oldTransaction,
+            exitAfterSave = {
+                navigator.popBackStack(HomeScreenDestination, inclusive = false)
+            }
+        )
     }
 }
 
@@ -87,7 +91,7 @@ fun DepositScreen(
 @Composable
 private fun DepositContent(
     modifier: Modifier = Modifier,
-    id: String? = null,
+    oldTransaction: Transaction? = null,
     depositViewModel: DepositViewModel = hiltViewModel(),
     exitAfterSave: () -> Boolean,
 ) {
@@ -95,17 +99,14 @@ private fun DepositContent(
 
     val amount by depositViewModel.amount.collectAsState()
     val description by depositViewModel.description.collectAsState()
-    val date by depositViewModel.date.collectAsState()
 
-    LaunchedEffect(key1 = id) {
-        if (id != null) {
-            depositViewModel.setUpUpdate(id)
-        }
+    LaunchedEffect(key1 = oldTransaction) {
+        depositViewModel.setUpUpdate(oldTransaction)
     }
 
     val state = rememberDatePickerState(
         initialDisplayMode = DisplayMode.Input,
-        initialSelectedDateMillis = Calendar.getInstance().timeInMillis
+        initialSelectedDateMillis = oldTransaction?.date ?: Calendar.getInstance().timeInMillis
     )
     LazyColumn(
         modifier = modifier
@@ -146,13 +147,11 @@ private fun DepositContent(
 
         item {
             Spacer(modifier = Modifier.height(24.dp))
-            SaveButton(
-                saveEntry = {
-                    depositViewModel.updateDate(state.selectedDateMillis)
-                    depositViewModel.saveTransaction()
-                    exitAfterSave.invoke()
-                }
-            )
+            SaveButton {
+                depositViewModel.updateDate(state.selectedDateMillis)
+                depositViewModel.saveTransaction()
+                exitAfterSave()
+            }
         }
     }
 }

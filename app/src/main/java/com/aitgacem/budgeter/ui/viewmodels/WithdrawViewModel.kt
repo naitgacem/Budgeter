@@ -34,6 +34,20 @@ class WithdrawViewModel @Inject constructor(
 
     private var date = MutableStateFlow<Long>(0)
 
+    private var isUpdate = false
+    private lateinit var oldTransaction: Transaction
+    fun setUpUpdate(transaction: Transaction?) {
+        if (transaction != null) {
+
+            _amount.value = transaction.amount.toString()
+            _description.value = transaction.title
+            _category.value = transaction.category
+            date.value = transaction.date
+            oldTransaction = transaction
+            isUpdate = true
+        }
+    }
+
     fun updateAmount(newAmount: String) {
         _amount.value = newAmount
     }
@@ -51,17 +65,29 @@ class WithdrawViewModel @Inject constructor(
     }
 
     fun saveTransaction() {
-        val transaction = Transaction(
-            date = date.value,
-            amount = _amount.value?.toFloatOrNull() ?: 0f,
-            title = _description.value ?: "",
-            category = _category.value ?: Category.Others,
-            id = Calendar.getInstance().timeInMillis
-        )
-        viewModelScope.launch {
-            repository.writeTransactionToDatabase(transaction)
+        if (isUpdate) {
+            viewModelScope.launch {
+                repository.updateTransaction(
+                    oldTransaction.copy(
+                        date = date.value,
+                        amount = _amount.value?.toFloatOrNull() ?: 0.0f,
+                        title = _description.value ?: "",
+                        category = _category.value ?: Category.Others
+                    ),
+                    oldTransaction
+                )
+            }
+        } else {
+            val transaction = Transaction(
+                date = date.value,
+                amount = _amount.value?.toFloatOrNull() ?: 0.0f,
+                title = _description.value ?: "",
+                category = _category.value ?: Category.Others,
+                id = Calendar.getInstance().timeInMillis
+            )
+            viewModelScope.launch {
+                repository.writeTransactionToDatabase(transaction)
+            }
         }
     }
-
-
 }
