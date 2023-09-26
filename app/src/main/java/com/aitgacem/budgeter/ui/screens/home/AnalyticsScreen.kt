@@ -1,5 +1,6 @@
 package com.aitgacem.budgeter.ui.screens.home
 
+import android.graphics.Typeface
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import androidx.compose.foundation.layout.Arrangement
@@ -19,21 +20,31 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.State
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavController
+import com.aitgacem.budgeter.data.model.CategoryAndValue
+import com.aitgacem.budgeter.data.model.DateAndBalance
 import com.aitgacem.budgeter.ui.viewmodels.AnalyticsViewModel
 import com.aitgacem.budgeter.ui.viewmodels.utils.DateFormatter
 import com.github.mikephil.charting.charts.LineChart
 import com.github.mikephil.charting.charts.PieChart
 import com.github.mikephil.charting.components.Legend
 import com.github.mikephil.charting.components.XAxis
+import com.github.mikephil.charting.data.Entry
+import com.github.mikephil.charting.data.LineData
+import com.github.mikephil.charting.data.LineDataSet
+import com.github.mikephil.charting.data.PieData
+import com.github.mikephil.charting.data.PieDataSet
+import com.github.mikephil.charting.data.PieEntry
+import com.github.mikephil.charting.formatter.PercentFormatter
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 
@@ -45,11 +56,11 @@ internal fun AnalyticsScreen(
     navigator: DestinationsNavigator,
     analyticsViewModel: AnalyticsViewModel = hiltViewModel(),
 ) {
-    val updateChart: (PieChart) -> Unit = { analyticsViewModel.updatePieChart(it) }
-    val updateLineChart: (LineChart) -> Unit = { analyticsViewModel.updateLineChart(it) }
+    val categoryAndValues by analyticsViewModel.categoryAndValues.collectAsState()
+    val dateAndBalance by analyticsViewModel.dateAndBalance.collectAsState()
 
-    //TODO: find a better way to trigger AndroidView to recompose.
-    val updateTrigger = analyticsViewModel.updateTrigger.collectAsState()
+    val updateChart: (PieChart) -> Unit = { updatePieChartWithData(it, categoryAndValues) }
+    val updateLineChart: (LineChart) -> Unit = { updateLineChartWithData(it, dateAndBalance) }
 
     Surface(color = MaterialTheme.colorScheme.primary) {
         Scaffold(
@@ -72,7 +83,6 @@ internal fun AnalyticsScreen(
                 modifier = Modifier.padding(paddingValues),
                 updatePieChart = updateChart,
                 updateLineChart = updateLineChart,
-                updateEvent = updateTrigger,
             )
 
 
@@ -85,7 +95,6 @@ fun AnalyticsScreenContent(
     modifier: Modifier = Modifier,
     updatePieChart: (chart: PieChart) -> Unit,
     updateLineChart: (chart: LineChart) -> Unit,
-    updateEvent: State<List<Any>>,
 ) {
     LazyColumn(
         modifier = modifier.fillMaxSize(),
@@ -110,7 +119,6 @@ fun AnalyticsScreenContent(
             ) {
                 PieChart(
                     updateChart = updatePieChart,
-                    updateEvent = updateEvent,
                 )
             }
         }
@@ -125,7 +133,6 @@ fun AnalyticsScreenContent(
             ) {
                 LineChart(
                     updateChart = updateLineChart,
-                    updateEvent = updateEvent,
                 )
             }
         }
@@ -135,7 +142,6 @@ fun AnalyticsScreenContent(
 @Composable
 fun LineChart(
     updateChart: (chart: LineChart) -> Unit,
-    updateEvent: State<List<Any>>,
 ) {
     AndroidView(
         factory = { context ->
@@ -159,7 +165,6 @@ fun LineChart(
             .wrapContentSize()
             .padding(5.dp),
     ) {
-        val update = updateEvent.value
         updateChart.invoke(it)
     }
 }
@@ -167,7 +172,6 @@ fun LineChart(
 @Composable
 fun PieChart(
     updateChart: (chart: PieChart) -> Unit,
-    updateEvent: State<List<Any>>,
 ) {
     AndroidView(
         factory = { context ->
@@ -192,7 +196,75 @@ fun PieChart(
             .wrapContentSize()
             .padding(5.dp),
     ) {
-        val update = updateEvent.value
         updateChart(it)
+    }
+}
+
+private fun updatePieChartWithData(
+    chart: PieChart,
+    data: List<CategoryAndValue>,
+) {
+    val entries = ArrayList<PieEntry>()
+    for (item in data) {
+        entries.add(
+            PieEntry(item.value, item.category.name)
+        )
+    }
+
+    val ds = PieDataSet(entries, "")
+    setPieChartProperties(ds)
+
+    ds.valueFormatter = PercentFormatter(chart)
+    chart.data = PieData(ds)
+    chart.invalidate()
+}
+
+private fun setPieChartProperties(ds: PieDataSet) {
+    ds.apply {
+        yValuePosition = PieDataSet.ValuePosition.OUTSIDE_SLICE
+        xValuePosition = PieDataSet.ValuePosition.OUTSIDE_SLICE
+        valueLinePart1OffsetPercentage = 100f
+        valueLinePart1Length = 0.6f
+        valueLinePart2Length = 0.4f
+        sliceSpace = 2f
+        valueTextColor = Color(0xFF000000).toArgb()
+        valueTextSize = 18f
+        valueTypeface = Typeface.DEFAULT
+        colors = com.aitgacem.budgeter.ui.components.colors.map {
+            it.toArgb()
+        }
+    }
+}
+
+private fun updateLineChartWithData(
+    chart: LineChart,
+    data: List<DateAndBalance>,
+) {
+    val entries = ArrayList<Entry>()
+    for (item in data) {
+        entries.add(
+            Entry(item.date.toFloat(), item.amount)
+        )
+    }
+
+    val ds = LineDataSet(entries, "")
+    setLineChartProperties(ds)
+
+    chart.data = LineData(ds)
+    chart.fitScreen()
+    chart.setVisibleXRange(0f, (7 * 24 * 3600 * 1000).toFloat()) // between 0 and 10 days
+    chart.moveViewToX(chart.xChartMax)
+}
+
+private fun setLineChartProperties(ds: LineDataSet) {
+    ds.apply {
+        valueTextColor = Color(0xFF000000).toArgb()
+        valueTextSize = 18f
+        valueTypeface = Typeface.DEFAULT
+        setDrawValues(false)
+        colors = listOf(
+            Color.Black.toArgb(),
+        )
+        circleColors = listOf(Color.Blue.toArgb())
     }
 }
