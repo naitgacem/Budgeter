@@ -144,8 +144,7 @@ class TransactionsRepository(private val db: TransactionDatabase) {
         if (transaction.category == Category.Deposit) {
             return
         }
-        val oldEntry =
-            analyticsDao.getCategoryAmount(category = oldTransaction.category.name)
+        val oldEntry = analyticsDao.getCategoryAmount(category = oldTransaction.category.name)
         require(oldEntry != null) //it already exists since we are updating
 
         if (oldTransaction.category == transaction.category) {
@@ -156,15 +155,14 @@ class TransactionsRepository(private val db: TransactionDatabase) {
                 )
             )
         } else {
-            val newEntry =
-                analyticsDao.getCategoryAmount(category = transaction.category.name)
+            val newEntry = analyticsDao.getCategoryAmount(category = transaction.category.name)
             analyticsDao.updateCategoryAmount(
                 oldEntry.copy(value = oldEntry.value - transaction.amount)
             )
 
             if (newEntry != null) {
                 analyticsDao.updateCategoryAmount(
-                    oldEntry.copy(
+                    newEntry.copy(
                         value = newEntry.value + transaction.amount
                     )
                 )

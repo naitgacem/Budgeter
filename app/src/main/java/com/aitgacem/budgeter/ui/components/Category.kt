@@ -9,6 +9,7 @@ import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Map
 import androidx.compose.material.icons.filled.Movie
 import androidx.compose.material.icons.filled.Phone
+import androidx.compose.material.icons.filled.Restaurant
 import androidx.compose.material.icons.filled.School
 import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.material.icons.filled.Spa
@@ -20,6 +21,7 @@ import kotlinx.parcelize.Parcelize
 enum class Category : Parcelable {
     Transportation,
     Groceries,
+    Food,
     Travel,
     Utilities,
     Entertainment,
@@ -40,6 +42,7 @@ fun Category.toIcon(): ImageVector {
         Category.Housing -> Icons.Default.Apartment
         Category.Education -> Icons.Default.School
         Category.Healthcare -> Icons.Default.Spa
+        Category.Food -> Icons.Default.Restaurant
         Category.Others -> Icons.Default.Edit
         Category.Deposit -> Icons.Default.ArrowUpward
     }
