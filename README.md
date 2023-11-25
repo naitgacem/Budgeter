@@ -1,4 +1,4 @@
-# ![app icon](./app/src/main/res/drawable/play_store_512.png) Budgeter
+# <img src="./app/src/main/res/drawable/play_store_512.png" alt="drawing" width="25"/> Budgeter
 Budgeter is a simple budgeting app.
 
 ## Features
