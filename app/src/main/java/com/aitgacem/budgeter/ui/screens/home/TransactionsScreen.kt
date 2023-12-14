@@ -4,6 +4,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -18,11 +19,17 @@ import androidx.compose.material3.DockedSearchBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.SearchBar
+import androidx.compose.material3.SearchBarDefaults
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
@@ -51,25 +58,32 @@ fun TransactionsScreen(
     transactionsViewModel: TransactionsViewModel = hiltViewModel(),
 ) {
     val listOfAllTransactions by transactionsViewModel.allTransactions.collectAsState()
-    val listOfDays = arrangeIntoDays(listOfAllTransactions)
 
+
+    var searchText by rememberSaveable { mutableStateOf("") }
+    var isSearchBarActive by remember { mutableStateOf(false) }
+
+    val listOfDays = arrangeIntoDays(filterTransaction(listOfAllTransactions, searchText))
     Surface {
         LazyColumn(
             modifier = modifier.fillMaxSize()
         ) {
             item {
                 DockedSearchBar(
-                    modifier = Modifier.padding(
-                        start = 16.dp,
-                        end = 16.dp,
-                        top = 16.dp,
-                        bottom = 20.dp
-                    ),
-                    query = "Search a transaction",
-                    onQueryChange = {},
-                    onSearch = {},
-                    active = false,
-                    onActiveChange = {},
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(
+                            start = 16.dp,
+                            // end = 16.dp,
+                            top = 16.dp,
+                            bottom = 20.dp
+                        ),
+                    placeholder = { Text("Search for transactions") },
+                    query = searchText,
+                    onQueryChange = { searchText = it },
+                    onSearch = { isSearchBarActive = false },
+                    active = isSearchBarActive,
+                    onActiveChange = { isSearchBarActive = it },
                     trailingIcon = {
                         Icon(
                             imageVector = Icons.Filled.Search,
@@ -77,6 +91,7 @@ fun TransactionsScreen(
                         )
                     }
                 ) {
+
                 }
             }
             items(
@@ -173,6 +188,20 @@ private fun arrangeIntoDays(transactions: List<Transaction>): List<Day> {
         )
     }
     return listOfDays
+}
+
+private fun filterTransaction(transactions: List<Transaction>, filter: String): List<Transaction> {
+    if (filter == "") {
+        return transactions
+    }
+    val result = mutableListOf<Transaction>()
+    for (transaction in transactions) {
+        if (transaction.title.contains(filter, ignoreCase = true)) {
+            result.add(transaction)
+        }
+    }
+    return result
+
 }
 
 private data class Day(
