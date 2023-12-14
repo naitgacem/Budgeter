@@ -264,7 +264,6 @@ private fun SaveButton(
 
 @OptIn(
     ExperimentalLayoutApi::class,
-    ExperimentalMaterial3Api::class
 )
 @Composable
 private fun InsertCategory(
