@@ -4,7 +4,6 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -19,8 +18,6 @@ import androidx.compose.material3.DockedSearchBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.SearchBar
-import androidx.compose.material3.SearchBarDefaults
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -32,14 +29,12 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.ActivityNavigator
-import androidx.navigation.NavController
 import com.aitgacem.budgeter.data.model.Transaction
-import com.aitgacem.budgeter.ui.components.Screen
 import com.aitgacem.budgeter.ui.components.toIcon
 import com.aitgacem.budgeter.ui.screens.destinations.TransactionDetailsScreenDestination
 import com.aitgacem.budgeter.ui.viewmodels.TransactionsViewModel
@@ -140,7 +135,7 @@ private fun ItemContent(
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Icon(
-            imageVector = transaction.category.toIcon(),
+            painter = painterResource(id = transaction.category.toIcon()),
             contentDescription = "",
             modifier = Modifier
                 .weight(.1f)

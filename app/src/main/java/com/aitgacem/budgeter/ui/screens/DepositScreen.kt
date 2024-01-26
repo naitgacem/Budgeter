@@ -10,8 +10,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.filled.AttachMoney
-import androidx.compose.material.icons.filled.Description
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material3.Button
 import androidx.compose.material3.DatePicker
@@ -30,10 +28,12 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.aitgacem.budgeter.R
 import com.aitgacem.budgeter.data.model.Transaction
 import com.aitgacem.budgeter.ui.screens.destinations.HomeScreenDestination
 import com.aitgacem.budgeter.ui.viewmodels.DepositViewModel
@@ -190,7 +190,7 @@ private fun InsertDescription(
             .padding(horizontal = 16.dp),
         leadingIcon = {
             Icon(
-                imageVector = Icons.Default.Description,
+                painter = painterResource(id = R.drawable.ic_description),
                 contentDescription = ""
             )
         },
@@ -214,7 +214,7 @@ private fun InsertAmount(
             .padding(horizontal = 16.dp),
         leadingIcon = {
             Icon(
-                imageVector = Icons.Default.AttachMoney, contentDescription = ""
+                painter = painterResource(id = R.drawable.ic_attach_money), contentDescription = ""
             )
         },
         label = { Text("Amount") },

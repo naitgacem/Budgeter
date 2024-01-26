@@ -2,11 +2,6 @@ package com.aitgacem.budgeter.ui.screens.home
 
 import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Analytics
-import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.Person
-import androidx.compose.material.icons.filled.SwapVert
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
@@ -15,7 +10,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
@@ -102,7 +97,7 @@ fun NavBar(
                 },
                 icon = {
                     Icon(
-                        destination.icon,
+                        painter = painterResource(id = destination.resId),
                         contentDescription = stringResource(destination.label)
                     )
                 },
@@ -115,11 +110,11 @@ fun NavBar(
 @Immutable
 enum class BottomBarDestination(
     val direction: DirectionDestinationSpec,
-    val icon: ImageVector,
+    val resId: Int,
     @StringRes val label: Int,
 ) {
-    Overview(OverviewScreenDestination, Icons.Filled.Home, R.string.home),
-    Analytics(AnalyticsScreenDestination, Icons.Filled.Analytics, R.string.analytics),
-    Transaction(TransactionsScreenDestination, Icons.Filled.SwapVert, R.string.transactions),
-    Goals(GoalsScreenDestination, Icons.Filled.Person, R.string.goals),
+    Overview(OverviewScreenDestination, R.drawable.ic_home, R.string.home),
+    Analytics(AnalyticsScreenDestination, R.drawable.ic_analytics, R.string.analytics),
+    Transaction(TransactionsScreenDestination, R.drawable.ic_swap_vert, R.string.transactions),
+    Goals(GoalsScreenDestination, R.drawable.ic_person, R.string.goals),
 }
