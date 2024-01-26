@@ -11,12 +11,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.automirrored.filled.Help
-import androidx.compose.material.icons.filled.CreditCard
-import androidx.compose.material.icons.filled.Notifications
-import androidx.compose.material.icons.filled.Payments
-import androidx.compose.material.icons.filled.Storage
-import androidx.compose.material.icons.filled.Tune
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -28,11 +22,10 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
 import com.aitgacem.budgeter.R
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
@@ -79,7 +72,7 @@ fun SettingsList(
     ) {
         items(settingsMenuItems) { item ->
             SettingCategoryDisplay(
-                icon = item.icon,
+                resId = item.resId,
                 title = item.title,
                 description = item.description
             )
@@ -91,7 +84,7 @@ fun SettingsList(
 @Composable
 fun SettingCategoryDisplay(
     modifier: Modifier = Modifier,
-    icon: ImageVector,
+    resId: Int,
     title: String,
     description: String,
 ) {
@@ -104,7 +97,7 @@ fun SettingCategoryDisplay(
             .height(72.dp)
     ) {
         Icon(
-            imageVector = icon,
+            painter = painterResource(id = resId),
             contentDescription = "",
             modifier = modifier
                 .size(width = 40.dp, height = 40.dp)
@@ -132,39 +125,39 @@ fun SettingCategoryDisplay(
 
 
 data class SettingMenuItem(
-    val icon: ImageVector,
+    val resId: Int,
     val title: String,
     val description: String,
 )
 
 val settingsMenuItems = listOf(
     SettingMenuItem(
-        icon = Icons.Filled.Tune,
+        resId = R.drawable.ic_tune,
         title = "General",
         description = "Currency selection, language preferences"
     ),
     SettingMenuItem(
-        icon = Icons.Filled.Payments,
+        resId = R.drawable.ic_payments,
         title = "Income and expenses",
         description = "Income categories, sources, budget limits"
     ),
     SettingMenuItem(
-        icon = Icons.Filled.CreditCard,
+        resId = R.drawable.ic_credit_card,
         title = "Transactions",
         description = "Recurring transactions, custom types"
     ),
     SettingMenuItem(
-        icon = Icons.Filled.Notifications,
+        resId = R.drawable.ic_notifications,
         title = "Notifications",
         description = "Budget alerts, bill reminders"
     ),
     SettingMenuItem(
-        icon = Icons.Filled.Storage,
+        resId = R.drawable.ic_storage,
         title = "Data management",
         description = "Import, export, and share budget data"
     ),
     SettingMenuItem(
-        icon = Icons.AutoMirrored.Filled.Help,
+        resId = R.drawable.ic_help,
         title = "Support and help",
         description = "FAQs, contact, app version"
     ),

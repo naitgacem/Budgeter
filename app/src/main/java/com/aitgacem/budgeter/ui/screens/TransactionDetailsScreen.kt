@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.filled.AttachFile
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -26,9 +25,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import com.aitgacem.budgeter.R
 import com.aitgacem.budgeter.data.model.Transaction
 import com.aitgacem.budgeter.ui.components.Category
 import com.aitgacem.budgeter.ui.components.toIcon
@@ -61,7 +62,10 @@ fun TransactionDetailsScreen(
                     IconButton(
                         onClick = {}
                     ) {
-                        Icon(Icons.Filled.AttachFile, contentDescription = null)
+                        Icon(
+                            painter = painterResource(id = R.drawable.ic_attach_file),
+                            contentDescription = null
+                        )
                     }
                     IconButton(
                         onClick = {
@@ -151,7 +155,7 @@ fun HeaderContent(transaction: Transaction) {
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Icon(
-            imageVector = transaction.category.toIcon(),
+            painter = painterResource(id = transaction.category.toIcon()),
             contentDescription = "",
             modifier = Modifier
                 .weight(.1f)

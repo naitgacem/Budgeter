@@ -16,8 +16,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.filled.AttachMoney
-import androidx.compose.material.icons.filled.Description
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material3.Button
 import androidx.compose.material3.DatePicker
@@ -43,10 +41,12 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.aitgacem.budgeter.R
 import com.aitgacem.budgeter.data.model.Transaction
 import com.aitgacem.budgeter.ui.components.Category
 import com.aitgacem.budgeter.ui.components.toIcon
@@ -208,7 +208,7 @@ private fun InsertAmount(
             .padding(horizontal = 16.dp),
         leadingIcon = {
             Icon(
-                imageVector = Icons.Default.AttachMoney, contentDescription = ""
+                painter = painterResource(id = R.drawable.ic_attach_money), contentDescription = ""
             )
         },
         label = { Text("Amount") },
@@ -232,7 +232,7 @@ private fun InsertDescription(
             .padding(horizontal = 16.dp),
         leadingIcon = {
             Icon(
-                imageVector = Icons.Default.Description, contentDescription = ""
+                painter = painterResource(id = R.drawable.ic_description), contentDescription = ""
             )
         },
         label = { Text("Description") },
@@ -291,7 +291,7 @@ private fun InsertCategory(
                     onClick = { updateCategory(element) },
                     leadingIcon = {
                         Icon(
-                            imageVector = element.toIcon(),
+                            painter = painterResource(id = element.toIcon()),
                             contentDescription = "",
                         )
                     },

@@ -1,19 +1,7 @@
 package com.aitgacem.budgeter.ui.components
 
 import android.os.Parcelable
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Apartment
-import androidx.compose.material.icons.filled.ArrowUpward
-import androidx.compose.material.icons.filled.DirectionsBus
-import androidx.compose.material.icons.filled.Edit
-import androidx.compose.material.icons.filled.Map
-import androidx.compose.material.icons.filled.Movie
-import androidx.compose.material.icons.filled.Phone
-import androidx.compose.material.icons.filled.Restaurant
-import androidx.compose.material.icons.filled.School
-import androidx.compose.material.icons.filled.ShoppingCart
-import androidx.compose.material.icons.filled.Spa
-import androidx.compose.ui.graphics.vector.ImageVector
+import com.aitgacem.budgeter.R
 import kotlinx.parcelize.Parcelize
 
 
@@ -32,18 +20,18 @@ enum class Category : Parcelable {
     Deposit
 }
 
-fun Category.toIcon(): ImageVector {
+fun Category.toIcon(): Int {
     return when (this) {
-        Category.Transportation -> Icons.Default.DirectionsBus
-        Category.Groceries -> Icons.Default.ShoppingCart
-        Category.Travel -> Icons.Default.Map
-        Category.Utilities -> Icons.Default.Phone
-        Category.Entertainment -> Icons.Default.Movie
-        Category.Housing -> Icons.Default.Apartment
-        Category.Education -> Icons.Default.School
-        Category.Healthcare -> Icons.Default.Spa
-        Category.Food -> Icons.Default.Restaurant
-        Category.Others -> Icons.Default.Edit
-        Category.Deposit -> Icons.Default.ArrowUpward
+        Category.Transportation -> R.drawable.ic_apartment
+        Category.Groceries -> R.drawable.ic_apartment
+        Category.Travel -> R.drawable.ic_map
+        Category.Utilities -> R.drawable.ic_movie
+        Category.Entertainment -> R.drawable.ic_movie
+        Category.Housing -> R.drawable.ic_apartment
+        Category.Education -> R.drawable.ic_school
+        Category.Healthcare -> R.drawable.ic_spa
+        Category.Food -> R.drawable.ic_restaurant
+        Category.Others -> R.drawable.ic_movie
+        Category.Deposit -> R.drawable.ic_arrow_upward
     }
 }

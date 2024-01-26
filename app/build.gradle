@@ -86,7 +86,6 @@ dependencies {
     implementation 'androidx.core:core-ktx:1.12.0'
     implementation 'androidx.compose.ui:ui:1.5.4'
     implementation 'androidx.compose.material:material:1.6.0-beta03'
-    implementation 'androidx.compose.material:material-icons-extended:1.5.4'
     implementation 'androidx.compose.runtime:runtime:1.5.4'
     implementation 'androidx.compose.ui:ui-tooling-preview:1.5.4'
     implementation 'com.google.android.material:material:1.11.0'
@@ -100,7 +99,6 @@ dependencies {
     androidTestImplementation 'androidx.compose.ui:ui-test-junit4:1.5.4'
     debugImplementation 'androidx.compose.ui:ui-tooling:1.5.4'
     implementation 'androidx.compose.runtime:runtime-livedata:1.5.4'
-    //implementation "androidx.navigation:navigation-compose:2.7.1"
     implementation 'org.jetbrains.kotlin:kotlin-reflect:1.9.22'
     implementation 'androidx.room:room-runtime:2.6.1'
     ksp 'androidx.room:room-compiler:2.6.1'

@@ -16,7 +16,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Savings
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.Card
@@ -37,9 +36,9 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -82,7 +81,8 @@ fun OverviewScreen(
                     },
                     navigationIcon = {
                         Icon(
-                            imageVector = Icons.Filled.Savings, contentDescription = null
+                            painter = painterResource(id = R.drawable.ic_savings),
+                            contentDescription = null
                         )
                     },
                     actions = {
@@ -205,7 +205,7 @@ private fun ItemDisplay(
 
     ) {
         Icon(
-            imageVector = transaction.category.toIcon(),
+            painter = painterResource(id = transaction.category.toIcon()),
             contentDescription = "",
             modifier = modifier
                 .size(width = 40.dp, height = 40.dp)
