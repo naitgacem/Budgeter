@@ -3,6 +3,7 @@ package com.aitgacem.budgeter
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import com.aitgacem.budgeter.ui.AppTheme
 import com.aitgacem.budgeter.ui.screens.NavGraphs
 import com.ramcosta.composedestinations.DestinationsNavHost
 import dagger.hilt.android.AndroidEntryPoint
@@ -13,7 +14,9 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         setContent {
-            DestinationsNavHost(navGraph = NavGraphs.root)
+            AppTheme {
+                DestinationsNavHost(navGraph = NavGraphs.root)
+            }
         }
     }
 }
