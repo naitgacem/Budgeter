@@ -7,7 +7,11 @@ import com.aitgacem.budgeter.ui.AppTheme
 import com.aitgacem.budgeter.ui.screens.NavGraphs
 import com.ramcosta.composedestinations.DestinationsNavHost
 import dagger.hilt.android.AndroidEntryPoint
+import java.lang.ref.WeakReference
 
+object CurrentActivityHolder {
+    var currentActivity: WeakReference<ComponentActivity>? = null
+}
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -18,6 +22,7 @@ class MainActivity : ComponentActivity() {
                 DestinationsNavHost(navGraph = NavGraphs.root)
             }
         }
+        CurrentActivityHolder.currentActivity = WeakReference(this)
     }
 }
 
