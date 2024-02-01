@@ -13,8 +13,5 @@
   -->
 <resources>
 
-    <style name="Theme.MyTheme" parent="Theme.MaterialComponents.DayNight">
-        <item name="android:statusBarColor">@color/status_bar_color</item>
-        <item name="android:windowLightStatusBar">?attr/isLightTheme</item>
-    </style>
+    <style name="AppTheme" parent="Theme.Material3.DayNight.NoActionBar"></style>
 </resources>
