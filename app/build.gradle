@@ -58,6 +58,7 @@ android {
     }
     buildFeatures {
         compose true
+        viewBinding true
     }
     composeOptions {
         kotlinCompilerExtensionVersion "1.5.8"
@@ -102,6 +103,7 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
     androidTestImplementation 'androidx.compose.ui:ui-test-junit4:1.6.0'
     debugImplementation 'androidx.compose.ui:ui-tooling:1.6.0'
+    implementation "androidx.compose.ui:ui-viewbinding:1.6.0"
     implementation 'androidx.compose.runtime:runtime-livedata:1.6.0'
     implementation 'org.jetbrains.kotlin:kotlin-reflect:1.9.22'
     implementation 'androidx.room:room-runtime:2.6.1'
