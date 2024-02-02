@@ -1,6 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/nav_graph">
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/overviewFragment">
 
+    <fragment
+        android:id="@+id/overviewFragment"
+        android:name="com.aitgacem.budgeter.ui.fragments.OverviewFragment"
+        android:label="OverviewFragment">
+        <action
+            android:id="@+id/action_overviewFragment_to_analyticsFragment"
+            app:destination="@id/analyticsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/analyticsFragment"
+        android:name="com.aitgacem.budgeter.ui.fragments.AnalyticsFragment"
+        android:label="AnalyticsFragment" />
 </navigation>
