@@ -16,6 +16,8 @@ import com.aitgacem.budgeter.data.model.Transaction
 import com.aitgacem.budgeter.databinding.FragmentOverviewScreenBinding
 import com.aitgacem.budgeter.ui.components.RecentTransactionsRecyclerViewAdapter
 import com.aitgacem.budgeter.ui.viewmodels.OverviewViewModel
+import com.google.android.material.transition.MaterialFade
+import com.google.android.material.transition.MaterialSharedAxis
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -42,17 +44,23 @@ class OverviewFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        exitTransition = MaterialSharedAxis(MaterialSharedAxis.Z, true).apply {
+            duration = 600
+        }
+        reenterTransition = MaterialSharedAxis(MaterialSharedAxis.Z, false).apply {
+            duration = 600
+        }
 
         viewModel.balancelivedata.observe(viewLifecycleOwner) {
             binding.balanceAmount.text = it.toString()
         }
 
 
-        binding.button.setOnClickListener {
+        binding.depositBtn.setOnClickListener {
             val action = OverviewFragmentDirections.depositAction(true)
             view.findNavController().navigate(action)
         }
-        binding.button2.setOnClickListener {
+        binding.withdrawBtn.setOnClickListener {
             val action = OverviewFragmentDirections.depositAction(false)
             view.findNavController().navigate(action)
         }

@@ -1,6 +1,5 @@
 package com.aitgacem.budgeter.ui.fragments
 
-import android.opengl.Visibility
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -12,6 +11,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.aitgacem.budgeter.databinding.FragmentFormfillBinding
 import com.aitgacem.budgeter.ui.viewmodels.DepositViewModel
+import com.google.android.material.transition.MaterialSharedAxis
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.Calendar
 
@@ -39,6 +39,14 @@ class FormFillFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        enterTransition = MaterialSharedAxis(MaterialSharedAxis.Z, true).apply {
+            duration = 600
+        }
+        returnTransition = MaterialSharedAxis(MaterialSharedAxis.Z, false).apply {
+            duration = 600
+        }
+
         binding.topbar.setOnClickListener { findNavController().popBackStack() }
         binding.saveBtn.setOnClickListener {
             viewModel.updateDescription(binding.transactionTitle.editText?.text.toString())
