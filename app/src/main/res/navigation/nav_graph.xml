@@ -11,6 +11,9 @@
         <action
             android:id="@+id/action_overviewFragment_to_analyticsFragment"
             app:destination="@id/analyticsFragment" />
+        <action
+            android:id="@+id/action_overviewFragment_to_formFillFragment"
+            app:destination="@id/formFillFragment" />
     </fragment>
     <fragment
         android:id="@+id/analyticsFragment"
@@ -20,4 +23,8 @@
         android:id="@+id/transactionsFragment"
         android:name="com.aitgacem.budgeter.ui.fragments.TransactionsFragment"
         android:label="TransactionsFragment" />
+    <fragment
+        android:id="@+id/formFillFragment"
+        android:name="com.aitgacem.budgeter.ui.fragments.FormFillFragment"
+        android:label="FormFillFragment" />
 </navigation>
