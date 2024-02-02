@@ -11,7 +11,9 @@ import com.aitgacem.budgeter.data.TransactionsRepository
 import com.aitgacem.budgeter.data.model.Transaction
 import com.aitgacem.budgeter.databinding.FragmentTransactionsBinding
 import com.aitgacem.budgeter.ui.components.ListTransactionsRecyclerViewAdapter
+import com.aitgacem.budgeter.ui.components.TransactionAdapter
 import com.aitgacem.budgeter.ui.viewmodels.TransactionsViewModel
+import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -41,14 +43,19 @@ class TransactionsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val transactions = mutableListOf<Transaction>()
-        val rva = ListTransactionsRecyclerViewAdapter(transactions)
-        binding.listTransactionsRv.layoutManager = LinearLayoutManager(this.activity)
-        binding.listTransactionsRv.adapter = rva
+        val listAdapter = TransactionAdapter {
+            Snackbar.make(
+                view,
+                "hey worked ${it.amount}",
+                Snackbar.LENGTH_SHORT
+            ).show()
+        }
+        val recyclerView = binding.listTransactionsRv
+        recyclerView.layoutManager = LinearLayoutManager(view.context)
+        recyclerView.adapter = listAdapter
 
         viewModel.transactionsLiveData.observe(viewLifecycleOwner) {
-            transactions.addAll(it)
-            rva.notifyDataSetChanged()
+            listAdapter.submitList(it)
         }
 
     }
