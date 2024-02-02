@@ -1,30 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/overviewFragment">
+    app:startDestination="@id/overview_dest">
 
     <fragment
-        android:id="@+id/overviewFragment"
+        android:id="@+id/overview_dest"
         android:name="com.aitgacem.budgeter.ui.fragments.OverviewFragment"
-        android:label="OverviewFragment">
-        <action
-            android:id="@+id/action_overviewFragment_to_analyticsFragment"
-            app:destination="@id/analyticsFragment" />
-        <action
-            android:id="@+id/action_overviewFragment_to_formFillFragment"
-            app:destination="@id/formFillFragment" />
-    </fragment>
+        android:label="OverviewFragment"
+        tools:layout="@layout/fragment_overview_screen"></fragment>
     <fragment
-        android:id="@+id/analyticsFragment"
+        android:id="@+id/analytics_dest"
         android:name="com.aitgacem.budgeter.ui.fragments.AnalyticsFragment"
-        android:label="AnalyticsFragment" />
+        android:label="AnalyticsFragment"
+        tools:layout="@layout/fragment_analytics_screen" />
     <fragment
-        android:id="@+id/transactionsFragment"
+        android:id="@+id/transactions_dest"
         android:name="com.aitgacem.budgeter.ui.fragments.TransactionsFragment"
-        android:label="TransactionsFragment" />
+        android:label="TransactionsFragment"
+        tools:layout="@layout/fragment_transactions" />
     <fragment
-        android:id="@+id/formFillFragment"
+        android:id="@+id/formFill_dest"
         android:name="com.aitgacem.budgeter.ui.fragments.FormFillFragment"
-        android:label="FormFillFragment" />
+        android:label="FormFillFragment"
+        tools:layout="@layout/fragment_formfill" />
 </navigation>

@@ -81,6 +81,7 @@
         <com.google.android.material.chip.ChipGroup
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:id="@+id/transaction_category"
             app:layout_constraintTop_toBottomOf="@id/transaction_date"
             android:layout_marginHorizontal="8dp"
             app:singleSelection="true">
@@ -156,5 +157,15 @@
                 app:chipIcon="@drawable/ic_edit_note"
                 style="@style/CustomChipStyle" />
         </com.google.android.material.chip.ChipGroup>
+
+        <com.google.android.material.button.MaterialButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/save_btn"
+            android:text="Save"
+            app:layout_constraintTop_toBottomOf="@id/transaction_category"
+            android:gravity="center_horizontal"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
