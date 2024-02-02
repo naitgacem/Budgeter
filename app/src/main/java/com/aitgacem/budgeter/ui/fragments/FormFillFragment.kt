@@ -1,12 +1,15 @@
 package com.aitgacem.budgeter.ui.fragments
 
+import android.opengl.Visibility
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
+import android.view.View.GONE
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import com.aitgacem.budgeter.databinding.FragmentFormfillBinding
 import com.aitgacem.budgeter.ui.viewmodels.DepositViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -27,6 +30,10 @@ class FormFillFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentFormfillBinding.inflate(layoutInflater, container, false)
+        val args: FormFillFragmentArgs by navArgs()
+        if (args.isDeposit) {
+            binding.transactionCategory.visibility = GONE
+        }
         return binding.root
     }
 

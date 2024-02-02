@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.Navigation
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.aitgacem.budgeter.R
 import com.aitgacem.budgeter.data.TransactionsRepository
@@ -41,20 +42,19 @@ class OverviewFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val transactions = mutableListOf<Transaction>()
-        val rva = RecentTransactionsRecyclerViewAdapter(transactions)
-        binding.recentTransactionsRv.layoutManager = LinearLayoutManager(this.activity)
-        binding.recentTransactionsRv.adapter = rva
+
         viewModel.balancelivedata.observe(viewLifecycleOwner) {
             binding.balanceAmount.text = it.toString()
         }
 
 
-        binding.button.setOnClickListener(
-            Navigation.createNavigateOnClickListener(
-                R.id.formFill_dest,
-                null
-            )
-        )
+        binding.button.setOnClickListener {
+            val action = OverviewFragmentDirections.depositAction(true)
+            view.findNavController().navigate(action)
+        }
+        binding.button2.setOnClickListener {
+            val action = OverviewFragmentDirections.depositAction(false)
+            view.findNavController().navigate(action)
+        }
     }
 }

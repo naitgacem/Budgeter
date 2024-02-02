@@ -8,9 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.aitgacem.budgeter.data.TransactionsRepository
-import com.aitgacem.budgeter.data.model.Transaction
 import com.aitgacem.budgeter.databinding.FragmentTransactionsBinding
-import com.aitgacem.budgeter.ui.components.ListTransactionsRecyclerViewAdapter
 import com.aitgacem.budgeter.ui.components.TransactionAdapter
 import com.aitgacem.budgeter.ui.viewmodels.TransactionsViewModel
 import com.google.android.material.snackbar.Snackbar
