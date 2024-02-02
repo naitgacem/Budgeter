@@ -35,17 +35,12 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.aitgacem.budgeter.R
 import com.aitgacem.budgeter.data.model.Transaction
-import com.aitgacem.budgeter.ui.screens.destinations.HomeScreenDestination
 import com.aitgacem.budgeter.ui.viewmodels.DepositViewModel
-import com.ramcosta.composedestinations.annotation.Destination
-import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import java.util.Calendar
 
-@Destination
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DepositScreen(
-    navigator: DestinationsNavigator,
     oldTransaction: Transaction? = null,
 ) {
     Scaffold(
@@ -55,7 +50,7 @@ fun DepositScreen(
                 },
                 navigationIcon = {
                     IconButton(
-                        onClick = { navigator.popBackStack() },
+                        onClick = { },
                     ) {
                         Icon(
                             imageVector = Icons.AutoMirrored.Filled.ArrowBack,
@@ -81,7 +76,7 @@ fun DepositScreen(
             modifier = Modifier.padding(paddingValues),
             oldTransaction = oldTransaction,
             exitAfterSave = {
-                navigator.popBackStack(HomeScreenDestination, inclusive = false)
+                true
             }
         )
     }

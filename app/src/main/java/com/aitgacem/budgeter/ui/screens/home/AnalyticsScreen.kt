@@ -35,7 +35,7 @@ import androidx.compose.ui.viewinterop.AndroidViewBinding
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.aitgacem.budgeter.data.model.CategoryAndValue
 import com.aitgacem.budgeter.data.model.DateAndBalance
-import com.aitgacem.budgeter.databinding.AnalyticsScreenBinding
+import com.aitgacem.budgeter.databinding.FragmentAnalyticsScreenBinding
 import com.aitgacem.budgeter.ui.viewmodels.AnalyticsViewModel
 import com.aitgacem.budgeter.ui.viewmodels.utils.DateFormatter
 import com.github.mikephil.charting.charts.LineChart
@@ -49,16 +49,11 @@ import com.github.mikephil.charting.data.PieData
 import com.github.mikephil.charting.data.PieDataSet
 import com.github.mikephil.charting.data.PieEntry
 import com.github.mikephil.charting.formatter.PercentFormatter
-import com.ramcosta.composedestinations.annotation.Destination
-import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 
 @RequiresApi(Build.VERSION_CODES.Q)
-@HomeNavGraph
-@Destination
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun AnalyticsScreen(
-    navigator: DestinationsNavigator,
     analyticsViewModel: AnalyticsViewModel = hiltViewModel(),
 ) {
     val categoryAndValues by analyticsViewModel.categoryAndValues.collectAsState()
@@ -81,7 +76,7 @@ internal fun AnalyticsScreen(
 
             AndroidViewBinding(
                 modifier = Modifier.padding(paddingValues),
-                factory = AnalyticsScreenBinding::inflate
+                factory = FragmentAnalyticsScreenBinding::inflate
             ) {
                 this.lineChart.apply {
                     isLogEnabled = false

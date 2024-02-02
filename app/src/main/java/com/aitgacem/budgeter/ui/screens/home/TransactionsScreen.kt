@@ -36,20 +36,14 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.aitgacem.budgeter.data.model.Transaction
 import com.aitgacem.budgeter.ui.components.toIcon
-import com.aitgacem.budgeter.ui.screens.destinations.TransactionDetailsScreenDestination
 import com.aitgacem.budgeter.ui.viewmodels.TransactionsViewModel
-import com.ramcosta.composedestinations.annotation.Destination
-import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import java.text.SimpleDateFormat
 import java.util.Date
 
-@HomeNavGraph
-@Destination
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TransactionsScreen(
     modifier: Modifier = Modifier,
-    navigator: DestinationsNavigator,
     transactionsViewModel: TransactionsViewModel = hiltViewModel(),
 ) {
     val listOfAllTransactions by transactionsViewModel.allTransactions.collectAsState()
@@ -104,7 +98,7 @@ fun TransactionsScreen(
                         ItemContent(
                             transaction = transaction,
                             navigateToItem = {
-                                navigator.navigate(TransactionDetailsScreenDestination(transaction = transaction))
+
                             }
                         )
                         Divider(

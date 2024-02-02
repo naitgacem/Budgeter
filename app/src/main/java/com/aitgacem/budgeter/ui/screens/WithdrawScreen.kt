@@ -49,16 +49,11 @@ import com.aitgacem.budgeter.R
 import com.aitgacem.budgeter.data.model.Transaction
 import com.aitgacem.budgeter.ui.components.Category
 import com.aitgacem.budgeter.ui.components.toIcon
-import com.aitgacem.budgeter.ui.screens.destinations.HomeScreenDestination
 import com.aitgacem.budgeter.ui.viewmodels.WithdrawViewModel
-import com.ramcosta.composedestinations.annotation.Destination
-import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 
-@Destination
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun WithdrawScreen(
-    navigator: DestinationsNavigator,
     oldTransaction: Transaction? = null,
 ) {
     var expanded by remember { mutableStateOf(false) }
@@ -69,7 +64,7 @@ fun WithdrawScreen(
                 },
                 navigationIcon = {
                     IconButton(
-                        onClick = { navigator.popBackStack() },
+                        onClick = { },
                     ) {
                         Icon(
                             imageVector = Icons.AutoMirrored.Filled.ArrowBack,
@@ -94,7 +89,7 @@ fun WithdrawScreen(
                                 text = {
                                     Text("Cancel")
                                 },
-                                onClick = { navigator.popBackStack() }
+                                onClick = { }
                             )
                         }
                     }
@@ -106,7 +101,7 @@ fun WithdrawScreen(
             modifier = Modifier.padding(paddingValues),
             oldTransaction = oldTransaction,
             exitAfterSave = {
-                navigator.popBackStack(HomeScreenDestination, inclusive = false)
+                true
             },
         )
     }

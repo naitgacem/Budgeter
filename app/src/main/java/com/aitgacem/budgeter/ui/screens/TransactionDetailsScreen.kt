@@ -33,18 +33,13 @@ import com.aitgacem.budgeter.R
 import com.aitgacem.budgeter.data.model.Transaction
 import com.aitgacem.budgeter.ui.components.Category
 import com.aitgacem.budgeter.ui.components.toIcon
-import com.aitgacem.budgeter.ui.screens.destinations.DepositScreenDestination
-import com.aitgacem.budgeter.ui.screens.destinations.WithdrawScreenDestination
-import com.ramcosta.composedestinations.annotation.Destination
-import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import java.text.SimpleDateFormat
 import java.util.Date
 
-@Destination
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TransactionDetailsScreen(
-    navigator: DestinationsNavigator,
     transaction: Transaction,
 ) {
     Scaffold(
@@ -53,7 +48,7 @@ fun TransactionDetailsScreen(
                 title = {},
                 navigationIcon = {
                     IconButton(
-                        onClick = { navigator.popBackStack() }
+                        onClick = { }
                     ) {
                         Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = null)
                     }
@@ -71,11 +66,11 @@ fun TransactionDetailsScreen(
                         onClick = {
                             when (transaction.category) {
                                 Category.Deposit -> {
-                                    navigator.navigate(DepositScreenDestination(oldTransaction = transaction))
+                                    //navigator.navigate(DepositScreenDestination(oldTransaction = transaction))
                                 }
 
                                 else -> {
-                                    navigator.navigate(WithdrawScreenDestination(oldTransaction = transaction))
+                                    //navigator.navigate(WithdrawScreenDestination(oldTransaction = transaction))
                                 }
                             }
                         }

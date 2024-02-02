@@ -27,14 +27,12 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.aitgacem.budgeter.R
-import com.ramcosta.composedestinations.annotation.Destination
-import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 
-@Destination
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SettingsScreen(
-    navigator: DestinationsNavigator,
+
 ) {
     Surface {
         Scaffold(
@@ -48,7 +46,7 @@ fun SettingsScreen(
                     },
                     navigationIcon = {
                         IconButton(
-                            onClick = { navigator.popBackStack() }
+                            onClick = { }
                         ) {
                             Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = null)
                         }
