@@ -6,22 +6,20 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.aitgacem.budgeter.data.TransactionsRepository
 import com.aitgacem.budgeter.data.model.Transaction
 import com.aitgacem.budgeter.databinding.FragmentTransactionsBinding
 import com.aitgacem.budgeter.ui.components.ListTransactionsRecyclerViewAdapter
-import com.aitgacem.budgeter.ui.viewmodels.TransactionDetailsViewModel
+import com.aitgacem.budgeter.ui.viewmodels.TransactionsViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @AndroidEntryPoint
 class TransactionsFragment : Fragment() {
 
-    lateinit var binding: FragmentTransactionsBinding
-    private val viewModel: TransactionDetailsViewModel by viewModels()
+    private lateinit var binding: FragmentTransactionsBinding
+    private val viewModel: TransactionsViewModel by viewModels()
 
     @Inject
     lateinit var repository: TransactionsRepository
@@ -48,14 +46,10 @@ class TransactionsFragment : Fragment() {
         binding.listTransactionsRv.layoutManager = LinearLayoutManager(this.activity)
         binding.listTransactionsRv.adapter = rva
 
-        lifecycleScope.launch {
-            repository.readAllTransactionsFromDatabase().collect {
-                transactions.addAll(it)
-                transactions.addAll(it)
-                transactions.addAll(it)
-                transactions.addAll(it)
-                rva.notifyDataSetChanged()
-            }
+        viewModel.transactionsLiveData.observe(viewLifecycleOwner) {
+            transactions.addAll(it)
+            rva.notifyDataSetChanged()
         }
+
     }
 }

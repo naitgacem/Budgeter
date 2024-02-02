@@ -32,7 +32,7 @@ class FormFillFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        binding.topbar.setOnClickListener { findNavController().popBackStack() }
         binding.saveBtn.setOnClickListener {
             viewModel.updateDescription(binding.transactionTitle.editText?.text.toString())
             viewModel.updateAmount(binding.transactionAmount.editText?.text.toString())

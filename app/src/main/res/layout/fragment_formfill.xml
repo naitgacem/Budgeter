@@ -17,8 +17,8 @@
             <Toolbar
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:logo="@drawable/ic_savings"
-                android:title="Budgeter">
+                android:navigationIcon="@drawable/ic_arrow_back"
+                android:id="@+id/topbar">
 
             </Toolbar>
         </com.google.android.material.appbar.CollapsingToolbarLayout>

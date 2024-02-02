@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
+import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
@@ -24,7 +25,7 @@ class OverviewViewModel @Inject constructor(
 
     private var _balance = MutableStateFlow(0.toFloat())
     val balance = _balance
-
+    val balancelivedata = _balance.asLiveData()
     init {
         refreshRecentTransactions()
         refreshBalance()

@@ -1,6 +1,7 @@
 package com.aitgacem.budgeter.ui.viewmodels
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import com.aitgacem.budgeter.data.TransactionsRepository
 import com.aitgacem.budgeter.data.model.Transaction
@@ -17,7 +18,7 @@ class TransactionsViewModel @Inject constructor(
 
     private var _allTransactions = MutableStateFlow<List<Transaction>>(emptyList())
     val allTransactions = _allTransactions.asStateFlow()
-
+    val transactionsLiveData = _allTransactions.asLiveData()
     init {
         viewModelScope.launch {
             repository.readAllTransactionsFromDatabase().collect { transactions ->
