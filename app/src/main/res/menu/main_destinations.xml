@@ -10,4 +10,8 @@
         android:id="@+id/analyticsFragment"
         android:icon="@drawable/ic_analytics"
         android:title="Anayltics" />
+    <item
+        android:id="@+id/transactionsFragment"
+        android:icon="@drawable/ic_swap_vert"
+        android:title="Transactions" />
 </menu>

@@ -16,4 +16,8 @@
         android:id="@+id/analyticsFragment"
         android:name="com.aitgacem.budgeter.ui.fragments.AnalyticsFragment"
         android:label="AnalyticsFragment" />
+    <fragment
+        android:id="@+id/transactionsFragment"
+        android:name="com.aitgacem.budgeter.ui.fragments.TransactionsFragment"
+        android:label="TransactionsFragment" />
 </navigation>
