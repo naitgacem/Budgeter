@@ -5,6 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -39,7 +40,12 @@ class ListTransactionsRecyclerViewAdapter(private val dataSet: List<Transaction>
         viewHolder.transactionTime.text = "09:43"
         viewHolder.transactionAmount.text = dataSet[position].amount.toString()
         val context = viewHolder.itemView.context
-        viewHolder.transactionIcon.setImageDrawable(context.getDrawable(dataSet[position].category.toIcon()))
+        viewHolder.transactionIcon.setImageDrawable(
+            ContextCompat.getDrawable(
+                context.applicationContext,
+                dataSet[position].category.toIcon()
+            )
+        )
     }
 
     override fun getItemCount() = dataSet.size
@@ -70,7 +76,12 @@ class TransactionAdapter(private val onClick: (Transaction) -> Unit) :
             transactionAmount.text = transaction.amount.toString()
             transactionTime.text = "09:42"
             val context = transactionTitle.context
-            transactionIcon.setImageDrawable(context.getDrawable(transaction.category.toIcon()))
+            transactionIcon.setImageDrawable(
+                ContextCompat.getDrawable(
+                    context.applicationContext,
+                    transaction.category.toIcon()
+                )
+            )
         }
     }
 
