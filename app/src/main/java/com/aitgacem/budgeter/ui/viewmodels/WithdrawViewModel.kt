@@ -100,7 +100,8 @@ class WithdrawViewModel @Inject constructor(
                     Transaction(
                         0, _description.value ?: "",
                         _amount.value?.toDoubleOrNull() ?: 0.0,
-                        1231232133, 155, _category.value ?: Category.Others,
+                        date.value,
+                        155, _category.value ?: Category.Others,
                     )
                 )
             }

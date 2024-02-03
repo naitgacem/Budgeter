@@ -17,5 +17,5 @@ interface CategoryDao {
     suspend fun insert(categoryEntity: CategoryEntity): Long
 
     @Update
-    suspend fun update(categoryEntity: CategoryEntity)
+    suspend fun update(categoryEntity: CategoryEntity): Long
 }

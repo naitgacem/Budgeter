@@ -57,7 +57,7 @@ class FormFillFragment : Fragment() {
                 Triple(it.dayOfMonth, it.month, it.year)
             }
             val timestamp = getTimestamp(day, month, year)
-
+            viewModel.updateId(timestamp)
             viewModel.updateCategory(Category.Entertainment)
             viewModel.saveTransaction()
             findNavController().popBackStack()

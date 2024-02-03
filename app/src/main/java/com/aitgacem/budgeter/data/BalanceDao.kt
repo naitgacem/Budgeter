@@ -14,7 +14,7 @@ interface BalanceDao {
     suspend fun insert(balance: BalanceEntity): Long
 
     @Update
-    suspend fun updateBalance(balance: BalanceEntity)
+    suspend fun updateBalance(balance: BalanceEntity): Long
 
     @Delete
     suspend fun delete(balance: BalanceEntity)
@@ -22,6 +22,9 @@ interface BalanceDao {
     @Query("select * from balance where date = :date")
     suspend fun getBalanceEntityOnDay(date: Long): BalanceEntity?
 
-    @Query("select * from balance where date <= :date order by date asc limit 1")
+    @Query("select * from balance where date <= :date order by date desc limit 1")
     suspend fun getBalanceEntityBeforeDay(date: Long): BalanceEntity?
+
+    @Query("select * from balance where date > :date")
+    suspend fun getDayBalancesAfterDate(date: Long): List<BalanceEntity>
 }
