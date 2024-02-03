@@ -14,7 +14,7 @@ interface BalanceDao {
     suspend fun insert(balance: BalanceEntity): Long
 
     @Update
-    suspend fun updateBalance(balance: BalanceEntity): Long
+    suspend fun updateBalance(balance: BalanceEntity)
 
     @Delete
     suspend fun delete(balance: BalanceEntity)

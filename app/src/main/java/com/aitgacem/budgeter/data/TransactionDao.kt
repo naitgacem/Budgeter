@@ -5,6 +5,7 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Update
+import com.aitgacem.budgeter.data.model.Transaction
 import com.aitgacem.budgeter.data.model.TransactionEntity
 
 @Dao
@@ -21,4 +22,12 @@ interface TransactionWithDetailsDao {
 
     @Update
     suspend fun updateTransaction(updatedTransaction: TransactionEntity)
+
+
+    @Query(
+        "SELECT transactions.id, transactions.title, transactions.amount, transactions.time, transactions.dateId as date, categories.name as category " +
+                "FROM transactions " +
+                "INNER JOIN categories ON transactions.categoryId = categories.categoryId"
+    )
+    suspend fun getTransactions(): List<Transaction>
 }
