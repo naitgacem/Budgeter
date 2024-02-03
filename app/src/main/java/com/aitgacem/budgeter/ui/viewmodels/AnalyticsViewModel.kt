@@ -34,15 +34,15 @@ class AnalyticsViewModel @Inject constructor(
     }
 
     private suspend fun loadDayAndData() {
-        repository.getBalanceByDate().collect {
-            _dateAndBalance.value = it
-        }
+//        repository.getBalanceByDate().collect {
+//            _dateAndBalance.value = it
+//        }
     }
 
     private suspend fun loadCategoryAndData() {
-        repository.getCategoryAndValue().collect {
-            _categoryAndValues.value = it
-        }
+//        repository.getCategoryAndValue().collect {
+//            _categoryAndValues.value = it
+//        }
     }
 }
 

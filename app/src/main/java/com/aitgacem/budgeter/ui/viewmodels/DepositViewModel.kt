@@ -58,27 +58,27 @@ class DepositViewModel @Inject constructor(
     fun saveTransaction() {
         if (isUpdate) {
             viewModelScope.launch {
-                repository.updateTransaction(
-                    oldTransaction.copy(
-                        date = _date.value,
-                        amount = _amount.value?.toFloatOrNull() ?: 0.0f,
-                        title = _description.value ?: "",
-                    ),
-                    oldTransaction,
-                )
+//                repository.updateTransaction(
+//                    oldTransaction.copy(
+//                        date = _date.value,
+//                        amount = _amount.value?.toFloatOrNull() ?: 0.0f,
+//                        title = _description.value ?: "",
+//                    ),
+//                    oldTransaction,
+//                )
             }
 
         } else {
-            val transaction = Transaction(
-                date = _date.value,
-                amount = _amount.value?.toFloatOrNull() ?: 0.0f,
-                title = _description.value ?: "",
-                category = Category.Deposit,
-                id = Calendar.getInstance().timeInMillis
-            )
-            viewModelScope.launch {
-                repository.writeTransactionToDatabase(transaction)
-            }
+//            val transaction = Transaction(
+//                date = _date.value,
+//                amount = _amount.value?.toFloatOrNull() ?: 0.0f,
+//                title = _description.value ?: "",
+//                category = Category.Deposit,
+//                id = Calendar.getInstance().timeInMillis
+//            )
+//            viewModelScope.launch {
+//                repository.writeTransactionToDatabase(transaction)
+//            }
         }
 
     }

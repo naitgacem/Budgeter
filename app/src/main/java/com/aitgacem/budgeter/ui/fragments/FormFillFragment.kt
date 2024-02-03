@@ -10,7 +10,9 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.aitgacem.budgeter.databinding.FragmentFormfillBinding
+import com.aitgacem.budgeter.ui.components.Category
 import com.aitgacem.budgeter.ui.viewmodels.DepositViewModel
+import com.aitgacem.budgeter.ui.viewmodels.WithdrawViewModel
 import com.google.android.material.transition.MaterialSharedAxis
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.Calendar
@@ -18,7 +20,7 @@ import java.util.Calendar
 @AndroidEntryPoint
 class FormFillFragment : Fragment() {
     lateinit var binding: FragmentFormfillBinding
-    private val viewModel: DepositViewModel by viewModels()
+    private val viewModel: WithdrawViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -55,7 +57,8 @@ class FormFillFragment : Fragment() {
                 Triple(it.dayOfMonth, it.month, it.year)
             }
             val timestamp = getTimestamp(day, month, year)
-            viewModel.updateDate(timestamp)
+
+            viewModel.updateCategory(Category.Entertainment)
             viewModel.saveTransaction()
             findNavController().popBackStack()
         }

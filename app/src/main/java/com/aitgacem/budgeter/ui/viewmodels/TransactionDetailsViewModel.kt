@@ -24,8 +24,8 @@ class TransactionDetailsViewModel @Inject constructor(
 
     fun loadTransaction(id: Long) {
         viewModelScope.launch {
-            val loadedTransaction = repository.loadTransaction(id)
-            _transaction.value = loadedTransaction
+//            val loadedTransaction = repository.loadTransaction(id)
+//            _transaction.value = loadedTransaction
         }
     }
 }

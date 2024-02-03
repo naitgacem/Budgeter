@@ -74,26 +74,35 @@ class WithdrawViewModel @Inject constructor(
     fun saveTransaction() {
         if (isUpdate) {
             viewModelScope.launch {
-                repository.updateTransaction(
-                    oldTransaction!!.copy(
-                        date = date.value,
-                        amount = _amount.value?.toFloatOrNull() ?: 0.0f,
-                        title = _description.value ?: "",
-                        category = _category.value ?: Category.Others
-                    ),
-                    oldTransaction
-                )
+//                repository.updateTransaction(
+//                    oldTransaction!!.copy(
+//                        date = date.value,
+//                        amount = _amount.value?.toFloatOrNull() ?: 0.0f,
+//                        title = _description.value ?: "",
+//                        category = _category.value ?: Category.Others
+//                    ),
+//                    oldTransaction
+//                )
             }
         } else {
-            val transaction = Transaction(
-                date = date.value,
-                amount = _amount.value?.toFloatOrNull() ?: 0.0f,
-                title = _description.value ?: "",
-                category = _category.value ?: Category.Others,
-                id = Calendar.getInstance().timeInMillis
-            )
+//            val transaction = Transaction(
+//                date = date.value,
+//                amount = _amount.value?.toFloatOrNull() ?: 0.0f,
+//                title = _description.value ?: "",
+//                category = _category.value ?: Category.Others,
+//                id = Calendar.getInstance().timeInMillis
+//            )
+//            viewModelScope.launch {
+//                repository.writeTransactionToDatabase(transaction)
+//            }
             viewModelScope.launch {
-                repository.writeTransactionToDatabase(transaction)
+                repository.writeTransactionToDatabase(
+                    Transaction(
+                        0, _description.value ?: "",
+                        _amount.value?.toDoubleOrNull() ?: 0.0,
+                        1231232133, 155, _category.value ?: Category.Others,
+                    )
+                )
             }
         }
     }

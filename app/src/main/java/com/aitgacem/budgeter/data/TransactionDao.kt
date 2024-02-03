@@ -5,29 +5,20 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Update
-import com.aitgacem.budgeter.data.model.Transaction
-import kotlinx.coroutines.flow.Flow
+import com.aitgacem.budgeter.data.model.TransactionEntity
 
 @Dao
-interface TransactionDao {
-    @Query("SELECT * FROM `transaction` order by date desc, id desc")
-    fun getAll(): Flow<List<Transaction>>
+interface TransactionWithDetailsDao {
 
-    @Query("SELECT * FROM `transaction` where id = :id ")
-    suspend fun loadTransaction(id: Long): Transaction?
-
-    @Query("SELECT * FROM `transaction` where date >= :date order by date desc, id desc")
-    fun loadNewerThan(date: Long): Flow<List<Transaction>>
-
-    @Query("SELECT * FROM `transaction` where (date > :date) or (date == :date and id > :id)")
-    fun loadNewerThan(date: Long, id: Long): Flow<List<Transaction>>
+    @Query("SELECT * FROM transactions WHERE id = :id")
+    suspend fun getTransactionById(id: Long): TransactionEntity?
 
     @Insert
-    suspend fun insert(transaction: Transaction)
+    suspend fun insert(transaction: TransactionEntity)
 
     @Delete
-    suspend fun delete(transaction: Transaction)
+    suspend fun delete(transactionWithDetails: TransactionEntity)
 
     @Update
-    suspend fun update(transaction: Transaction)
+    suspend fun updateTransaction(updatedTransaction: TransactionEntity)
 }

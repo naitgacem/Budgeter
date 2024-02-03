@@ -21,9 +21,9 @@ class TransactionsViewModel @Inject constructor(
     val transactionsLiveData = _allTransactions.asLiveData()
     init {
         viewModelScope.launch {
-            repository.readAllTransactionsFromDatabase().collect { transactions ->
-                _allTransactions.value = transactions
-            }
+//            repository.readAllTransactionsFromDatabase().collect { transactions ->
+//                _allTransactions.value = transactions
+//            }
         }
     }
 

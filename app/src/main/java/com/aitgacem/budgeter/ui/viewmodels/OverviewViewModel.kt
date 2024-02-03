@@ -33,17 +33,17 @@ class OverviewViewModel @Inject constructor(
 
     private fun refreshRecentTransactions() {
         viewModelScope.launch {
-            repository.readRecentTransactionsFromDatabase().collect { transactions ->
-                _recentTransactions.value = transactions
-            }
+//            repository.readRecentTransactionsFromDatabase().collect { transactions ->
+//                _recentTransactions.value = transactions
+//            }
         }
     }
 
     private fun refreshBalance() {
         viewModelScope.launch {
-            repository.readBalance().collect {
-                _balance.value = it ?: 0.toFloat()
-            }
+//            repository.readBalance().collect {
+//                _balance.value = it ?: 0.toFloat()
+//            }
         }
     }
 
