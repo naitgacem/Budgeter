@@ -144,8 +144,8 @@ private fun AddTransactionContent(
         }
         item {
             InsertAmount(
-                value = amount ?: "",
-                updateAmount = { withdrawViewModel.updateAmount(it) }
+                value = "amount ?: ",
+                updateAmount = { }
             )
         }
         item {
@@ -177,7 +177,7 @@ private fun AddTransactionContent(
             SaveButton(
                 saveEntry = {
                     withdrawViewModel.updateId(state.selectedDateMillis)
-                    withdrawViewModel.saveTransaction()
+                    withdrawViewModel.saveTransaction(false)
                     exitAfterSave()
                 }
             )

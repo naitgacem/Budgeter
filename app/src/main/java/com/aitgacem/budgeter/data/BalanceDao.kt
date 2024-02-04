@@ -1,5 +1,6 @@
 package com.aitgacem.budgeter.data
 
+import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
@@ -30,4 +31,7 @@ interface BalanceDao {
 
     @Query("select * from balance where date >= :date order by date asc")
     suspend fun getDayBalancesStarting(date: Long): List<BalanceEntity>
+
+    @Query("select balance.balance from balance order by date desc limit 1")
+    fun getLatestBalance(): LiveData<Double?>
 }

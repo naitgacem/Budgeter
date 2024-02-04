@@ -16,15 +16,6 @@ class TransactionsViewModel @Inject constructor(
     private val repository: TransactionsRepository,
 ) : ViewModel() {
 
-    private var _allTransactions = MutableStateFlow<List<Transaction>>(emptyList())
-    val allTransactions = _allTransactions.asStateFlow()
-    val transactionsLiveData = _allTransactions.asLiveData()
-    init {
-        viewModelScope.launch {
-//            repository.readAllTransactionsFromDatabase().collect { transactions ->
-//                _allTransactions.value = transactions
-//            }
-        }
-    }
+    val transactionsLiveData = repository.readAllTransactionsFromDatabase()
 
 }

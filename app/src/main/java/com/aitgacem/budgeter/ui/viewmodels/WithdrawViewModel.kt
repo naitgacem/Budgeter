@@ -21,10 +21,10 @@ class WithdrawViewModel @Inject constructor(
     private val repository: TransactionsRepository,
 ) : ViewModel() {
 
-    val categories = Category.values().filter { it != Category.Deposit }
+    val categories = Category.entries.filter { it != Category.Deposit }
 
-    private var _amount = MutableStateFlow<String?>(null)
-    val amount: StateFlow<String?> = _amount
+    private var _amount = MutableStateFlow<Double>(0.0)
+    val amount: StateFlow<Double> = _amount
 
     private var _description = MutableStateFlow<String?>("")
     val description: StateFlow<String?> = _description
@@ -47,7 +47,7 @@ class WithdrawViewModel @Inject constructor(
     fun setUpUpdate(transaction: Transaction?) {
         if (transaction != null) {
             oldTransaction = transaction
-            _amount.value = transaction.amount.toString()
+            _amount.value = transaction.amount
             _description.value = transaction.title
             _category.value = transaction.category
             date.value = transaction.date
@@ -56,7 +56,10 @@ class WithdrawViewModel @Inject constructor(
     }
 
     fun updateAmount(newAmount: String) {
-        _amount.value = newAmount
+        val value = newAmount.toDoubleOrNull()
+        if (value != null) {
+            _amount.value = value
+        }
     }
 
     fun updateDescription(description: String) {
@@ -71,7 +74,7 @@ class WithdrawViewModel @Inject constructor(
         _category.value = category
     }
 
-    fun saveTransaction() {
+    fun saveTransaction(isDeposit: Boolean) {
         if (isUpdate) {
             viewModelScope.launch {
 //                repository.updateTransaction(
@@ -99,7 +102,11 @@ class WithdrawViewModel @Inject constructor(
                 repository.writeTransactionToDatabase(
                     Transaction(
                         0, _description.value ?: "",
-                        _amount.value?.toDoubleOrNull() ?: 0.0,
+                        if (isDeposit) {
+                            _amount.value
+                        } else {
+                            -1 * _amount.value
+                        },
                         date.value,
                         155, _category.value ?: Category.Others,
                     )

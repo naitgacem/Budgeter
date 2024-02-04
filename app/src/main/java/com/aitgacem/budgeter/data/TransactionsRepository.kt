@@ -28,7 +28,7 @@ class TransactionsRepository(private val db: TransactionDatabase) {
 
             val prevBalance = balanceDao.getBalanceEntityAtDay(transaction.date)?.balance ?: 0.0
             val newBalance = BalanceEntity(0, transaction.date, prevBalance + transaction.amount)
-
+            print(prevBalance)
             val balanceId: Long = when (balanceEntity) {
                 null -> {
                     balanceDao.insert(newBalance)
@@ -150,7 +150,7 @@ class TransactionsRepository(private val db: TransactionDatabase) {
         }
     }
 
-    suspend fun readAllTransactionsFromDatabase(): LiveData<List<Transaction>> {
+    fun readAllTransactionsFromDatabase(): LiveData<List<Transaction>> {
         return transactionDao.getTransactions()
     }
 
@@ -160,6 +160,10 @@ class TransactionsRepository(private val db: TransactionDatabase) {
 
     suspend fun readBalance(date: Long): Double {
         return balanceDao.getBalanceEntityAtDay(date)?.balance ?: 0.0
+    }
+
+    fun readLatestBalence(): LiveData<Double?> {
+        return balanceDao.getLatestBalance()
     }
 
     suspend fun getBalancesAfterDate(date: Long): List<BalanceEntity> {

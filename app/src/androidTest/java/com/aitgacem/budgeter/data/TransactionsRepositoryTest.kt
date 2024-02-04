@@ -217,6 +217,46 @@ class TransactionsRepositoryTest {
         assert(abs(transactionsRepository.readBalance(date = 0) - 0.0) < 0.001)
         assert(abs(transactionsRepository.readBalance(date = 11) - 65.0) < 0.001)
 
+        //testing withdrawals-----------------------------------------------------------------
+        val tr9 = Transaction(0, "oldest", -10.0, 2, 0, Category.Deposit)
+        transactionsRepository.writeTransactionToDatabase(tr9)
+        assert(abs(transactionsRepository.readBalance(date = 2) - -10.0) < 0.001)
+        assert(abs(transactionsRepository.readBalance(date = 5) - 25.0) < 0.001)
+        assert(abs(transactionsRepository.readBalance(date = 10) - 55.0) < 0.001)
+        assert(abs(transactionsRepository.readBalance(date = 12) - 125) < 0.001)
+        assert(abs(transactionsRepository.readBalance(date = 20) - 225) < 0.001)
+        assert(abs(transactionsRepository.readBalance(date = 25) - 285) < 0.001)
+        assert(abs(transactionsRepository.readBalance(date = 32) - 300) < 0.001)
+        assert(abs(transactionsRepository.readBalance(date = 60) - 330) < 0.001)
+
+        val tr10 = Transaction(0, "middle", -100.0, 22, 0, Category.Groceries)
+        transactionsRepository.writeTransactionToDatabase(tr10)
+        assert(abs(transactionsRepository.readBalance(date = 2) - -10.0) < 0.001)
+        assert(abs(transactionsRepository.readBalance(date = 5) - 25.0) < 0.001)
+        assert(abs(transactionsRepository.readBalance(date = 10) - 55.0) < 0.001)
+        assert(abs(transactionsRepository.readBalance(date = 12) - 125) < 0.001)
+        assert(abs(transactionsRepository.readBalance(date = 20) - 225) < 0.001)
+        assert(abs(transactionsRepository.readBalance(date = 22) - 125) < 0.001)
+        assert(abs(transactionsRepository.readBalance(date = 25) - 185) < 0.001)
+        assert(abs(transactionsRepository.readBalance(date = 32) - 200) < 0.001)
+        assert(abs(transactionsRepository.readBalance(date = 60) - 230) < 0.001)
+
+        val tr11 = Transaction(0, "end", -70.0, 65, 0, Category.Groceries)
+        transactionsRepository.writeTransactionToDatabase(tr11)
+        assert(abs(transactionsRepository.readBalance(date = 2) - -10.0) < 0.001)
+        assert(abs(transactionsRepository.readBalance(date = 5) - 25.0) < 0.001)
+        assert(abs(transactionsRepository.readBalance(date = 10) - 55.0) < 0.001)
+        assert(abs(transactionsRepository.readBalance(date = 12) - 125) < 0.001)
+        assert(abs(transactionsRepository.readBalance(date = 20) - 225) < 0.001)
+        assert(abs(transactionsRepository.readBalance(date = 22) - 125) < 0.001)
+        assert(abs(transactionsRepository.readBalance(date = 25) - 185) < 0.001)
+        assert(abs(transactionsRepository.readBalance(date = 32) - 200) < 0.001)
+        assert(abs(transactionsRepository.readBalance(date = 60) - 230) < 0.001)
+        assert(abs(transactionsRepository.readBalance(date = 65) - 160) < 0.001)
+
+        assert(abs(transactionsRepository.readBalance(date = 1) - 0) < 0.001)
+        assert(abs(transactionsRepository.readBalance(date = 70) - 160) < 0.001)
+
 
     }
 }

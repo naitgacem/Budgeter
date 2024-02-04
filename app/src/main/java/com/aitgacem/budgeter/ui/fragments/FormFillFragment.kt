@@ -21,7 +21,7 @@ import java.util.Calendar
 class FormFillFragment : Fragment() {
     lateinit var binding: FragmentFormfillBinding
     private val viewModel: WithdrawViewModel by viewModels()
-
+    private var isDeposit: Boolean = false
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
     }
@@ -33,7 +33,8 @@ class FormFillFragment : Fragment() {
     ): View {
         binding = FragmentFormfillBinding.inflate(layoutInflater, container, false)
         val args: FormFillFragmentArgs by navArgs()
-        if (args.isDeposit) {
+        isDeposit = args.isDeposit
+        if (isDeposit) {
             binding.transactionCategory.visibility = GONE
         }
         return binding.root
@@ -59,7 +60,7 @@ class FormFillFragment : Fragment() {
             val timestamp = getTimestamp(day, month, year)
             viewModel.updateId(timestamp)
             viewModel.updateCategory(Category.Entertainment)
-            viewModel.saveTransaction()
+            viewModel.saveTransaction(isDeposit)
             findNavController().popBackStack()
         }
     }
