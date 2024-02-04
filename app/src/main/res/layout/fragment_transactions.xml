@@ -29,5 +29,7 @@
         app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        tools:itemCount="10"
+        tools:listheader="@layout/item_day_divider"
         tools:listitem="@layout/item_list_transactions" />
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

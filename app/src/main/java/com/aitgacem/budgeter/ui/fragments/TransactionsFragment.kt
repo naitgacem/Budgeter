@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.aitgacem.budgeter.data.TransactionsRepository
 import com.aitgacem.budgeter.databinding.FragmentTransactionsBinding
 import com.aitgacem.budgeter.ui.components.DayDecorator
+import com.aitgacem.budgeter.ui.components.ItemType
 import com.aitgacem.budgeter.ui.components.TransactionAdapter
 import com.aitgacem.budgeter.ui.viewmodels.TransactionsViewModel
 import com.google.android.material.snackbar.Snackbar
@@ -54,8 +55,13 @@ class TransactionsFragment : Fragment() {
         recyclerView.adapter = listAdapter
         val dividerItemDecoration = DayDecorator()
         recyclerView.addItemDecoration(dividerItemDecoration)
-        viewModel.transactionsLiveData.observe(viewLifecycleOwner) {
-            listAdapter.submitList(it)
+        viewModel.transactionsLiveData.observe(viewLifecycleOwner) { it ->
+            val new = mutableListOf<ItemType>()
+            new.add(ItemType.Date("24/02/2024"))
+            it.forEach {
+                new.add(ItemType.Item(it))
+            }
+            listAdapter.submitList(new)
         }
 
     }
