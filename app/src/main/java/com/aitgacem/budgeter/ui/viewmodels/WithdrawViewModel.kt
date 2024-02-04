@@ -1,9 +1,5 @@
 package com.aitgacem.budgeter.ui.viewmodels
 
-import androidx.compose.material3.CalendarLocale
-import androidx.compose.material3.DatePickerState
-import androidx.compose.material3.DisplayMode
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.aitgacem.budgeter.data.TransactionsRepository
@@ -13,7 +9,6 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
-import java.util.Calendar
 import javax.inject.Inject
 
 @HiltViewModel
@@ -37,12 +32,6 @@ class WithdrawViewModel @Inject constructor(
     private var isUpdate = false
     private var oldTransaction: Transaction? = null
 
-    @OptIn(ExperimentalMaterial3Api::class)
-    val datePickerState = DatePickerState(
-        CalendarLocale.getDefault(),
-        initialDisplayMode = DisplayMode.Input,
-        initialSelectedDateMillis = Calendar.getInstance().timeInMillis
-    )
 
     fun setUpUpdate(transaction: Transaction?) {
         if (transaction != null) {

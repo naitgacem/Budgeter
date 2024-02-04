@@ -58,7 +58,7 @@ android {
         jvmTarget = '17'
     }
     buildFeatures {
-        compose true
+        compose false
         viewBinding true
     }
     composeOptions {
@@ -86,20 +86,6 @@ dependencies {
     implementation 'androidx.preference:preference-ktx:1.2.1'
     implementation 'org.jetbrains.kotlin:kotlin-reflect:1.9.22'
 //-----------------------------------------------------------------------------------------------
-    //COMPOSE
-    implementation(platform('androidx.compose:compose-bom:2024.01.00'))
-    implementation 'androidx.compose.material3:material3:1.2.0-rc01'
-    implementation 'androidx.compose.material3:material3-window-size-class:1.1.2'
-    implementation 'androidx.compose.material:material:1.6.0'
-    implementation 'androidx.compose.runtime:runtime:1.6.0'
-    implementation 'androidx.compose.runtime:runtime-livedata:1.6.0'
-    implementation 'androidx.compose.ui:ui:1.6.0'
-    implementation 'androidx.compose.ui:ui-tooling-preview:1.6.0'
-    implementation "androidx.compose.ui:ui-viewbinding:1.6.0"
-    debugImplementation 'androidx.compose.ui:ui-tooling:1.6.0'
-    androidTestImplementation 'androidx.compose.ui:ui-test-junit4:1.6.0'
-    androidTestImplementation(platform('androidx.compose:compose-bom:2024.01.00'))
-//----------------------------------------------------------------------------------------------
     //LIFECYCLE
     implementation 'androidx.lifecycle:lifecycle-viewmodel-compose:2.7.0'
     implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.7.0'
@@ -133,6 +119,7 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
     androidTestImplementation 'androidx.arch.core:core-testing:2.2.0'
+    androidTestImplementation 'org.jetbrains.kotlinx:kotlinx-coroutines-test:1.8.0-RC2'
 }
 kapt {
     correctErrorTypes true

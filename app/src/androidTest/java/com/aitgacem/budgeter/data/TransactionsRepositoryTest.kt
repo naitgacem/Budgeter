@@ -45,9 +45,9 @@ class TransactionsRepositoryTest {
         val transactionsRepository = TransactionsRepository(db)
 
         transactionsRepository.writeTransactionToDatabase(transaction)
-//
+
         val readTransaction = transactionsRepository.loadTransaction(1)
-//
+
         assert(readTransaction != null && transaction.amount == readTransaction.amount)
         assert(readTransaction != null && transaction.title == readTransaction.title)
     }
@@ -55,7 +55,7 @@ class TransactionsRepositoryTest {
     @Test
     fun updateBalance() = runBlocking {
         val transactionsRepository = TransactionsRepository(db)
-//
+
         transactionsRepository.writeTransactionToDatabase(
             Transaction(0, "100", 100.0, 23, 0, Category.Education)
         )

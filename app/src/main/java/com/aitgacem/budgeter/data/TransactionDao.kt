@@ -26,7 +26,8 @@ interface TransactionWithDetailsDao {
         "SELECT transactions.id, transactions.title, transactions.amount, balance.date as date, transactions.time, categories.name as category " +
                 "FROM transactions " +
                 "INNER JOIN categories ON transactions.categoryId = categories.categoryId " +
-                "INNER JOIN balance ON transactions.dateId = balance.dateId "
+                "INNER JOIN balance ON transactions.dateId = balance.dateId " +
+                "order by date desc"
     )
     fun getTransactions(): LiveData<List<Transaction>>
 

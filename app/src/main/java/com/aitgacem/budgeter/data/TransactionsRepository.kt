@@ -1,10 +1,7 @@
 package com.aitgacem.budgeter.data
 
-import androidx.annotation.MainThread
 import androidx.annotation.WorkerThread
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.map
-import androidx.lifecycle.switchMap
 import androidx.room.withTransaction
 import com.aitgacem.budgeter.data.model.BalanceEntity
 import com.aitgacem.budgeter.data.model.CategoryAndValue
@@ -162,7 +159,7 @@ class TransactionsRepository(private val db: TransactionDatabase) {
         return balanceDao.getBalanceEntityAtDay(date)?.balance ?: 0.0
     }
 
-    fun readLatestBalence(): LiveData<Double?> {
+    fun readLatestBalance(): LiveData<Double?> {
         return balanceDao.getLatestBalance()
     }
 

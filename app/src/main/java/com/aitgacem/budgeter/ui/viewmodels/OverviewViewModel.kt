@@ -10,5 +10,5 @@ class OverviewViewModel @Inject constructor(
     private val repository: TransactionsRepository,
 ) : ViewModel() {
 
-    val balanceLiveData = repository.readLatestBalence()
+    val balanceLiveData = repository.readLatestBalance()
 }
