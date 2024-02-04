@@ -23,8 +23,11 @@ interface BalanceDao {
     suspend fun getBalanceEntityOnDay(date: Long): BalanceEntity?
 
     @Query("select * from balance where date <= :date order by date desc limit 1")
-    suspend fun getBalanceEntityBeforeDay(date: Long): BalanceEntity?
+    suspend fun getBalanceEntityAtDay(date: Long): BalanceEntity?
 
-    @Query("select * from balance where date > :date")
+    @Query("select * from balance where date > :date order by date asc")
     suspend fun getDayBalancesAfterDate(date: Long): List<BalanceEntity>
+
+    @Query("select * from balance where date >= :date order by date asc")
+    suspend fun getDayBalancesStarting(date: Long): List<BalanceEntity>
 }

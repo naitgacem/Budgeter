@@ -1,5 +1,6 @@
 package com.aitgacem.budgeter.data
 
+import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
@@ -18,4 +19,7 @@ interface CategoryDao {
 
     @Update
     suspend fun update(categoryEntity: CategoryEntity)
+
+    @Query("SELECT name as category, total as value from categories")
+    fun getCatAndValue(): LiveData<List<CategoryAndValue>>
 }

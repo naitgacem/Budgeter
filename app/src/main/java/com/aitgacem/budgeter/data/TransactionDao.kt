@@ -1,5 +1,6 @@
 package com.aitgacem.budgeter.data
 
+import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
@@ -10,9 +11,6 @@ import com.aitgacem.budgeter.data.model.TransactionEntity
 
 @Dao
 interface TransactionWithDetailsDao {
-
-    @Query("SELECT * FROM transactions WHERE id = :id")
-    suspend fun getTransactionById(id: Long): TransactionEntity?
 
     @Insert
     suspend fun insert(transaction: TransactionEntity)
@@ -25,9 +23,28 @@ interface TransactionWithDetailsDao {
 
 
     @Query(
-        "SELECT transactions.id, transactions.title, transactions.amount, transactions.time, transactions.dateId as date, categories.name as category " +
+        "SELECT transactions.id, transactions.title, transactions.amount, balance.date as date, transactions.time, categories.name as category " +
                 "FROM transactions " +
-                "INNER JOIN categories ON transactions.categoryId = categories.categoryId"
+                "INNER JOIN categories ON transactions.categoryId = categories.categoryId " +
+                "INNER JOIN balance ON transactions.dateId = balance.dateId "
     )
-    suspend fun getTransactions(): List<Transaction>
+    fun getTransactions(): LiveData<List<Transaction>>
+
+    @Query(
+        "SELECT transactions.id, transactions.title, transactions.amount, balance.date as date, transactions.time, categories.name as category " +
+                "FROM transactions " +
+                "INNER JOIN categories ON transactions.categoryId = categories.categoryId " +
+                "INNER JOIN balance ON transactions.dateId = balance.dateId " +
+                "WHERE transactions.id = :transactionId"
+    )
+    suspend fun getTransactionById(transactionId: Long): Transaction?
+
+    @Query(
+        "SELECT transactions.id, transactions.title, transactions.amount, balance.date as date, transactions.time, categories.name as category " +
+                "FROM transactions " +
+                "INNER JOIN categories ON transactions.categoryId = categories.categoryId " +
+                "INNER JOIN balance ON transactions.dateId = balance.dateId " +
+                "WHERE date <= :date"
+    )
+    fun loadNewerThan(date: Long): LiveData<List<Transaction>>
 }
