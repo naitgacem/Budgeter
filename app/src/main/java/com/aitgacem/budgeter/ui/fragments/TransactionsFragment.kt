@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.aitgacem.budgeter.data.TransactionsRepository
 import com.aitgacem.budgeter.databinding.FragmentTransactionsBinding
@@ -44,11 +45,8 @@ class TransactionsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val listAdapter = TransactionAdapter {
-            Snackbar.make(
-                view,
-                "hey worked ${it.amount}",
-                Snackbar.LENGTH_SHORT
-            ).show()
+            val action = TransactionsFragmentDirections.viewTransaction(it)
+            view.findNavController().navigate(action)
         }
         val recyclerView = binding.listTransactionsRv
         recyclerView.layoutManager = LinearLayoutManager(view.context)

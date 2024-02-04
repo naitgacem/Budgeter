@@ -23,7 +23,11 @@
         android:id="@+id/transactions_dest"
         android:name="com.aitgacem.budgeter.ui.fragments.TransactionsFragment"
         android:label="TransactionsFragment"
-        tools:layout="@layout/fragment_transactions" />
+        tools:layout="@layout/fragment_transactions">
+        <action
+            android:id="@+id/view_transaction"
+            app:destination="@id/details_dest" />
+    </fragment>
     <fragment
         android:id="@+id/formFill_dest"
         android:name="com.aitgacem.budgeter.ui.fragments.FormFillFragment"
@@ -33,5 +37,14 @@
         <argument
             android:name="is_deposit"
             app:argType="boolean" />
+    </fragment>
+    <fragment
+        android:id="@+id/details_dest"
+        android:name="com.aitgacem.budgeter.ui.fragments.DetailsFragment"
+        android:label="DetailsFragment"
+        tools:layout="@layout/fragment_details">
+        <argument
+            android:name="transaction"
+            app:argType="com.aitgacem.budgeter.ui.components.ItemType$Transaction" />
     </fragment>
 </navigation>
