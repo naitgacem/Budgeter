@@ -56,7 +56,8 @@ interface TransactionWithDetailsDao {
                 "transactions.time, categories.name as category " +
                 "from balance " +
                 "join transactions on balance.dateId = transactions.dateId " +
-                "join categories on categories.categoryId == transactions.categoryId"
+                "join categories on categories.categoryId == transactions.categoryId " +
+                "order by date desc"
     )
     fun getDayTransactions(): LiveData<Map<@MapColumn(columnName = "date") ItemType.Date, List<ItemType.Transaction>>>
 }

@@ -11,7 +11,6 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.aitgacem.budgeter.databinding.FragmentFormfillBinding
 import com.aitgacem.budgeter.ui.components.Category
-import com.aitgacem.budgeter.ui.viewmodels.DepositViewModel
 import com.aitgacem.budgeter.ui.viewmodels.WithdrawViewModel
 import com.google.android.material.transition.MaterialSharedAxis
 import dagger.hilt.android.AndroidEntryPoint

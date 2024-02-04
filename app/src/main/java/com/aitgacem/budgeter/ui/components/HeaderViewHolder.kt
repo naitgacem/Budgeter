@@ -3,7 +3,6 @@ package com.aitgacem.budgeter.ui.components
 import android.view.View
 import android.widget.TextView
 import com.aitgacem.budgeter.R
-import java.sql.Timestamp
 import java.text.SimpleDateFormat
 import java.util.Date
 

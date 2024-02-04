@@ -7,9 +7,8 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.aitgacem.budgeter.R
-import com.aitgacem.budgeter.data.model.Transaction
 
-class TransactionAdapter(private val onClick: (Transaction) -> Unit) :
+class TransactionAdapter(private val onClick: (ItemType.Transaction) -> Unit) :
     ListAdapter<ItemType, ListViewHolder>(ListItemDiffCallback) {
 
 
@@ -50,7 +49,11 @@ sealed class ListViewHolder(view: View) : RecyclerView.ViewHolder(view) {
     abstract fun bind(item: ItemType)
 
     companion object {
-        fun init(view: View, viewType: Int, onClick: (Transaction) -> Unit): ListViewHolder {
+        fun init(
+            view: View,
+            viewType: Int,
+            onClick: (ItemType.Transaction) -> Unit
+        ): ListViewHolder {
 
             return when (viewType) {
                 R.layout.item_day_divider -> HeaderViewHolder(view)
