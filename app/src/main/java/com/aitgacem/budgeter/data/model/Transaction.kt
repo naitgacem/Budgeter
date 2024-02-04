@@ -8,16 +8,6 @@ import kotlinx.parcelize.Parcelize
 
 
 @Parcelize
-data class Transaction(
-    val id: Long,
-    val title: String,
-    val amount: Double,
-    val date: Long,
-    val time: Long,
-    val category: Category
-) : Parcelable
-
-@Parcelize
 @Entity(
     tableName = "transactions",
 )

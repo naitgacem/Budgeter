@@ -7,7 +7,6 @@ import androidx.room.Insert
 import androidx.room.MapColumn
 import androidx.room.Query
 import androidx.room.Update
-import com.aitgacem.budgeter.data.model.Transaction
 import com.aitgacem.budgeter.data.model.TransactionEntity
 import com.aitgacem.budgeter.ui.components.ItemType
 
@@ -31,7 +30,7 @@ interface TransactionWithDetailsDao {
                 "INNER JOIN balance ON transactions.dateId = balance.dateId " +
                 "order by date desc"
     )
-    fun getTransactions(): LiveData<List<Transaction>>
+    fun getTransactions(): LiveData<List<ItemType.Transaction>>
 
     @Query(
         "SELECT transactions.id, transactions.title, transactions.amount, balance.date as date, transactions.time, categories.name as category " +
@@ -40,7 +39,7 @@ interface TransactionWithDetailsDao {
                 "INNER JOIN balance ON transactions.dateId = balance.dateId " +
                 "WHERE transactions.id = :transactionId"
     )
-    suspend fun getTransactionById(transactionId: Long): Transaction?
+    suspend fun getTransactionById(transactionId: Long): ItemType.Transaction?
 
     @Query(
         "SELECT transactions.id, transactions.title, transactions.amount, balance.date as date, transactions.time, categories.name as category " +
@@ -49,7 +48,7 @@ interface TransactionWithDetailsDao {
                 "INNER JOIN balance ON transactions.dateId = balance.dateId " +
                 "WHERE date <= :date"
     )
-    fun loadNewerThan(date: Long): LiveData<List<Transaction>>
+    fun loadNewerThan(date: Long): LiveData<List<ItemType.Transaction>>
 
     @Query(
         "SELECT balance.date, transactions.id, transactions.title, transactions.amount, " +

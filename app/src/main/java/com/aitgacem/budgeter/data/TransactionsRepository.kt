@@ -6,7 +6,7 @@ import androidx.room.withTransaction
 import com.aitgacem.budgeter.data.model.BalanceEntity
 import com.aitgacem.budgeter.data.model.CategoryAndValue
 import com.aitgacem.budgeter.data.model.CategoryEntity
-import com.aitgacem.budgeter.data.model.Transaction
+import com.aitgacem.budgeter.ui.components.ItemType.Transaction
 import com.aitgacem.budgeter.data.model.TransactionEntity
 import com.aitgacem.budgeter.ui.components.Category
 import com.aitgacem.budgeter.ui.components.ItemType

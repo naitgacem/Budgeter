@@ -1,5 +1,6 @@
 package com.aitgacem.budgeter.ui.components
 
+import android.os.Parcelable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -7,6 +8,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.aitgacem.budgeter.R
+import kotlinx.parcelize.Parcelize
 
 class TransactionAdapter(private val onClick: (ItemType.Transaction) -> Unit) :
     ListAdapter<ItemType, ListViewHolder>(ListItemDiffCallback) {
@@ -34,6 +36,8 @@ class TransactionAdapter(private val onClick: (ItemType.Transaction) -> Unit) :
 
 sealed class ItemType {
     data class Date(val date: String) : ItemType()
+
+    @Parcelize
     data class Transaction(
         val id: Long,
         val title: String,
@@ -41,7 +45,7 @@ sealed class ItemType {
         val date: Long,
         val time: Long,
         val category: Category
-    ) : ItemType()
+    ) : Parcelable, ItemType()
 }
 
 sealed class ListViewHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -73,3 +77,4 @@ object ListItemDiffCallback : DiffUtil.ItemCallback<ItemType>() {
         return oldItem == newItem
     }
 }
+

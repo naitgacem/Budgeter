@@ -3,13 +3,11 @@ package com.aitgacem.budgeter.ui.viewmodels
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.aitgacem.budgeter.data.TransactionsRepository
-import com.aitgacem.budgeter.data.model.Transaction
-import com.aitgacem.budgeter.ui.components.Category
+import com.aitgacem.budgeter.ui.components.ItemType.Transaction
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
-import java.util.Calendar
 import javax.inject.Inject
 
 @HiltViewModel
