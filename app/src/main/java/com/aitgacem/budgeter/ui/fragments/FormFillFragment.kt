@@ -11,7 +11,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.aitgacem.budgeter.databinding.FragmentFormfillBinding
 import com.aitgacem.budgeter.ui.components.Category
-import com.aitgacem.budgeter.ui.viewmodels.WithdrawViewModel
+import com.aitgacem.budgeter.ui.viewmodels.FormFillViewModel
 import com.google.android.material.transition.MaterialSharedAxis
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.Calendar
@@ -19,7 +19,7 @@ import java.util.Calendar
 @AndroidEntryPoint
 class FormFillFragment : Fragment() {
     lateinit var binding: FragmentFormfillBinding
-    private val viewModel: WithdrawViewModel by viewModels()
+    private val viewModel: FormFillViewModel by viewModels()
     private var isDeposit: Boolean = false
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

@@ -12,7 +12,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class WithdrawViewModel @Inject constructor(
+class FormFillViewModel @Inject constructor(
     private val repository: TransactionsRepository,
 ) : ViewModel() {
 
