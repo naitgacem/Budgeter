@@ -3,8 +3,14 @@ package com.aitgacem.budgeter.data.model
 import android.os.Parcelable
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import androidx.room.TypeConverter
 import com.aitgacem.budgeter.ui.components.Category
+import com.aitgacem.budgeter.ui.components.ItemType
 import kotlinx.parcelize.Parcelize
+import java.text.SimpleDateFormat
+import java.time.Instant
+import java.util.Calendar
+import java.util.Date
 
 
 @Parcelize
@@ -43,3 +49,4 @@ data class CategoryEntity(
     val name: Category,
     val total: Double
 )
+

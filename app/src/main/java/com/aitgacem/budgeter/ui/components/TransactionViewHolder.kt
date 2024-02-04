@@ -13,17 +13,10 @@ class TransactionViewHolder(itemView: View, private val onClick: (Transaction) -
     private val transactionAmount: TextView = itemView.findViewById(R.id.transaction_amount)
     private val transactionTime: TextView = itemView.findViewById(R.id.transaction_time)
     private val transactionIcon: ImageView = itemView.findViewById(R.id.transaction_icon)
-    private var currentTransaction: Transaction? = null
 
-    init {
-        itemView.setOnClickListener {
-            currentTransaction?.let(onClick)
-        }
-    }
 
     override fun bind(item: ItemType) {
-        val transaction = (item as ItemType.Item).transaction
-        currentTransaction = transaction
+        val transaction = item as ItemType.Transaction
         transactionTitle.text = transaction.title
         transactionAmount.text = transaction.amount.toString()
         transactionTime.text = "09:42"

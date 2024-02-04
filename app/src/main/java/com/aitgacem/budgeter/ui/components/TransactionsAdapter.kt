@@ -25,7 +25,7 @@ class TransactionAdapter(private val onClick: (Transaction) -> Unit) :
 
     override fun getItemViewType(position: Int): Int {
         return when (getItem(position)) {
-            is ItemType.Item -> R.layout.item_list_transactions
+            is ItemType.Transaction -> R.layout.item_list_transactions
             is ItemType.Date -> R.layout.item_day_divider
         }
     }
@@ -34,12 +34,18 @@ class TransactionAdapter(private val onClick: (Transaction) -> Unit) :
 
 
 sealed class ItemType {
-    class Date(val date: String) : ItemType()
-    class Item(val transaction: Transaction) : ItemType()
+    data class Date(val date: String) : ItemType()
+    data class Transaction(
+        val id: Long,
+        val title: String,
+        val amount: Double,
+        val date: Long,
+        val time: Long,
+        val category: Category
+    ) : ItemType()
 }
 
-sealed class ListViewHolder(view: View) :
-    RecyclerView.ViewHolder(view) {
+sealed class ListViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
     abstract fun bind(item: ItemType)
 

@@ -18,4 +18,5 @@ class TransactionsViewModel @Inject constructor(
 
     val transactionsLiveData = repository.readAllTransactionsFromDatabase()
 
+    val transactions = repository.getDayAndTransactions()
 }

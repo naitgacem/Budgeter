@@ -4,10 +4,12 @@ import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
+import androidx.room.MapColumn
 import androidx.room.Query
 import androidx.room.Update
 import com.aitgacem.budgeter.data.model.Transaction
 import com.aitgacem.budgeter.data.model.TransactionEntity
+import com.aitgacem.budgeter.ui.components.ItemType
 
 @Dao
 interface TransactionWithDetailsDao {
@@ -48,4 +50,13 @@ interface TransactionWithDetailsDao {
                 "WHERE date <= :date"
     )
     fun loadNewerThan(date: Long): LiveData<List<Transaction>>
+
+    @Query(
+        "SELECT balance.date, transactions.id, transactions.title, transactions.amount, " +
+                "transactions.time, categories.name as category " +
+                "from balance " +
+                "join transactions on balance.dateId = transactions.dateId " +
+                "join categories on categories.categoryId == transactions.categoryId"
+    )
+    fun getDayTransactions(): LiveData<Map<@MapColumn(columnName = "date") ItemType.Date, List<ItemType.Transaction>>>
 }

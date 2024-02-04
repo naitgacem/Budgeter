@@ -2,8 +2,8 @@ package com.aitgacem.budgeter.data
 
 import androidx.room.Database
 import androidx.room.RoomDatabase
-import com.aitgacem.budgeter.data.model.CategoryEntity
 import com.aitgacem.budgeter.data.model.BalanceEntity
+import com.aitgacem.budgeter.data.model.CategoryEntity
 import com.aitgacem.budgeter.data.model.TransactionEntity
 
 @Database(
@@ -13,7 +13,7 @@ import com.aitgacem.budgeter.data.model.TransactionEntity
         CategoryEntity::class
     ],
     version = 1,
-    exportSchema = false
+    exportSchema = false,
 )
 abstract class TransactionDatabase : RoomDatabase() {
     abstract fun transactionDao(): TransactionWithDetailsDao

@@ -9,7 +9,9 @@ import com.aitgacem.budgeter.data.model.CategoryEntity
 import com.aitgacem.budgeter.data.model.Transaction
 import com.aitgacem.budgeter.data.model.TransactionEntity
 import com.aitgacem.budgeter.ui.components.Category
+import com.aitgacem.budgeter.ui.components.ItemType
 import java.util.Calendar
+
 
 @WorkerThread
 class TransactionsRepository(private val db: TransactionDatabase) {
@@ -171,13 +173,17 @@ class TransactionsRepository(private val db: TransactionDatabase) {
         return categoryDao.getCategoryAmount(category)?.total ?: 0.0
     }
 
-    suspend fun readRecentTransactionsFromDatabase(): LiveData<List<Transaction>> {
+    fun readRecentTransactionsFromDatabase(): LiveData<List<Transaction>> {
         val oneWeekAgo = Calendar.getInstance()
         oneWeekAgo.add(Calendar.DAY_OF_WEEK, -7)
         return transactionDao.loadNewerThan(oneWeekAgo.timeInMillis)
     }
 
-    suspend fun getCategoryAndValue(): LiveData<List<CategoryAndValue>> {
+    fun getCategoryAndValue(): LiveData<List<CategoryAndValue>> {
         return categoryDao.getCatAndValue()
+    }
+
+    fun getDayAndTransactions(): LiveData<Map<ItemType.Date, List<ItemType.Transaction>>> {
+        return transactionDao.getDayTransactions()
     }
 }

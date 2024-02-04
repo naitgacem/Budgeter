@@ -55,14 +55,14 @@ class TransactionsFragment : Fragment() {
         recyclerView.adapter = listAdapter
         val dividerItemDecoration = DayDecorator()
         recyclerView.addItemDecoration(dividerItemDecoration)
-        viewModel.transactionsLiveData.observe(viewLifecycleOwner) { it ->
+
+        viewModel.transactions.observe(viewLifecycleOwner) { it ->
             val new = mutableListOf<ItemType>()
-            new.add(ItemType.Date("24/02/2024"))
-            it.forEach {
-                new.add(ItemType.Item(it))
+            for ((key, value) in it) {
+                new.addAll(mutableListOf(key))
+                new.addAll(value)
             }
             listAdapter.submitList(new)
         }
-
     }
 }

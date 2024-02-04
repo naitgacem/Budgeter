@@ -69,7 +69,7 @@ class FormFillFragment : Fragment() {
 private fun getTimestamp(day: Int, month: Int, year: Int): Long {
     val calendar = Calendar.getInstance()
     calendar.set(Calendar.DAY_OF_MONTH, day)
-    calendar.set(Calendar.MONTH, month - 1)  // Calendar months are zero-based
+    calendar.set(Calendar.MONTH, month)  // Calendar months are zero-based
     calendar.set(Calendar.YEAR, year)
 
     // Set the time to midnight (00:00:00)
