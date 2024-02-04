@@ -10,6 +10,7 @@ import androidx.navigation.fragment.navArgs
 import com.aitgacem.budgeter.R
 import com.aitgacem.budgeter.databinding.FragmentDetailsBinding
 import com.aitgacem.budgeter.ui.components.ItemType
+import com.aitgacem.budgeter.ui.components.toFormattedDate
 
 class DetailsFragment : Fragment() {
     lateinit var binding: FragmentDetailsBinding
@@ -32,7 +33,7 @@ class DetailsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.transactionAmount.text = transaction.amount.toString()
-        binding.transactionDate.text = transaction.date.toString()
+        binding.transactionDate.text = transaction.date.toString().toFormattedDate()
         binding.transactionDescription.text = transaction.title
         val menu = binding.toolbarMenu.menu
         MenuInflater(context).inflate(R.menu.menu_transaction_details, menu)
