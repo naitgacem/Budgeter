@@ -31,7 +31,7 @@ class FormFillFragment : Fragment() {
     private var isDeposit: Boolean = false
     private val map = mutableMapOf<Int, Category>()
     private var isEdit: Boolean = false
-    private val transaction: ItemType.Transaction? = null
+    private var oldTransaction: ItemType.Transaction? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -45,7 +45,22 @@ class FormFillFragment : Fragment() {
         val context = requireContext()
 
         setupSelectionChips(context, isDeposit)
+        oldTransaction = args.transaction
+        if (oldTransaction != null) {
+            isEdit = true
+            preFill()
+        }
         return binding.root
+    }
+
+    private fun preFill() {
+        binding.transactionTitle.editText?.setText(oldTransaction?.title)
+        binding.transactionAmount.editText?.setText(oldTransaction?.amount.toString())
+        for ((k, v) in map) {
+            if (oldTransaction?.category == v) {
+                binding.transactionCategory.check(k)
+            }
+        }
     }
 
     private fun setupSelectionChips(context: Context, isDeposit: Boolean) {
@@ -91,7 +106,7 @@ class FormFillFragment : Fragment() {
             val checkedId = chipGroup.checkedChipId
             updateCategory(map[checkedId] ?: Category.Others)
             if (isEdit) {
-                updateTransaction(isDeposit, transaction as ItemType.Transaction)
+                updateTransaction(isDeposit, oldTransaction as ItemType.Transaction)
             } else {
                 saveTransaction(isDeposit)
             }

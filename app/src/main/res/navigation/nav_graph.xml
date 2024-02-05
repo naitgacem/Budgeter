@@ -37,6 +37,11 @@
         <argument
             android:name="is_deposit"
             app:argType="boolean" />
+        <argument
+            android:name="transaction"
+            app:argType="com.aitgacem.budgeter.ui.components.ItemType$Transaction"
+            app:nullable="true"
+            android:defaultValue="@null" />
     </fragment>
     <fragment
         android:id="@+id/details_dest"
@@ -46,5 +51,8 @@
         <argument
             android:name="transaction"
             app:argType="com.aitgacem.budgeter.ui.components.ItemType$Transaction" />
+        <action
+            android:id="@+id/edit_tranaction"
+            app:destination="@id/formFill_dest" />
     </fragment>
 </navigation>
