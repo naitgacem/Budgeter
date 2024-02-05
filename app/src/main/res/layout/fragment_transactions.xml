@@ -6,14 +6,22 @@
     android:layout_height="match_parent"
     android:transitionGroup="true">
 
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/list_transactions_rv"
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/nested_scroll_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:paddingHorizontal="16dp"
-        tools:itemCount="10"
-        tools:listitem="@layout/item_list_transactions" />
+        app:layout_behavior="@string/searchbar_scrolling_view_behavior">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/list_transactions_rv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="88dp"
+            android:paddingHorizontal="16dp"
+            tools:itemCount="10"
+            tools:listitem="@layout/item_list_transactions" />
+    </androidx.core.widget.NestedScrollView>
+
 
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
@@ -25,6 +33,7 @@
             android:layout_height="wrap_content"
             android:hint="Search transactions" />
     </com.google.android.material.appbar.AppBarLayout>
+
 
     <com.google.android.material.search.SearchView
         android:layout_width="match_parent"
