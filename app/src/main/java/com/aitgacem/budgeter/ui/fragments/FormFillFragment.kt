@@ -28,7 +28,7 @@ class FormFillFragment : Fragment() {
     private lateinit var binding: FragmentFormfillBinding
     private val viewModel: FormFillViewModel by viewModels()
     private var isDeposit: Boolean = false
-
+    private val map = mutableMapOf<Int, Category>()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -58,6 +58,7 @@ class FormFillFragment : Fragment() {
                     chip.text = it.name
                     chip.chipIcon = AppCompatResources.getDrawable(context, it.toIcon())
                     binding.transactionCategory.addView(chip)
+                    map[chip.id] = it
                 }
             }
         }
@@ -82,9 +83,8 @@ class FormFillFragment : Fragment() {
             }
             val timestamp = getTimestamp(day, month, year)
             viewModel.updateId(timestamp)
-            val chackedChip = chipGroup.checkedChipId
-            print(chackedChip)
-            viewModel.updateCategory(Category.Entertainment)
+            val checkedId = chipGroup.checkedChipId
+            viewModel.updateCategory(map[checkedId] ?: Category.Others)
             viewModel.saveTransaction(isDeposit)
             findNavController().popBackStack()
         }
