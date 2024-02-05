@@ -67,26 +67,37 @@ class FormFillFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        setupTransitions()
+
+        binding.topbar.setOnClickListener { findNavController().popBackStack() }
+
+
+        binding.saveBtn.setOnClickListener(::clickSave)
+    }
+
+    private fun clickSave(view: View) {
+        val chipGroup = binding.transactionCategory
+        with(viewModel) {
+            updateDescription(binding.transactionTitle.editText?.text.toString())
+            updateAmount(binding.transactionAmount.editText?.text.toString())
+            val (day, month, year) = binding.transactionDate.let {
+                Triple(it.dayOfMonth, it.month, it.year)
+            }
+            val timestamp = getTimestamp(day, month, year)
+            updateId(timestamp)
+            val checkedId = chipGroup.checkedChipId
+            updateCategory(map[checkedId] ?: Category.Others)
+            saveTransaction(isDeposit)
+        }
+        findNavController().popBackStack()
+    }
+
+    private fun setupTransitions() {
         enterTransition = MaterialSharedAxis(MaterialSharedAxis.Z, true).apply {
             duration = 600
         }
         returnTransition = MaterialSharedAxis(MaterialSharedAxis.Z, false).apply {
             duration = 600
-        }
-        val chipGroup = binding.transactionCategory
-        binding.topbar.setOnClickListener { findNavController().popBackStack() }
-        binding.saveBtn.setOnClickListener {
-            viewModel.updateDescription(binding.transactionTitle.editText?.text.toString())
-            viewModel.updateAmount(binding.transactionAmount.editText?.text.toString())
-            val (day, month, year) = binding.transactionDate.let {
-                Triple(it.dayOfMonth, it.month, it.year)
-            }
-            val timestamp = getTimestamp(day, month, year)
-            viewModel.updateId(timestamp)
-            val checkedId = chipGroup.checkedChipId
-            viewModel.updateCategory(map[checkedId] ?: Category.Others)
-            viewModel.saveTransaction(isDeposit)
-            findNavController().popBackStack()
         }
     }
 }
@@ -94,10 +105,9 @@ class FormFillFragment : Fragment() {
 private fun getTimestamp(day: Int, month: Int, year: Int): Long {
     val calendar = Calendar.getInstance()
     calendar.set(Calendar.DAY_OF_MONTH, day)
-    calendar.set(Calendar.MONTH, month)  // Calendar months are zero-based
+    calendar.set(Calendar.MONTH, month)
     calendar.set(Calendar.YEAR, year)
 
-    // Set the time to midnight (00:00:00)
     calendar.set(Calendar.HOUR_OF_DAY, 0)
     calendar.set(Calendar.MINUTE, 0)
     calendar.set(Calendar.SECOND, 0)
