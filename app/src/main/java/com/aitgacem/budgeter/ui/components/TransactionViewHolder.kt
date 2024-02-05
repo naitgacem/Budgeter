@@ -3,7 +3,9 @@ package com.aitgacem.budgeter.ui.components
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.content.ContextCompat
+import androidx.core.content.contentValuesOf
 import com.aitgacem.budgeter.R
 
 class TransactionViewHolder(itemView: View, private val onClick: (ItemType.Transaction) -> Unit) :
@@ -30,9 +32,7 @@ class TransactionViewHolder(itemView: View, private val onClick: (ItemType.Trans
         transactionTime.text = "09:42"
         val context = transactionTitle.context
         transactionIcon.setImageDrawable(
-            ContextCompat.getDrawable(
-                context.applicationContext, transaction.category.toIcon()
-            )
+            AppCompatResources.getDrawable(context, transaction.category.toIcon())
         )
     }
 }

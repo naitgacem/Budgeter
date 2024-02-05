@@ -5,7 +5,8 @@
     android:layout_height="65dp"
     android:orientation="horizontal"
     android:layout_marginHorizontal="4dp"
-    app:cardCornerRadius="8dp">
+    app:cardCornerRadius="8dp"
+    style="@style/Widget.Material3.CardView.Filled">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -24,7 +25,8 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.0"
-            android:layout_marginHorizontal="10dp" />
+            android:layout_marginHorizontal="10dp"
+            style="@style/Widget.Material3.Chip.Input.Icon" />
 
         <TextView
             android:id="@+id/transaction_title"
