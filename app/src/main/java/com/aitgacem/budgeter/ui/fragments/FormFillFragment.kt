@@ -112,7 +112,7 @@ class FormFillFragment : Fragment() {
             }
         }
         val action =
-            if (isEdit) FormFillFragmentDirections.finishEdit() else FormFillFragmentDirections.finishFormSubmit()
+            if (isEdit) FormFillFragmentDirections.navigateToTransactions() else FormFillFragmentDirections.navigateToOverview()
         findNavController().navigate(action)
     }
 

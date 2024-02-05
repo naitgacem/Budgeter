@@ -35,7 +35,8 @@
         tools:layout="@layout/fragment_transactions">
         <action
             android:id="@+id/view_transaction"
-            app:destination="@id/details_dest" />
+            app:destination="@id/details_dest"
+            app:restoreState="true" />
     </fragment>
     <fragment
         android:id="@+id/formFill_dest"
@@ -51,14 +52,6 @@
             app:argType="com.aitgacem.budgeter.ui.components.ItemType$Transaction"
             app:nullable="true"
             android:defaultValue="@null" />
-        <action
-            android:id="@+id/finish_form_submit"
-            app:destination="@id/overview_dest"
-            app:popUpTo="@id/overview_dest" />
-        <action
-            android:id="@+id/finish_edit"
-            app:destination="@id/transactions_dest"
-            app:popUpTo="@id/transactions_dest" />
     </fragment>
     <fragment
         android:id="@+id/details_dest"
@@ -72,4 +65,18 @@
             android:id="@+id/edit_tranaction"
             app:destination="@id/formFill_dest" />
     </fragment>
+    <action
+        android:id="@+id/navigate_to_overview"
+        app:destination="@id/overview_dest"
+        app:popUpTo="@id/overview_dest"
+        app:popUpToInclusive="true" />
+    <action
+        android:id="@+id/navigate_to_transactions"
+        app:destination="@id/transactions_dest"
+        app:enterAnim="@anim/nav_default_enter_anim"
+        app:exitAnim="@anim/nav_default_exit_anim"
+        app:popUpTo="@id/transactions_dest"
+        app:popUpToInclusive="true"
+        app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+        app:popExitAnim="@anim/nav_default_pop_exit_anim" />
 </navigation>
