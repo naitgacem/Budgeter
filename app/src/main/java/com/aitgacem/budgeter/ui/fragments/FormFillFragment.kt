@@ -14,13 +14,13 @@ import androidx.navigation.fragment.navArgs
 import com.aitgacem.budgeter.R
 import com.aitgacem.budgeter.databinding.FragmentFormfillBinding
 import com.aitgacem.budgeter.ui.components.Category
+import com.aitgacem.budgeter.ui.getTimestamp
 import com.aitgacem.budgeter.ui.components.toIcon
 import com.aitgacem.budgeter.ui.viewmodels.FormFillViewModel
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipDrawable
 import com.google.android.material.transition.MaterialSharedAxis
 import dagger.hilt.android.AndroidEntryPoint
-import java.util.Calendar
 
 @AndroidEntryPoint
 class FormFillFragment : Fragment() {
@@ -102,16 +102,3 @@ class FormFillFragment : Fragment() {
     }
 }
 
-private fun getTimestamp(day: Int, month: Int, year: Int): Long {
-    val calendar = Calendar.getInstance()
-    calendar.set(Calendar.DAY_OF_MONTH, day)
-    calendar.set(Calendar.MONTH, month)
-    calendar.set(Calendar.YEAR, year)
-
-    calendar.set(Calendar.HOUR_OF_DAY, 0)
-    calendar.set(Calendar.MINUTE, 0)
-    calendar.set(Calendar.SECOND, 0)
-    calendar.set(Calendar.MILLISECOND, 0)
-
-    return calendar.timeInMillis
-}

@@ -11,7 +11,7 @@ import androidx.navigation.fragment.navArgs
 import com.aitgacem.budgeter.R
 import com.aitgacem.budgeter.databinding.FragmentDetailsBinding
 import com.aitgacem.budgeter.ui.components.ItemType
-import com.aitgacem.budgeter.ui.components.toFormattedDate
+import com.aitgacem.budgeter.ui.toFormattedDate
 import com.aitgacem.budgeter.ui.components.toIcon
 
 class DetailsFragment : Fragment() {
