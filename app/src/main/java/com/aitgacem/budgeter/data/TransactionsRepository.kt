@@ -127,7 +127,7 @@ class TransactionsRepository(private val db: TransactionDatabase) {
             }
             transactionDao.updateTransaction(
                 TransactionEntity(
-                    transaction.id,
+                    oldTransaction.id,
                     transaction.title,
                     transaction.amount,
                     balanceId,

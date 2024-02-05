@@ -3,8 +3,8 @@ package com.aitgacem.budgeter.ui.viewmodels
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.aitgacem.budgeter.data.TransactionsRepository
-import com.aitgacem.budgeter.ui.components.ItemType.Transaction
 import com.aitgacem.budgeter.ui.components.Category
+import com.aitgacem.budgeter.ui.components.ItemType.Transaction
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -16,13 +16,10 @@ class FormFillViewModel @Inject constructor(
     private val repository: TransactionsRepository,
 ) : ViewModel() {
 
-    val categories = Category.entries.filter { it != Category.Deposit }
-
     private var _amount = MutableStateFlow<Double>(0.0)
     val amount: StateFlow<Double> = _amount
 
     private var _description = MutableStateFlow<String?>("")
-    val description: StateFlow<String?> = _description
 
     private var _category = MutableStateFlow<Category?>(null)
     val category = _category
@@ -32,17 +29,6 @@ class FormFillViewModel @Inject constructor(
     private var isUpdate = false
     private var oldTransaction: Transaction? = null
 
-
-    fun setUpUpdate(transaction: Transaction?) {
-        if (transaction != null) {
-            oldTransaction = transaction
-            _amount.value = transaction.amount
-            _description.value = transaction.title
-            _category.value = transaction.category
-            date.value = transaction.date
-            isUpdate = true
-        }
-    }
 
     fun updateAmount(newAmount: String) {
         val value = newAmount.toDoubleOrNull()
@@ -64,43 +50,40 @@ class FormFillViewModel @Inject constructor(
     }
 
     fun saveTransaction(isDeposit: Boolean) {
-        if (isUpdate) {
-            viewModelScope.launch {
-//                repository.updateTransaction(
-//                    oldTransaction!!.copy(
-//                        date = date.value,
-//                        amount = _amount.value?.toFloatOrNull() ?: 0.0f,
-//                        title = _description.value ?: "",
-//                        category = _category.value ?: Category.Others
-//                    ),
-//                    oldTransaction
-//                )
-            }
-        } else {
-//            val transaction = Transaction(
-//                date = date.value,
-//                amount = _amount.value?.toFloatOrNull() ?: 0.0f,
-//                title = _description.value ?: "",
-//                category = _category.value ?: Category.Others,
-//                id = Calendar.getInstance().timeInMillis
-//            )
-//            viewModelScope.launch {
-//                repository.writeTransactionToDatabase(transaction)
-//            }
             viewModelScope.launch {
                 repository.writeTransactionToDatabase(
                     Transaction(
-                        0, _description.value ?: "",
-                        if (isDeposit) {
+                        id = 0,
+                        title = _description.value ?: "",
+                        amount = if (isDeposit) {
                             _amount.value
                         } else {
                             -1 * _amount.value
                         },
-                        date.value,
-                        155, _category.value ?: Category.Others,
+                        date = date.value,
+                        time = 155,
+                        category = if (isDeposit) Category.Deposit else _category.value
+                            ?: Category.Others,
                     )
                 )
             }
+    }
+
+    fun updateTransaction(isDeposit: Boolean, old: Transaction) {
+        val transaction = Transaction(
+            date = date.value,
+            amount = if (isDeposit) {
+                _amount.value
+            } else {
+                -1 * _amount.value
+            },
+            title = _description.value ?: "",
+            category = if (isDeposit) Category.Deposit else _category.value ?: Category.Others,
+            time = 0,
+            id = old.id
+        )
+        viewModelScope.launch {
+            repository.updateTransaction(transaction, old)
         }
     }
 }

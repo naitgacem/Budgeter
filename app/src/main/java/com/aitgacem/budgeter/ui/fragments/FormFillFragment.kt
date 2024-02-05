@@ -14,8 +14,9 @@ import androidx.navigation.fragment.navArgs
 import com.aitgacem.budgeter.R
 import com.aitgacem.budgeter.databinding.FragmentFormfillBinding
 import com.aitgacem.budgeter.ui.components.Category
-import com.aitgacem.budgeter.ui.getTimestamp
+import com.aitgacem.budgeter.ui.components.ItemType
 import com.aitgacem.budgeter.ui.components.toIcon
+import com.aitgacem.budgeter.ui.getTimestamp
 import com.aitgacem.budgeter.ui.viewmodels.FormFillViewModel
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipDrawable
@@ -29,6 +30,8 @@ class FormFillFragment : Fragment() {
     private val viewModel: FormFillViewModel by viewModels()
     private var isDeposit: Boolean = false
     private val map = mutableMapOf<Int, Category>()
+    private var isEdit: Boolean = false
+    private val transaction: ItemType.Transaction? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -87,7 +90,11 @@ class FormFillFragment : Fragment() {
             updateId(timestamp)
             val checkedId = chipGroup.checkedChipId
             updateCategory(map[checkedId] ?: Category.Others)
-            saveTransaction(isDeposit)
+            if (isEdit) {
+                updateTransaction(isDeposit, transaction as ItemType.Transaction)
+            } else {
+                saveTransaction(isDeposit)
+            }
         }
         findNavController().popBackStack()
     }
