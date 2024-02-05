@@ -111,7 +111,9 @@ class FormFillFragment : Fragment() {
                 saveTransaction(isDeposit)
             }
         }
-        findNavController().popBackStack()
+        val action =
+            if (isEdit) FormFillFragmentDirections.finishEdit() else FormFillFragmentDirections.finishFormSubmit()
+        findNavController().navigate(action)
     }
 
     private fun setupTransitions() {

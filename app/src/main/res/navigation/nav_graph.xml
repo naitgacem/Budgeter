@@ -13,6 +13,15 @@
         <action
             android:id="@+id/deposit_action"
             app:destination="@id/formFill_dest" />
+        <action
+            android:id="@+id/goto_analytics"
+            app:destination="@id/analytics_dest" />
+        <action
+            android:id="@+id/goto_transactions"
+            app:destination="@id/transactions_dest" />
+        <action
+            android:id="@+id/goto_details"
+            app:destination="@id/details_dest" />
     </fragment>
     <fragment
         android:id="@+id/analytics_dest"
@@ -42,6 +51,14 @@
             app:argType="com.aitgacem.budgeter.ui.components.ItemType$Transaction"
             app:nullable="true"
             android:defaultValue="@null" />
+        <action
+            android:id="@+id/finish_form_submit"
+            app:destination="@id/overview_dest"
+            app:popUpTo="@id/overview_dest" />
+        <action
+            android:id="@+id/finish_edit"
+            app:destination="@id/transactions_dest"
+            app:popUpTo="@id/transactions_dest" />
     </fragment>
     <fragment
         android:id="@+id/details_dest"
