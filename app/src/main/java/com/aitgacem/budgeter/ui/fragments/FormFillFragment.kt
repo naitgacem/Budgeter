@@ -48,7 +48,7 @@ class FormFillFragment : Fragment() {
         returnTransition = MaterialSharedAxis(MaterialSharedAxis.Z, false).apply {
             duration = 600
         }
-
+        val chipGroup = binding.transactionCategory
         binding.topbar.setOnClickListener { findNavController().popBackStack() }
         binding.saveBtn.setOnClickListener {
             viewModel.updateDescription(binding.transactionTitle.editText?.text.toString())
@@ -58,6 +58,8 @@ class FormFillFragment : Fragment() {
             }
             val timestamp = getTimestamp(day, month, year)
             viewModel.updateId(timestamp)
+            val chackedChip = chipGroup.checkedChipId
+            print(chackedChip)
             viewModel.updateCategory(Category.Entertainment)
             viewModel.saveTransaction(isDeposit)
             findNavController().popBackStack()
