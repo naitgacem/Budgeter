@@ -10,6 +10,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+import kotlin.math.abs
 
 @HiltViewModel
 class FormFillViewModel @Inject constructor(
@@ -26,14 +27,11 @@ class FormFillViewModel @Inject constructor(
 
     private var date = MutableStateFlow<Long>(0)
 
-    private var isUpdate = false
-    private var oldTransaction: Transaction? = null
-
 
     fun updateAmount(newAmount: String) {
         val value = newAmount.toDoubleOrNull()
         if (value != null) {
-            _amount.value = value
+            _amount.value = abs(value)
         }
     }
 
@@ -55,11 +53,7 @@ class FormFillViewModel @Inject constructor(
                     Transaction(
                         id = 0,
                         title = _description.value ?: "",
-                        amount = if (isDeposit) {
-                            _amount.value
-                        } else {
-                            -1 * _amount.value
-                        },
+                        amount = _amount.value,
                         date = date.value,
                         time = 155,
                         category = if (isDeposit) Category.Deposit else _category.value
@@ -72,11 +66,7 @@ class FormFillViewModel @Inject constructor(
     fun updateTransaction(isDeposit: Boolean, old: Transaction) {
         val transaction = Transaction(
             date = date.value,
-            amount = if (isDeposit) {
-                _amount.value
-            } else {
-                -1 * _amount.value
-            },
+            amount = _amount.value,
             title = _description.value ?: "",
             category = if (isDeposit) Category.Deposit else _category.value ?: Category.Others,
             time = 0,
