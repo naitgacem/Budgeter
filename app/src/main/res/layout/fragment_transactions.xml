@@ -6,41 +6,79 @@
     android:layout_height="match_parent"
     android:transitionGroup="true">
 
-    <androidx.core.widget.NestedScrollView
-        android:id="@+id/nested_scroll_view"
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/list_transactions_rv"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layout_behavior="@string/searchbar_scrolling_view_behavior">
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/list_transactions_rv"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingTop="88dp"
-            android:paddingHorizontal="16dp"
-            tools:itemCount="10"
-            tools:listitem="@layout/item_list_transactions" />
-    </androidx.core.widget.NestedScrollView>
-
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp"
+        android:clipToPadding="false"
+        android:paddingHorizontal="10dp"
+        tools:listitem="@layout/item_list_transactions"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
     <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/app_bar_layout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:fitsSystemWindows="true"
+        app:liftOnScroll="false"
+        app:statusBarForeground="?attr/colorSurface">
 
         <com.google.android.material.search.SearchBar
-            android:id="@+id/search_bar"
+            android:id="@+id/open_search_bar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Search transactions" />
+            android:hint="string/cat_searchbar_hint">
+
+        </com.google.android.material.search.SearchBar>
+
+
     </com.google.android.material.appbar.AppBarLayout>
 
+    <!-- Elevation needs to be greater than AppBarLayout's elevation;
+         otherwise for some reason when the AppBarLayout's background
+         is not transparent, the elevation on this Toolbar doesn't show. -->
+    <FrameLayout
+        android:id="@+id/contextual_toolbar_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:elevation="5dp"
+        android:visibility="gone">
+
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/contextual_toolbar"
+
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </FrameLayout>
+
+    <ProgressBar
+        android:id="@+id/spinner"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center" />
 
     <com.google.android.material.search.SearchView
+        android:id="@+id/open_search_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:hint="Search transactions"
-        app:layout_anchor="@id/search_bar">
-        <!-- Search suggestions/results go here (ScrollView, RecyclerView, etc.). -->
+        android:hint="string/cat_searchbar_hint"
+        app:layout_anchor="@id/open_search_bar">
+
+        <!-- Content goes here (ScrollView, RecyclerView, etc.). -->
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scrollbars="none">
+
+            <LinearLayout
+                android:id="@+id/open_search_view_suggestion_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical" />
+        </ScrollView>
     </com.google.android.material.search.SearchView>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
