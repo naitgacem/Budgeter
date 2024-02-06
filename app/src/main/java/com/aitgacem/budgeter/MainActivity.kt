@@ -1,17 +1,16 @@
 package com.aitgacem.budgeter
 
 import android.os.Bundle
+import android.view.View.GONE
+import android.view.View.VISIBLE
 import androidx.activity.ComponentActivity
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import dagger.hilt.android.AndroidEntryPoint
 import java.lang.ref.WeakReference
-
-object CurrentActivityHolder {
-    var currentActivity: WeakReference<ComponentActivity>? = null
-}
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
@@ -22,8 +21,17 @@ class MainActivity : AppCompatActivity() {
         val navHostFragment =
             supportFragmentManager.findFragmentById(R.id.main_activity_host) as NavHostFragment
         val navController = navHostFragment.navController
-        findViewById<BottomNavigationView>(R.id.bottom_nav)
-            .setupWithNavController(navController)
+
+        val bottomBar = findViewById<BottomNavigationView>(R.id.bottom_nav)
+
+        navController.addOnDestinationChangedListener { _, destination, _ ->
+            if (destination.id == R.id.formFill_dest) {
+                bottomBar.visibility = GONE
+            } else {
+                bottomBar.visibility = VISIBLE
+            }
+        }
+        bottomBar.setupWithNavController(navController)
 
     }
 
