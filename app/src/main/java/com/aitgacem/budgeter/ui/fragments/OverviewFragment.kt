@@ -22,9 +22,6 @@ class OverviewFragment : Fragment() {
     private lateinit var binding: FragmentOverviewScreenBinding
     private val viewModel: OverviewViewModel by viewModels()
 
-    @Inject
-    lateinit var repository: TransactionsRepository
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 

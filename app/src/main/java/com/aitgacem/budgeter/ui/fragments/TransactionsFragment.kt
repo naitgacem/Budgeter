@@ -23,8 +23,6 @@ class TransactionsFragment : Fragment() {
     private lateinit var binding: FragmentTransactionsBinding
     private val viewModel: TransactionsViewModel by viewModels()
 
-    @Inject
-    lateinit var repository: TransactionsRepository
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

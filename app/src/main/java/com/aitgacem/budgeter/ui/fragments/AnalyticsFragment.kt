@@ -12,7 +12,7 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class AnalyticsFragment : Fragment() {
-    lateinit var binding: FragmentAnalyticsScreenBinding
+    private lateinit var binding: FragmentAnalyticsScreenBinding
     private val viewModel: AnalyticsViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
