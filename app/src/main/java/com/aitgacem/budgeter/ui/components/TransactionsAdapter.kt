@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.aitgacem.budgeter.R
 import kotlinx.parcelize.Parcelize
 
-class TransactionAdapter(private val onClick: (ItemType.Transaction) -> Unit) :
+class HistoryRvAdapter(private val onClick: (ItemType.Transaction) -> Unit) :
     ListAdapter<ItemType, ListViewHolder>(ListItemDiffCallback) {
 
 

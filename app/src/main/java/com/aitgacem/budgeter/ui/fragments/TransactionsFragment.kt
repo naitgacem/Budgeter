@@ -12,9 +12,8 @@ import com.aitgacem.budgeter.data.TransactionsRepository
 import com.aitgacem.budgeter.databinding.FragmentTransactionsBinding
 import com.aitgacem.budgeter.ui.components.DayDecorator
 import com.aitgacem.budgeter.ui.components.ItemType
-import com.aitgacem.budgeter.ui.components.TransactionAdapter
+import com.aitgacem.budgeter.ui.components.HistoryRvAdapter
 import com.aitgacem.budgeter.ui.viewmodels.TransactionsViewModel
-import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -44,7 +43,7 @@ class TransactionsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val listAdapter = TransactionAdapter {
+        val listAdapter = HistoryRvAdapter {
             val action = TransactionsFragmentDirections.viewTransaction(it)
             view.findNavController().navigate(action)
         }
