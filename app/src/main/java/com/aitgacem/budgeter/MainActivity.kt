@@ -23,9 +23,12 @@ class MainActivity : AppCompatActivity() {
         val navController = navHostFragment.navController
 
         val bottomBar = findViewById<BottomNavigationView>(R.id.bottom_nav)
-
+        val fullScreenDest = setOf(
+            R.id.details_dest,
+            R.id.formFill_dest,
+        )
         navController.addOnDestinationChangedListener { _, destination, _ ->
-            if (destination.id == R.id.formFill_dest) {
+            if (destination.id in fullScreenDest) {
                 bottomBar.visibility = GONE
             } else {
                 bottomBar.visibility = VISIBLE
