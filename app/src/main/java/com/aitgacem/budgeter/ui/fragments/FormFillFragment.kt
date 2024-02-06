@@ -46,6 +46,7 @@ class FormFillFragment : Fragment() {
 
         setupSelectionChips(context, isDeposit)
         oldTransaction = args.transaction
+        viewModel.initialize(oldTransaction)
         if (oldTransaction != null) {
             isEdit = true
             preFill()
@@ -54,11 +55,19 @@ class FormFillFragment : Fragment() {
     }
 
     private fun preFill() {
-        binding.transactionTitle.editText?.setText(oldTransaction?.title)
-        binding.transactionAmount.editText?.setText(oldTransaction?.amount.toString())
-        for ((k, v) in map) {
-            if (oldTransaction?.category == v) {
-                binding.transactionCategory.check(k)
+        with(viewModel) {
+            description.observe(viewLifecycleOwner) {
+                binding.transactionTitle.editText?.setText(it)
+            }
+            amount.observe(viewLifecycleOwner) {
+                binding.transactionAmount.editText?.setText(it.toString())
+            }
+            category.observe(viewLifecycleOwner) { category ->
+                for ((k, v) in map) {
+                    if (category == v) {
+                        binding.transactionCategory.check(k)
+                    }
+                }
             }
         }
     }
@@ -111,9 +120,7 @@ class FormFillFragment : Fragment() {
                 saveTransaction(isDeposit)
             }
         }
-        val action =
-            if (isEdit) FormFillFragmentDirections.navigateToTransactions() else FormFillFragmentDirections.navigateToOverview()
-        findNavController().navigate(action)
+        findNavController().popBackStack()
     }
 
     private fun setupTransitions() {

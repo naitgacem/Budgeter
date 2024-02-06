@@ -1,14 +1,15 @@
 package com.aitgacem.budgeter.ui.viewmodels
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.aitgacem.budgeter.data.TransactionsRepository
 import com.aitgacem.budgeter.ui.components.Category
 import com.aitgacem.budgeter.ui.components.ItemType.Transaction
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import java.util.Calendar
 import javax.inject.Inject
 import kotlin.math.abs
 
@@ -17,16 +18,26 @@ class FormFillViewModel @Inject constructor(
     private val repository: TransactionsRepository,
 ) : ViewModel() {
 
-    private var _amount = MutableStateFlow<Double>(0.0)
-    val amount: StateFlow<Double> = _amount
+    private var _amount = MutableLiveData<Double>(0.0)
+    val amount: LiveData<Double> = _amount
 
-    private var _description = MutableStateFlow<String?>("")
+    private var _description = MutableLiveData("")
+    val description: LiveData<String> = _description
 
-    private var _category = MutableStateFlow<Category?>(null)
-    val category = _category
+    private var _category = MutableLiveData<Category?>(null)
+    val category: LiveData<Category?> = _category
 
-    private var date = MutableStateFlow<Long>(0)
+    private var _date: MutableLiveData<Long> = MutableLiveData<Long>(0)
+    val date: LiveData<Long> = _date
 
+    fun initialize(transaction: Transaction?) {
+        if (transaction != null) {
+            _amount.value = transaction.amount
+            _description.value = transaction.title
+            _category.value = transaction.category
+            _date.value = transaction.date
+        }
+    }
 
     fun updateAmount(newAmount: String) {
         val value = newAmount.toDoubleOrNull()
@@ -40,7 +51,7 @@ class FormFillViewModel @Inject constructor(
     }
 
     fun updateId(timestamp: Long?) {
-        date.value = timestamp ?: 0
+        _date.value = timestamp ?: 0
     }
 
     fun updateCategory(category: Category) {
@@ -53,8 +64,8 @@ class FormFillViewModel @Inject constructor(
                     Transaction(
                         id = 0,
                         title = _description.value ?: "",
-                        amount = _amount.value,
-                        date = date.value,
+                        amount = _amount.value ?: 0.0,
+                        date = _date.value ?: Calendar.getInstance().timeInMillis,
                         time = 155,
                         category = if (isDeposit) Category.Deposit else _category.value
                             ?: Category.Others,
@@ -65,8 +76,8 @@ class FormFillViewModel @Inject constructor(
 
     fun updateTransaction(isDeposit: Boolean, old: Transaction) {
         val transaction = Transaction(
-            date = date.value,
-            amount = _amount.value,
+            date = _date.value ?: Calendar.getInstance().timeInMillis,
+            amount = _amount.value ?: 0.0,
             title = _description.value ?: "",
             category = if (isDeposit) Category.Deposit else _category.value ?: Category.Others,
             time = 0,

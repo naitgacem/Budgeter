@@ -34,7 +34,7 @@ class DetailsFragment : Fragment() {
         super.onCreate(savedInstanceState)
         val args: DetailsFragmentArgs by navArgs()
         transaction = args.transaction
-
+        viewModel.initialize(transaction)
     }
 
     override fun onCreateView(
@@ -48,15 +48,27 @@ class DetailsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.transactionAmount.text = transaction.amount.toString()
-        binding.transactionDate.text = transaction.date.toString().toFormattedDate()
-        binding.transactionDescription.text = transaction.title
-        binding.transactionIcon.setImageDrawable(
-            AppCompatResources.getDrawable(
-                view.context,
-                transaction.category.toIcon()
-            )
-        )
+        with(viewModel) {
+            amount.observe(viewLifecycleOwner) {
+                binding.transactionAmount.text = it.toString()
+            }
+            category.observe(viewLifecycleOwner) {
+                it?.let {
+                    binding.transactionIcon.setImageDrawable(
+                        AppCompatResources.getDrawable(
+                            view.context,
+                            it.toIcon()
+                        )
+                    )
+                }
+            }
+            date.observe(viewLifecycleOwner) {
+                binding.transactionDate.text = it.toString().toFormattedDate()
+            }
+            description.observe(viewLifecycleOwner) {
+                binding.transactionDescription.text = it
+            }
+        }
 
         binding.topAppBar.setNavigationOnClickListener {
             findNavController().popBackStack()
