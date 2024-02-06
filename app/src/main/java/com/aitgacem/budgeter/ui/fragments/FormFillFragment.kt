@@ -16,6 +16,7 @@ import com.aitgacem.budgeter.databinding.FragmentFormfillBinding
 import com.aitgacem.budgeter.ui.components.Category
 import com.aitgacem.budgeter.ui.components.ItemType
 import com.aitgacem.budgeter.ui.components.toIcon
+import com.aitgacem.budgeter.ui.getDayMonthYearFromTimestamp
 import com.aitgacem.budgeter.ui.getTimestamp
 import com.aitgacem.budgeter.ui.viewmodels.FormFillViewModel
 import com.google.android.material.chip.Chip
@@ -30,7 +31,6 @@ class FormFillFragment : Fragment() {
     private val viewModel: FormFillViewModel by hiltNavGraphViewModels(R.id.nav_graph)
     private var isDeposit: Boolean = false
     private val map = mutableMapOf<Int, Category>()
-    private var isEdit: Boolean = false
     private var oldTransaction: ItemType.Transaction? = null
 
     override fun onCreateView(
@@ -47,14 +47,14 @@ class FormFillFragment : Fragment() {
         setupSelectionChips(context, isDeposit)
         oldTransaction = args.transaction
         viewModel.initialize(oldTransaction)
-        if (oldTransaction != null) {
-            isEdit = true
-            preFill()
-        }
+        preFill(oldTransaction)
         return binding.root
     }
 
-    private fun preFill() {
+    private fun preFill(oldTransaction: ItemType.Transaction?) {
+        if (oldTransaction == null) {
+            return
+        }
         with(viewModel) {
             description.observe(viewLifecycleOwner) {
                 binding.transactionTitle.editText?.setText(it)
@@ -67,6 +67,12 @@ class FormFillFragment : Fragment() {
                     if (category == v) {
                         binding.transactionCategory.check(k)
                     }
+                }
+            }
+            date.observe(viewLifecycleOwner) {
+                with(binding.transactionDate) {
+                    val (day, month, year) = getDayMonthYearFromTimestamp(it)
+                    this.init(year, month, day, null)
                 }
             }
         }
@@ -114,7 +120,7 @@ class FormFillFragment : Fragment() {
             updateId(timestamp)
             val checkedId = chipGroup.checkedChipId
             updateCategory(map[checkedId] ?: Category.Others)
-            if (isEdit) {
+            if (oldTransaction != null) {
                 updateTransaction(isDeposit, oldTransaction as ItemType.Transaction)
             } else {
                 saveTransaction(isDeposit)

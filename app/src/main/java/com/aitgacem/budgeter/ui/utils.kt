@@ -24,3 +24,14 @@ fun getTimestamp(day: Int, month: Int, year: Int): Long {
 
     return calendar.timeInMillis
 }
+
+fun getDayMonthYearFromTimestamp(timestamp: Long): Triple<Int, Int, Int> {
+    val calendar = Calendar.getInstance()
+    calendar.timeInMillis = timestamp
+
+    val day = calendar.get(Calendar.DAY_OF_MONTH)
+    val month = calendar.get(Calendar.MONTH)
+    val year = calendar.get(Calendar.YEAR)
+
+    return Triple(day, month, year)
+}
