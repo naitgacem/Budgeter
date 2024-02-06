@@ -45,12 +45,6 @@ class FormFillFragment : Fragment() {
         setupSelectionChips(context, isDeposit)
         oldTransaction = args.transaction
 
-        /*
-            setup the Fragment to optionally edit an already existing transaction
-            Ignore bogus warning about `always null`.
-         */
-        preFill(oldTransaction)
-
         return binding.root
     }
 
@@ -104,6 +98,7 @@ class FormFillFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        preFill(oldTransaction)
         setupTransitions()
 
         binding.topbar.setOnClickListener { findNavController().popBackStack() }
