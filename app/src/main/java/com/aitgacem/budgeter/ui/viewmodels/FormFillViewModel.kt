@@ -30,13 +30,11 @@ class FormFillViewModel @Inject constructor(
     private var _date: MutableLiveData<Long> = MutableLiveData<Long>(0)
     val date: LiveData<Long> = _date
 
-    fun initialize(transaction: Transaction?) {
-        if (transaction != null) {
-            _amount.value = transaction.amount
-            _description.value = transaction.title
-            _category.value = transaction.category
-            _date.value = transaction.date
-        }
+    fun initialize(transaction: Transaction) {
+        _amount.value = transaction.amount
+        _description.value = transaction.title
+        _category.value = transaction.category
+        _date.value = transaction.date
     }
 
     fun updateAmount(newAmount: String) {

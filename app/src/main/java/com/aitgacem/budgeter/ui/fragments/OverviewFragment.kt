@@ -13,7 +13,6 @@ import com.aitgacem.budgeter.data.TransactionsRepository
 import com.aitgacem.budgeter.databinding.FragmentOverviewScreenBinding
 import com.aitgacem.budgeter.ui.components.RecentAdapter
 import com.aitgacem.budgeter.ui.viewmodels.OverviewViewModel
-import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.transition.MaterialSharedAxis
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -40,16 +39,25 @@ class OverviewFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        exitTransition = MaterialSharedAxis(MaterialSharedAxis.Z, true).apply {
-            duration = 600
-        }
-        reenterTransition = MaterialSharedAxis(MaterialSharedAxis.Z, false).apply {
-            duration = 600
-        }
+        setupTransitions()
 
         viewModel.balanceLiveData.observe(viewLifecycleOwner) {
             binding.balanceAmount.text = it?.toString() ?: "0"
         }
+
+        setupRecyclerView()
+
+        binding.depositBtn.setOnClickListener {
+            val action = OverviewFragmentDirections.depositAction(true)
+            view.findNavController().navigate(action)
+        }
+        binding.withdrawBtn.setOnClickListener {
+            val action = OverviewFragmentDirections.depositAction(false)
+            view.findNavController().navigate(action)
+        }
+    }
+
+    private fun setupRecyclerView() {
         val recyclerView = binding.recentTransactionsRv
         recyclerView.layoutManager = LinearLayoutManager(context)
         val listAdapter = RecentAdapter {
@@ -60,14 +68,14 @@ class OverviewFragment : Fragment() {
         viewModel.recentLiveData.observe(viewLifecycleOwner) {
             listAdapter.submitList(it)
         }
+    }
 
-        binding.depositBtn.setOnClickListener {
-            val action = OverviewFragmentDirections.depositAction(true)
-            view.findNavController().navigate(action)
+    private fun setupTransitions() {
+        exitTransition = MaterialSharedAxis(MaterialSharedAxis.Z, true).apply {
+            duration = 600
         }
-        binding.withdrawBtn.setOnClickListener {
-            val action = OverviewFragmentDirections.depositAction(false)
-            view.findNavController().navigate(action)
+        reenterTransition = MaterialSharedAxis(MaterialSharedAxis.Z, false).apply {
+            duration = 600
         }
     }
 }

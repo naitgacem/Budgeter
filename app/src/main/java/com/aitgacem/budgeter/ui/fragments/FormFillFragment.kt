@@ -34,9 +34,7 @@ class FormFillFragment : Fragment() {
     private var oldTransaction: ItemType.Transaction? = null
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         binding = FragmentFormfillBinding.inflate(layoutInflater, container, false)
         val args: FormFillFragmentArgs by navArgs()
@@ -46,8 +44,13 @@ class FormFillFragment : Fragment() {
 
         setupSelectionChips(context, isDeposit)
         oldTransaction = args.transaction
-        viewModel.initialize(oldTransaction)
+
+        /*
+            setup the Fragment to optionally edit an already existing transaction
+            Ignore bogus warning about `always null`.
+         */
         preFill(oldTransaction)
+
         return binding.root
     }
 
@@ -55,6 +58,7 @@ class FormFillFragment : Fragment() {
         if (oldTransaction == null) {
             return
         }
+        viewModel.initialize(oldTransaction)
         with(viewModel) {
             description.observe(viewLifecycleOwner) {
                 binding.transactionTitle.editText?.setText(it)
