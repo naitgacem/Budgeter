@@ -47,10 +47,7 @@ class DetailsFragment : Fragment() {
             category.observe(viewLifecycleOwner) {
                 it?.let {
                     binding.transactionIcon.setImageDrawable(
-                        AppCompatResources.getDrawable(
-                            view.context,
-                            it.toIcon()
-                        )
+                        AppCompatResources.getDrawable(view.context, it.toIcon())
                     )
                 }
             }
@@ -65,6 +62,12 @@ class DetailsFragment : Fragment() {
         binding.topAppBar.setNavigationOnClickListener {
             findNavController().popBackStack()
         }
+        setupMenuBar()
+
+
+    }
+
+    private fun setupMenuBar() {
         binding.topAppBar.setOnMenuItemClickListener { menuItem ->
             when (menuItem.itemId) {
                 R.id.edit_btn -> {
@@ -89,7 +92,5 @@ class DetailsFragment : Fragment() {
                 }
             }
         }
-
-
     }
 }
