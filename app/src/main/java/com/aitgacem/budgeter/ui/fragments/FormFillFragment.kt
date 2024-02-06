@@ -8,7 +8,7 @@ import android.view.View.GONE
 import android.view.ViewGroup
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
+import androidx.hilt.navigation.fragment.hiltNavGraphViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.aitgacem.budgeter.R
@@ -27,7 +27,7 @@ import dagger.hilt.android.AndroidEntryPoint
 class FormFillFragment : Fragment() {
 
     private lateinit var binding: FragmentFormfillBinding
-    private val viewModel: FormFillViewModel by viewModels()
+    private val viewModel: FormFillViewModel by hiltNavGraphViewModels(R.id.nav_graph)
     private var isDeposit: Boolean = false
     private val map = mutableMapOf<Int, Category>()
     private var isEdit: Boolean = false

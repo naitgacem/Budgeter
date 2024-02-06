@@ -79,4 +79,7 @@
         app:popUpToInclusive="true"
         app:popEnterAnim="@anim/nav_default_pop_enter_anim"
         app:popExitAnim="@anim/nav_default_pop_exit_anim" />
+    <action
+        android:id="@+id/load_transaction_details"
+        app:destination="@id/details_dest" />
 </navigation>
