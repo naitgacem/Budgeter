@@ -8,9 +8,10 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.aitgacem.budgeter.R
+import com.aitgacem.budgeter.ui.components.ItemType.*
 import kotlinx.parcelize.Parcelize
 
-class HistoryRvAdapter(private val onClick: (ItemType.Transaction) -> Unit) :
+class HistoryRvAdapter(private val onClick: (Transaction) -> Unit) :
     ListAdapter<ItemType, ListViewHolder>(ListItemDiffCallback) {
 
 
@@ -26,8 +27,8 @@ class HistoryRvAdapter(private val onClick: (ItemType.Transaction) -> Unit) :
 
     override fun getItemViewType(position: Int): Int {
         return when (getItem(position)) {
-            is ItemType.Transaction -> R.layout.item_list_transactions
-            is ItemType.Date -> R.layout.item_day_divider
+            is Transaction -> R.layout.item_list_transactions
+            is Date -> R.layout.item_day_divider
         }
     }
 
@@ -56,7 +57,7 @@ sealed class ListViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         fun init(
             view: View,
             viewType: Int,
-            onClick: (ItemType.Transaction) -> Unit
+            onClick: (Transaction) -> Unit
         ): ListViewHolder {
 
             return when (viewType) {
