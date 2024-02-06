@@ -21,21 +21,14 @@ class TransactionsRepository(private val db: TransactionDatabase) {
     private val categoryDao = db.categoryDao()
 
     suspend fun writeTransactionToDatabase(transaction: Transaction) {
-        val signedAmount = if (transaction.category == Category.Deposit) {
-            transaction.amount
-        } else {
-            -1 * transaction.amount
-        }
+        val signedAmount = getSignedAmount(transaction)
         db.withTransaction {
-            //-----------------------------------------------------------------------------------
-            val balanceEntity = balanceDao.getBalanceEntityOnDay(transaction.date)
 
+        val balanceEntity = balanceDao.getBalanceEntityOnDay(transaction.date)
             val prevBalance = balanceDao.getBalanceEntityAtDay(transaction.date)?.balance ?: 0.0
             val newBalance = BalanceEntity(0, transaction.date, prevBalance + signedAmount)
             val balanceId: Long = when (balanceEntity) {
-                null -> {
-                    balanceDao.insert(newBalance)
-                }
+                null -> balanceDao.insert(newBalance)
 
                 else -> {
                     balanceDao.updateBalance(newBalance.copy(dateId = balanceEntity.dateId))
@@ -43,21 +36,7 @@ class TransactionsRepository(private val db: TransactionDatabase) {
                 }
             }
             //--------------------------------------------------------------------------
-            val catEntity = categoryDao.getCategoryAmount(transaction.category)
-            val prevAmount = catEntity?.total ?: 0.0
-
-            val newCat = CategoryEntity(0, transaction.category, transaction.amount + prevAmount)
-
-            val catId: Long = when (catEntity) {
-                null -> {
-                    categoryDao.insert(newCat)
-                }
-
-                else -> {
-                    categoryDao.update(newCat.copy(categoryId = catEntity.categoryId))
-                    catEntity.categoryId
-                }
-            }
+            val catId: Long = updateCatOnInsert(transaction)
             //----------------------------------------------------------------------------------------
 
             transactionDao.insert(
@@ -72,78 +51,35 @@ class TransactionsRepository(private val db: TransactionDatabase) {
             )
             // Now we need to update the balance for all days after this one
             val daysAfter = balanceDao.getDayBalancesAfterDate(transaction.date)
-            for (day in daysAfter) {
-                balanceDao.updateBalance(
-                    day.copy(
-                        balance = signedAmount + day.balance
-                    )
-                )
-            }
+            updateBalances(daysAfter, signedAmount)
         }
     }
 
+
     suspend fun updateTransaction(transaction: Transaction, oldTransaction: Transaction) {
-        val signedOldTransactionAmount = if (oldTransaction.category == Category.Deposit) {
-            oldTransaction.amount
-        } else {
-            -1 * oldTransaction.amount
-        }
+        val signedOldTransactionAmount = getSignedAmount(oldTransaction)
 
         db.withTransaction {
+            //Remove from old day
             val daysAfterOld = balanceDao.getDayBalancesStarting(oldTransaction.date)
-            for (day in daysAfterOld) {
-                balanceDao.updateBalance(
-                    day.copy(
-                        balance = day.balance - signedOldTransactionAmount
-                    )
-                )
-            }
+            updateBalances(daysAfterOld, -1 * signedOldTransactionAmount)
 
             //Add to new day
-            val signedAmount = if (transaction.category == Category.Deposit) {
-                transaction.amount
-            } else {
-                -1 * transaction.amount
-            }
+            val signedAmount = getSignedAmount(transaction)
             val balanceEntity = balanceDao.getBalanceEntityOnDay(transaction.date)
 
             val prevBalance = balanceDao.getBalanceEntityAtDay(transaction.date)?.balance ?: 0.0
             val newBalance = BalanceEntity(0, transaction.date, prevBalance + signedAmount)
 
             val balanceId: Long = when (balanceEntity) {
-                null -> {
-                    balanceDao.insert(newBalance)
-                }
-
+                null -> balanceDao.insert(newBalance)
                 else -> {
                     balanceDao.updateBalance(newBalance.copy(dateId = balanceEntity.dateId))
                     balanceEntity.dateId
                 }
             }
-            //Remove from old category
-            val oldCatValue =
-                categoryDao.getCategoryAmount(oldTransaction.category)!! //has to exist
-            categoryDao.update(
-                oldCatValue.copy(
-                    total = oldCatValue.total - oldTransaction.amount
-                )
-            )
-            //Add to new category
-            val catEntity = categoryDao.getCategoryAmount(transaction.category)
-            val prevAmount = catEntity?.total ?: 0.0
+            val catId: Long = updateCatOnUpdate(oldTransaction, transaction)
 
-            val newCat = CategoryEntity(0, transaction.category, transaction.amount + prevAmount)
-
-            val catId: Long = when (catEntity) {
-                null -> {
-                    categoryDao.insert(newCat)
-                }
-
-                else -> {
-                    categoryDao.update(newCat.copy(categoryId = catEntity.categoryId))
-                    catEntity.categoryId
-                }
-            }
             transactionDao.updateTransaction(
                 TransactionEntity(
                     oldTransaction.id,
@@ -155,19 +91,67 @@ class TransactionsRepository(private val db: TransactionDatabase) {
                 )
             )
 
-
             // Now we need to update the balance for all days after this one
-
             val daysAfterNew = balanceDao.getDayBalancesAfterDate(transaction.date)
-            for (day in daysAfterNew) {
-                balanceDao.updateBalance(
-                    day.copy(
-                        balance = signedAmount + day.balance
-                    )
-                )
-            }
+            updateBalances(daysAfterNew, signedAmount)
         }
     }
+
+    private suspend fun updateCatOnInsert(transaction: Transaction): Long {
+        val catEntity = categoryDao.getCategoryAmount(transaction.category)
+        val prevAmount = catEntity?.total ?: 0.0
+
+        val newCat = CategoryEntity(0, transaction.category, transaction.amount + prevAmount)
+
+        val catId: Long = when (catEntity) {
+            null -> categoryDao.insert(newCat)
+
+            else -> {
+                categoryDao.update(newCat.copy(categoryId = catEntity.categoryId))
+                catEntity.categoryId
+            }
+        }
+        return catId
+    }
+
+    private suspend fun updateCatOnUpdate(
+        oldTransaction: Transaction,
+        transaction: Transaction
+    ): Long {
+        //Remove from old category
+        val oldCatValue =
+            categoryDao.getCategoryAmount(oldTransaction.category)!! //has to exist
+        categoryDao.update(
+            oldCatValue.copy(
+                total = oldCatValue.total - oldTransaction.amount
+            )
+        )
+        //Add to new category
+        return updateCatOnInsert(transaction)
+    }
+
+
+    private fun getSignedAmount(transaction: Transaction): Double {
+        return if (transaction.category == Category.Deposit) {
+            transaction.amount
+        } else {
+            -1 * transaction.amount
+        }
+    }
+
+    private suspend fun updateBalances(
+        balances: List<BalanceEntity>,
+        signedAmount: Double
+    ) {
+        for (day in balances) {
+            balanceDao.updateBalance(
+                day.copy(
+                    balance = day.balance + signedAmount
+                )
+            )
+        }
+    }
+
 
     fun readAllTransactionsFromDatabase(): LiveData<List<Transaction>> {
         return transactionDao.getTransactions()
