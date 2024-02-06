@@ -44,7 +44,7 @@ class TransactionsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val listAdapter = HistoryRvAdapter {
-            val action = TransactionsFragmentDirections.viewTransaction(it)
+            val action = TransactionsFragmentDirections.loadTransactionDetails(it)
             view.findNavController().navigate(action)
         }
         val recyclerView = binding.listTransactionsRv
