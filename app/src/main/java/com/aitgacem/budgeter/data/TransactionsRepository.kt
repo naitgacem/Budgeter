@@ -169,10 +169,6 @@ class TransactionsRepository(private val db: TransactionDatabase) {
         return balanceDao.getLatestBalance()
     }
 
-    suspend fun getBalancesAfterDate(date: Long): List<BalanceEntity> {
-        return balanceDao.getDayBalancesAfterDate(date)
-    }
-
     suspend fun loadCategoryTotal(category: Category): Double {
         return categoryDao.getCategoryAmount(category)?.total ?: 0.0
     }
