@@ -7,8 +7,6 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.aitgacem.budgeter.databinding.FragmentAnalyticsScreenBinding
-import com.aitgacem.budgeter.ui.components.ItemType
-import com.aitgacem.budgeter.ui.components.ItemType.*
 import com.aitgacem.budgeter.ui.viewmodels.AnalyticsViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -38,7 +36,7 @@ class AnalyticsFragment : Fragment() {
             currMonth = it.filter { (date, _) ->
                 date > 1706742000000L
             }.toList().toMutableList()
-            binding.lineChart.init(currMonth)
+            //binding.lineChart.init()
             binding.lineChart.invalidate()
         }
     }

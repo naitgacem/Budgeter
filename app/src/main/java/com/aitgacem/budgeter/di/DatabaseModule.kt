@@ -21,7 +21,7 @@ object DatabaseModule {
             TransactionDatabase::class.java, "main_database"
         )
             .fallbackToDestructiveMigration()
-            .createFromAsset("database/test.db")
+            //.createFromAsset("database/test.db")
             .build()
     }
 

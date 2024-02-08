@@ -19,7 +19,9 @@
             <com.aitgacem.budgeter.ui.components.LineChart
                 android:layout_width="match_parent"
                 android:layout_height="512dp"
-                android:id="@+id/line_chart" />
+                android:id="@+id/line_chart"
+                tools:layout_width="match_parent"
+                tools:layout_height="512dp" />
 
 
         </LinearLayout>
