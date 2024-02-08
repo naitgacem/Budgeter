@@ -6,10 +6,7 @@ import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.PointF
 import android.util.AttributeSet
-import android.util.Log
 import android.view.View
-import kotlin.math.abs
-import kotlin.math.log
 
 class LineChart : View {
     /**
@@ -32,7 +29,8 @@ class LineChart : View {
     private var paddingBottom = 0
     private var centerX = 0
     private var centerY = 0
-
+    private var usableWidth = 0
+    private var usableHeight = 0
     private val testDays = (1..30).map {
         it to when (it) {
             1 -> 123.45
@@ -105,31 +103,45 @@ class LineChart : View {
 
 
     override fun onDraw(canvas: Canvas) {
+        if (testDays.isEmpty()) {
+            //Log.d("TAG", "onDraw: returning")
+            return
+        }
         canvas.drawColor(Color.GREEN)
-        val scaleX = width / testDays.size.toFloat()
-        val scaleY = height / (minY - maxY).toFloat()
-        val b = -scaleY * maxY
+
         mPaint.apply {
             color = Color.BLACK
             strokeWidth = 5f // Adjust the stroke width as needed
             style = Paint.Style.FILL // Use FILL_AND_STROKE to fill the point
             isAntiAlias = true // Enable anti-aliasing for smoother rendering
         }
-        var prevX = 0f
-        var prevY = 0f
-        mPoints.clear()
-        for (day in testDays) {
-            val point =
-                PointF(scaleX * day.first.toFloat(), scaleY * day.second.toFloat() + b.toFloat())
-            mPoints.add(point)
-            canvas.drawPoint(point.x, point.y, mPaint)
-        }
-        for (i in 0..<mPoints.size - 1) {
-            val point = mPoints[i]
-            val next = mPoints[i + 1]
-            canvas.drawLine(point.x, point.y, next.x, next.y, mPaint)
-        }
 
+        drawChart(canvas)
+    }
+
+    private fun drawChart(canvas: Canvas) {
+        val scaleX = usableWidth / testDays.size.toFloat()
+        val scaleY = usableHeight / (minY - maxY).toFloat()
+        val offset = -scaleY * maxY
+
+
+        var prevX = paddingLeft + scaleX * testDays[0].first.toFloat()
+        var prevY = paddingTop + scaleY * testDays[0].second.toFloat() + offset.toFloat()
+        var x = 0f
+        var y = 0f
+
+        var day: Pair<Int, Double>
+        for (i in 1..<testDays.size) {
+            day = testDays[i]
+            x = paddingLeft + scaleX * day.first.toFloat()
+            y = paddingTop + scaleY * day.second.toFloat() + offset.toFloat()
+            //Log.d("TAG", "onDraw: x = ${x}, y = ${y}")
+            canvas.drawPoint(x, y, mPaint)
+            canvas.drawLine(prevX, prevY, x, y, mPaint)
+            //Log.d("TAG", "onDraw: prevx = ${prevX}, prevy = ${prevY}")
+            prevX = x
+            prevY = y
+        }
     }
 
     enum class ViewType {
@@ -147,8 +159,8 @@ class LineChart : View {
         paddingRight = getPaddingRight()
         paddingTop = getPaddingTop()
         paddingBottom = getPaddingBottom()
-        val usableWidth = width - (paddingLeft + paddingRight)
-        val usableHeight = height - (paddingTop + paddingBottom)
+        usableWidth = width - (paddingLeft + paddingRight)
+        usableHeight = height - (paddingTop + paddingBottom)
         centerX = paddingLeft + usableWidth / 2
         centerY = paddingTop + usableHeight / 2
     }
