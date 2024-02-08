@@ -13,7 +13,7 @@ import com.aitgacem.budgeter.data.model.TransactionEntity
         CategoryEntity::class
     ],
     version = 1,
-    exportSchema = false,
+    exportSchema = true,
 )
 abstract class TransactionDatabase : RoomDatabase() {
     abstract fun transactionDao(): TransactionWithDetailsDao

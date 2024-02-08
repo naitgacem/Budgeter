@@ -1,9 +1,11 @@
 package com.aitgacem.budgeter.data
 
 import androidx.lifecycle.LiveData
+import androidx.room.ColumnInfo
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
+import androidx.room.MapColumn
 import androidx.room.Query
 import androidx.room.Update
 import com.aitgacem.budgeter.data.model.BalanceEntity
@@ -34,4 +36,7 @@ interface BalanceDao {
 
     @Query("select balance.balance from balance order by date desc limit 1")
     fun getLatestBalance(): LiveData<Double?>
+
+    @Query("SELECT balance.date, balance.balance from balance order by date desc")
+    fun getBalanceChartData(): LiveData<Map<@MapColumn("date") Long, @MapColumn("balance") Double>>
 }

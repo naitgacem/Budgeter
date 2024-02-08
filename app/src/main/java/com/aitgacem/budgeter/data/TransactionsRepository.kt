@@ -186,4 +186,8 @@ class TransactionsRepository(private val db: TransactionDatabase) {
     fun getDayAndTransactions(): LiveData<Map<Date, List<Transaction>>> {
         return transactionDao.getDayTransactions()
     }
+
+    fun getDayAndBalance(): LiveData<Map<Long, Double>> {
+        return balanceDao.getBalanceChartData()
+    }
 }

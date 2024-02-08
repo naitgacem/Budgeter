@@ -1,5 +1,6 @@
 package com.aitgacem.budgeter.ui.viewmodels
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.aitgacem.budgeter.data.TransactionsRepository
@@ -20,29 +21,8 @@ class AnalyticsViewModel @Inject constructor(
     val categoryAndValues = _categoryAndValues.asStateFlow()
 
 
-    private var _dateAndBalance = MutableStateFlow<List<DateAndBalance>>(emptyList())
-    val dateAndBalance = _dateAndBalance.asStateFlow()
+    private var _dateAndBalance = repository.getDayAndBalance()
+    val dateAndBalance = _dateAndBalance
 
-
-    init {
-        viewModelScope.launch {
-            loadCategoryAndData()
-        }
-        viewModelScope.launch {
-            loadDayAndData()
-        }
-    }
-
-    private suspend fun loadDayAndData() {
-//        repository.getBalanceByDate().collect {
-//            _dateAndBalance.value = it
-//        }
-    }
-
-    private suspend fun loadCategoryAndData() {
-//        repository.getCategoryAndValue().collect {
-//            _categoryAndValues.value = it
-//        }
-    }
 }
 
