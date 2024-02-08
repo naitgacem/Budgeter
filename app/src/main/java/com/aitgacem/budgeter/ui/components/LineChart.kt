@@ -4,6 +4,7 @@ import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
+import android.graphics.Path
 import android.graphics.PointF
 import android.util.AttributeSet
 import android.view.View
@@ -16,7 +17,7 @@ class LineChart : View {
      */
     private val mPoints = mutableListOf<PointF>()
     private val type: ViewType = ViewType.MONTH
-
+    private val mPath = Path()
     private var maxY = 0.0
     private var minY = 0.0
 
@@ -110,23 +111,37 @@ class LineChart : View {
         canvas.drawColor(Color.GREEN)
 
         mPaint.apply {
+            isAntiAlias = true
             color = Color.BLACK
             strokeWidth = 5f // Adjust the stroke width as needed
-            style = Paint.Style.FILL // Use FILL_AND_STROKE to fill the point
-            isAntiAlias = true // Enable anti-aliasing for smoother rendering
+            style = Paint.Style.STROKE
+            strokeJoin = Paint.Join.ROUND
+            strokeCap = Paint.Cap.ROUND
         }
 
         drawChart(canvas)
+    }
+
+    fun interpolate(start: Float, end: Float, fraction: Float): Float {
+        return start + fraction * (end - start)
+    }
+
+    fun interpolatePoints(x1: Float, y1: Float, x2: Float, y2: Float, fraction: Float): PointF {
+        val interpolatedX = interpolate(x1, x2, fraction)
+        val interpolatedY = interpolate(y1, y2, fraction)
+        return PointF(interpolatedX, interpolatedY)
     }
 
     private fun drawChart(canvas: Canvas) {
         val scaleX = usableWidth / testDays.size.toFloat()
         val scaleY = usableHeight / (minY - maxY).toFloat()
         val offset = -scaleY * maxY
-
+        mPath.reset()
+        val numberOfPoints = 50
 
         var prevX = paddingLeft + scaleX * testDays[0].first.toFloat()
         var prevY = paddingTop + scaleY * testDays[0].second.toFloat() + offset.toFloat()
+        mPath.moveTo(prevX, prevY)
         var x = 0f
         var y = 0f
 
@@ -137,11 +152,24 @@ class LineChart : View {
             y = paddingTop + scaleY * day.second.toFloat() + offset.toFloat()
             //Log.d("TAG", "onDraw: x = ${x}, y = ${y}")
             canvas.drawPoint(x, y, mPaint)
-            canvas.drawLine(prevX, prevY, x, y, mPaint)
+            val interpolatedPoints = mutableListOf<PointF>()
+            var tempx = prevX
+            var tempy = prevY
+            for (j in 0..numberOfPoints) {
+
+                val fraction = i.toFloat() / numberOfPoints
+                val interpolatedPoint: PointF = interpolatePoints(prevX, prevY, x, y, fraction)
+                mPath.quadTo(tempx, tempy, interpolatedPoint.x, interpolatedPoint.y)
+                tempx = interpolatedPoint.x
+                tempy = interpolatedPoint.y
+
+            }
+            //canvas.drawLine(prevX, prevY, x, y, mPaint)
             //Log.d("TAG", "onDraw: prevx = ${prevX}, prevy = ${prevY}")
             prevX = x
             prevY = y
         }
+        canvas.drawPath(mPath, mPaint)
     }
 
     enum class ViewType {
