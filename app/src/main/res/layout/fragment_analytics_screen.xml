@@ -16,15 +16,13 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <com.aitgacem.budgeter.ui.components.LineChart
-                android:layout_width="match_parent"
-                android:layout_height="512dp"
-                android:id="@+id/line_chart"
-                tools:layout_width="match_parent"
-                tools:layout_height="512dp"
-                android:paddingHorizontal="16dp"
-                android:paddingVertical="16dp" />
-
+            <com.patrykandpatrick.vico.views.chart.ChartView
+                android:id="@+id/chart_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:chart="line"
+                app:showStartAxis="true"
+                app:showBottomAxis="true" />
 
         </LinearLayout>
     </ScrollView>
