@@ -7,7 +7,14 @@ import android.graphics.Paint
 import android.graphics.Path
 import android.graphics.PointF
 import android.util.AttributeSet
+import android.util.TypedValue
 import android.view.View
+import androidx.core.graphics.withScale
+import java.lang.Math.pow
+import kotlin.math.ceil
+import kotlin.math.floor
+import kotlin.math.log10
+import kotlin.math.pow
 
 class LineChart : View {
     /**
@@ -21,7 +28,9 @@ class LineChart : View {
     private var maxY = 0.0
     private var minY = 0.0
 
-    private val mPaint = Paint()
+    private val mPaintText = Paint()
+    private val mPaintGrid = Paint()
+    private val mPaintChart = Paint()
     private var width = 0
     private var height = 0
     private var paddingLeft = 0
@@ -80,12 +89,6 @@ class LineChart : View {
     }
 
     private fun init() {
-        mPaint.apply {
-            color = Color.BLACK
-            strokeWidth = 15f // Adjust the stroke width as needed
-            style = Paint.Style.FILL // Use FILL_AND_STROKE to fill the point
-            isAntiAlias = true // Enable anti-aliasing for smoother rendering
-        }
         var amount: Double
         for (day in testDays) {
             amount = day.second
@@ -95,6 +98,27 @@ class LineChart : View {
             if (amount > maxY) {
                 maxY = amount
             }
+        }
+        mPaintChart.apply {
+            isAntiAlias = true
+            color = Color.BLACK
+            strokeWidth = 5f
+            style = Paint.Style.STROKE
+            strokeJoin = Paint.Join.ROUND
+            strokeCap = Paint.Cap.ROUND
+        }
+        mPaintGrid.apply {
+            isAntiAlias = true
+            color = Color.BLACK
+            strokeWidth = .3f
+            style = Paint.Style.STROKE
+        }
+        mPaintText.apply {
+            isAntiAlias = true
+            color = Color.BLACK
+            style = Paint.Style.FILL_AND_STROKE
+            textSize =
+                TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 12f, resources.displayMetrics)
         }
     }
 
@@ -108,42 +132,43 @@ class LineChart : View {
             //Log.d("TAG", "onDraw: returning")
             return
         }
-        canvas.drawColor(Color.GREEN)
+        canvas.drawColor(Color.WHITE)
 
-        mPaint.apply {
-            isAntiAlias = true
-            color = Color.BLACK
-            strokeWidth = 5f // Adjust the stroke width as needed
-            style = Paint.Style.STROKE
-            strokeJoin = Paint.Join.ROUND
-            strokeCap = Paint.Cap.ROUND
-        }
 
+        drawGrid(canvas)
         drawChart(canvas)
     }
 
-    fun interpolate(start: Float, end: Float, fraction: Float): Float {
-        return start + fraction * (end - start)
+    private fun drawGrid(canvas: Canvas) {
+        val order = floor(log10(maxY - minY)).toInt() - 1
+        val steps = ceil((maxY - minY) / 10.0.pow(order)).toInt()
+        val scaleY = usableHeight / steps.toFloat()
+        val max = 10.0.pow(order + 1).toInt()
+
+        for (i in 0..steps) {
+            val y = paddingTop + i.toFloat() * scaleY
+            val value = max - i * 10.0.pow(order).toInt()
+            canvas.drawLine(paddingLeft.toFloat(), y, width.toFloat() - paddingRight, y, mPaintGrid)
+            canvas.drawText(value.toString(), 0f, y, mPaintText)
+        }
     }
 
-    fun interpolatePoints(x1: Float, y1: Float, x2: Float, y2: Float, fraction: Float): PointF {
-        val interpolatedX = interpolate(x1, x2, fraction)
-        val interpolatedY = interpolate(y1, y2, fraction)
-        return PointF(interpolatedX, interpolatedY)
-    }
 
     private fun drawChart(canvas: Canvas) {
+        mPaintChart.apply {
+            strokeWidth = 5f
+        }
         val scaleX = usableWidth / testDays.size.toFloat()
         val scaleY = usableHeight / (minY - maxY).toFloat()
         val offset = -scaleY * maxY
         mPath.reset()
-        val numberOfPoints = 50
 
         var prevX = paddingLeft + scaleX * testDays[0].first.toFloat()
         var prevY = paddingTop + scaleY * testDays[0].second.toFloat() + offset.toFloat()
         mPath.moveTo(prevX, prevY)
-        var x = 0f
-        var y = 0f
+        var x: Float
+        var y: Float
+
 
         var day: Pair<Int, Double>
         for (i in 1..<testDays.size) {
@@ -151,31 +176,18 @@ class LineChart : View {
             x = paddingLeft + scaleX * day.first.toFloat()
             y = paddingTop + scaleY * day.second.toFloat() + offset.toFloat()
             //Log.d("TAG", "onDraw: x = ${x}, y = ${y}")
-            canvas.drawPoint(x, y, mPaint)
-            val interpolatedPoints = mutableListOf<PointF>()
-            var tempx = prevX
-            var tempy = prevY
-            for (j in 0..numberOfPoints) {
-
-                val fraction = i.toFloat() / numberOfPoints
-                val interpolatedPoint: PointF = interpolatePoints(prevX, prevY, x, y, fraction)
-                mPath.quadTo(tempx, tempy, interpolatedPoint.x, interpolatedPoint.y)
-                tempx = interpolatedPoint.x
-                tempy = interpolatedPoint.y
-
-            }
+            canvas.drawPoint(x, y, mPaintChart)
+            mPath.lineTo(x, y)
             //canvas.drawLine(prevX, prevY, x, y, mPaint)
             //Log.d("TAG", "onDraw: prevx = ${prevX}, prevy = ${prevY}")
             prevX = x
             prevY = y
         }
-        canvas.drawPath(mPath, mPaint)
+        canvas.drawPath(mPath, mPaintChart)
     }
 
     enum class ViewType {
-        YEAR,
-        MONTH,
-        DAY,
+        YEAR, MONTH, DAY,
     }
 
 
