@@ -1,11 +1,11 @@
 package com.aitgacem.budgeter.ui.viewmodels
 
+import androidx.compose.material3.CalendarLocale
+import androidx.compose.material3.DatePickerState
+import androidx.compose.material3.DisplayMode
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import androidx.lifecycle.viewmodel.initializer
-import androidx.lifecycle.viewmodel.viewModelFactory
-import com.aitgacem.budgeter.Budgeter
 import com.aitgacem.budgeter.data.TransactionsRepository
 import com.aitgacem.budgeter.data.model.Transaction
 import com.aitgacem.budgeter.ui.components.Category
@@ -35,15 +35,22 @@ class WithdrawViewModel @Inject constructor(
     private var date = MutableStateFlow<Long>(0)
 
     private var isUpdate = false
-    private lateinit var oldTransaction: Transaction
+    private var oldTransaction: Transaction? = null
+
+    @OptIn(ExperimentalMaterial3Api::class)
+    val datePickerState = DatePickerState(
+        CalendarLocale.getDefault(),
+        initialDisplayMode = DisplayMode.Input,
+        initialSelectedDateMillis = Calendar.getInstance().timeInMillis
+    )
+
     fun setUpUpdate(transaction: Transaction?) {
         if (transaction != null) {
-
+            oldTransaction = transaction
             _amount.value = transaction.amount.toString()
             _description.value = transaction.title
             _category.value = transaction.category
             date.value = transaction.date
-            oldTransaction = transaction
             isUpdate = true
         }
     }
@@ -68,7 +75,7 @@ class WithdrawViewModel @Inject constructor(
         if (isUpdate) {
             viewModelScope.launch {
                 repository.updateTransaction(
-                    oldTransaction.copy(
+                    oldTransaction!!.copy(
                         date = date.value,
                         amount = _amount.value?.toFloatOrNull() ?: 0.0f,
                         title = _description.value ?: "",
