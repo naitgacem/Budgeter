@@ -7,8 +7,11 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.aitgacem.budgeter.databinding.FragmentAnalyticsScreenBinding
+import com.aitgacem.budgeter.ui.components.Category
 import com.aitgacem.budgeter.ui.viewmodels.AnalyticsViewModel
-import com.patrykandpatrick.vico.core.component.marker.MarkerComponent
+import com.github.aachartmodel.aainfographics.aachartcreator.AAChartModel
+import com.github.aachartmodel.aainfographics.aachartcreator.AAChartType
+import com.github.aachartmodel.aainfographics.aachartcreator.AASeriesElement
 import com.patrykandpatrick.vico.core.entry.entryModelOf
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -52,6 +55,13 @@ class AnalyticsFragment : Fragment() {
             else -> 0.0
         }
     }
+    private val testCat = listOf(
+        Pair(Category.Healthcare, 2400.0),
+        Pair(Category.Entertainment, 500.0),
+        Pair(Category.Education, 100.0),
+        Pair(Category.Groceries, 1500.0),
+        Pair(Category.Food, 600.0),
+    )
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -72,7 +82,24 @@ class AnalyticsFragment : Fragment() {
 
         val chartEntryModel = entryModelOf(*testDays.toTypedArray())
         binding.chartView.setModel(chartEntryModel)
+        val aaChartView = binding.aaChartView
+        val aaChartModel: AAChartModel = AAChartModel()
+            .chartType(AAChartType.Pie)
+            .title("Spending by category")
+            .dataLabelsEnabled(true)
+            .series(
+                arrayOf(
+                    AASeriesElement()
+                        .name("Total:")
+                        .data(
+                            testCat.map {
+                                arrayOf(it.first.name, it.second)
+                            }.toTypedArray()
+                        )
+                )
+            ).dataLabelsEnabled(false)
 
 
+        aaChartView.aa_drawChartWithChartModel(aaChartModel)
     }
 }

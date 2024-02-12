@@ -121,6 +121,8 @@ dependencies {
 //---------------------------------------------------------------------------------------------
     //CHARTING
     implementation "com.patrykandpatrick.vico:views:1.13.1"
+    implementation 'com.github.AAChartModel:AAChartCore-Kotlin:-SNAPSHOT'
+
 //------------------------------------------------------------------------------------------------
     //TESTING
     testImplementation 'org.mockito.kotlin:mockito-kotlin:5.2.1'
