@@ -4,4 +4,5 @@
     <style name="CustomChipStyle" parent="Widget.Material3.Chip.Suggestion">
         <item name="chipIconVisible">true</item>
     </style>
+
 </resources>
