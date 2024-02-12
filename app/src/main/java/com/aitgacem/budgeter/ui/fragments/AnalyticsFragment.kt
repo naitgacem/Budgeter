@@ -12,7 +12,6 @@ import com.aitgacem.budgeter.ui.viewmodels.AnalyticsViewModel
 import com.github.aachartmodel.aainfographics.aachartcreator.AAChartModel
 import com.github.aachartmodel.aainfographics.aachartcreator.AAChartType
 import com.github.aachartmodel.aainfographics.aachartcreator.AASeriesElement
-import com.patrykandpatrick.vico.core.entry.entryModelOf
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -80,10 +79,8 @@ class AnalyticsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val chartEntryModel = entryModelOf(*testDays.toTypedArray())
-        binding.chartView.setModel(chartEntryModel)
-        val aaChartView = binding.aaChartView
-        val aaChartModel: AAChartModel = AAChartModel()
+        val pieChart = binding.pieChart
+        val pieChartModel: AAChartModel = AAChartModel()
             .chartType(AAChartType.Pie)
             .title("Spending by category")
             .dataLabelsEnabled(true)
@@ -99,7 +96,26 @@ class AnalyticsFragment : Fragment() {
                 )
             ).dataLabelsEnabled(false)
 
+        val lineChart = binding.lineChart
+        val lineChartModel: AAChartModel = AAChartModel()
+            .chartType(AAChartType.Line)
+            .title("Daily Balance")
+            .dataLabelsEnabled(true)
+            .categories(testDays.map {
+                it.first.toString()
+            }.toTypedArray())
+            .series(
+                arrayOf(
+                    AASeriesElement()
+                        .name("Balance: ")
+                        .data(testDays.map {
+                            it.second
+                        }.toTypedArray())
+                )
+            ).dataLabelsEnabled(false)
 
-        aaChartView.aa_drawChartWithChartModel(aaChartModel)
+
+        pieChart.aa_drawChartWithChartModel(pieChartModel)
+        lineChart.aa_drawChartWithChartModel(lineChartModel)
     }
 }
