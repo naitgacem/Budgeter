@@ -104,7 +104,7 @@ dependencies {
     testImplementation 'junit:junit:4.13.2'
 //------------------------------------------------------------------------------------------------
     //NAVIGATION
-    def nav_version = "2.7.6"
+    def nav_version = "2.7.7"
     implementation "androidx.navigation:navigation-fragment-ktx:$nav_version"
     implementation "androidx.navigation:navigation-ui-ktx:$nav_version"
 
