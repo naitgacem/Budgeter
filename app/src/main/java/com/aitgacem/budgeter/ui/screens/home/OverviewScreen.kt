@@ -1,5 +1,6 @@
 package com.aitgacem.budgeter.ui.screens.home
 
+import androidx.activity.ComponentActivity
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
@@ -32,7 +33,6 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -42,6 +42,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.aitgacem.budgeter.CurrentActivityHolder
 import com.aitgacem.budgeter.R
 import com.aitgacem.budgeter.data.model.Transaction
 import com.aitgacem.budgeter.ui.components.toIcon
@@ -54,17 +55,22 @@ import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import java.text.DecimalFormat
 
+val TAG = "Overview Screen"
 
 @HomeNavGraph
 @Destination
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
+
+// we need to explicitly specify the viewModelStoreOwner to avoid instantiating multiple viewModels
 fun OverviewScreen(
     navigator: DestinationsNavigator,
-    overviewViewModel: OverviewViewModel = hiltViewModel(),
+    overviewViewModel: OverviewViewModel = hiltViewModel(
+        viewModelStoreOwner = (CurrentActivityHolder.currentActivity?.get() as ComponentActivity)
+    ),
 ) {
-    val recentTransactions by overviewViewModel.recentTransactions.collectAsState()
-    val balance by overviewViewModel.balance.collectAsState()
+    val recentTransactions = overviewViewModel.recentTransactions.collectAsState()
+    val balance = overviewViewModel.balance.collectAsState()
 
 
     Surface {
@@ -102,8 +108,8 @@ fun OverviewScreen(
         ) { paddingValues ->
             OverviewScreenContent(
                 modifier = Modifier.padding(paddingValues),
-                balance = balance,
-                recentTransactions = recentTransactions,
+                balance = { balance.value },
+                recentTransactions = { recentTransactions.value },
                 navigator = navigator
             )
         }
@@ -113,8 +119,8 @@ fun OverviewScreen(
 @Composable
 private fun OverviewScreenContent(
     modifier: Modifier = Modifier,
-    balance: Float,
-    recentTransactions: List<Transaction>,
+    balance: () -> Float,
+    recentTransactions: () -> List<Transaction>,
     navigator: DestinationsNavigator,
 ) {
     LazyColumn(
@@ -141,8 +147,7 @@ private fun OverviewScreenContent(
                 ) {
                     Budget(
                         modifier = Modifier.weight(.45f),
-                        balance = balance,
-                    )
+                    ) { balance() }
                     Operations(
                         modifier = Modifier.weight(.45f),
                         navigateToWithdraw = { navigator.navigate(WithdrawScreenDestination(null)) },
@@ -164,7 +169,7 @@ private fun OverviewScreenContent(
 
         items(
             key = { it.id },
-            items = recentTransactions,
+            items = recentTransactions(),
         ) { day ->
             ItemDisplay(
                 transaction = day,
@@ -271,7 +276,7 @@ private fun Operations(
 @Composable
 private fun Budget(
     modifier: Modifier = Modifier,
-    balance: Float,
+    balance: () -> Float,
 ) {
     Card(
         modifier = modifier
@@ -294,7 +299,7 @@ private fun Budget(
                 style = MaterialTheme.typography.titleMedium,
             )
             Text(
-                text = "${DecimalFormat("#.##").format(balance)} DA",
+                text = "${DecimalFormat("#.##").format(balance())} DA",
                 style = MaterialTheme.typography.bodyMedium,
             )
         }

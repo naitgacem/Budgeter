@@ -1,8 +1,10 @@
 package com.aitgacem.budgeter.ui.screens.home
 
 import android.graphics.Typeface
+import android.os.Build
 import android.view.ViewGroup
 import android.widget.LinearLayout
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -29,9 +31,11 @@ import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
+import androidx.compose.ui.viewinterop.AndroidViewBinding
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.aitgacem.budgeter.data.model.CategoryAndValue
 import com.aitgacem.budgeter.data.model.DateAndBalance
+import com.aitgacem.budgeter.databinding.AnalyticsScreenBinding
 import com.aitgacem.budgeter.ui.viewmodels.AnalyticsViewModel
 import com.aitgacem.budgeter.ui.viewmodels.utils.DateFormatter
 import com.github.mikephil.charting.charts.LineChart
@@ -48,6 +52,7 @@ import com.github.mikephil.charting.formatter.PercentFormatter
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 
+@RequiresApi(Build.VERSION_CODES.Q)
 @HomeNavGraph
 @Destination
 @OptIn(ExperimentalMaterial3Api::class)
@@ -61,31 +66,54 @@ internal fun AnalyticsScreen(
 
     val updateChart: (PieChart) -> Unit = { updatePieChartWithData(it, categoryAndValues) }
     val updateLineChart: (LineChart) -> Unit = { updateLineChartWithData(it, dateAndBalance) }
-
+    val textColor = Color.White
     Surface(color = MaterialTheme.colorScheme.primary) {
-        Scaffold(
-            topBar = {
-                TopAppBar(
-                    title = {
-                        Text(
-                            text = "Financial Analytics",
-                            modifier = Modifier.fillMaxWidth(),
-                            textAlign = TextAlign.Left,
-                            style = MaterialTheme.typography.titleLarge
-                        )
-                    }
+        Scaffold(topBar = {
+            TopAppBar(title = {
+                Text(
+                    text = "Financial Analytics",
+                    modifier = Modifier.fillMaxWidth(),
+                    textAlign = TextAlign.Left,
+                    style = MaterialTheme.typography.titleLarge
                 )
-            }
-        ) { paddingValues ->
+            })
+        }) { paddingValues ->
 
-
-            AnalyticsScreenContent(
+            AndroidViewBinding(
                 modifier = Modifier.padding(paddingValues),
-                updatePieChart = updateChart,
-                updateLineChart = updateLineChart,
-            )
+                factory = AnalyticsScreenBinding::inflate
+            ) {
+                this.lineChart.apply {
+                    isLogEnabled = false
+                    axisLeft.setDrawGridLines(false)
+                    axisRight.setDrawGridLines(false)
+                    xAxis.setDrawGridLines(false)
+                    description.isEnabled = false
+                    legend.isEnabled = false
+                    xAxis.valueFormatter = DateFormatter()
+                    xAxis.position = XAxis.XAxisPosition.BOTTOM
+                    xAxis.textColor = Color.White.toArgb()
+                    axisLeft.textColor = Color.White.toArgb()
+                    axisRight.isEnabled = false
+
+                }
+                this.pieChart.apply {
+                    description.isEnabled = false
+                    isDrawHoleEnabled = false
+                    legend.isEnabled = true
+                    legend.textSize = 14F
+                    legend.horizontalAlignment = Legend.LegendHorizontalAlignment.CENTER
+                    legend.isWordWrapEnabled = true
+                    isLogEnabled = true
+                    setEntryLabelColor(0)
+                    setUsePercentValues(true)
+                    description.textColor = textColor.toArgb()
 
 
+                }
+                updateLineChart(this.lineChart)
+                updateChart(this.pieChart)
+            }
         }
     }
 }
@@ -105,8 +133,7 @@ fun AnalyticsScreenContent(
         }
         item {
             Text(
-                text = "Spending by category",
-                style = MaterialTheme.typography.bodyLarge
+                text = "Spending by category", style = MaterialTheme.typography.bodyLarge
             )
         }
         item {
@@ -213,8 +240,12 @@ private fun updatePieChartWithData(
 
     val ds = PieDataSet(entries, "")
     setPieChartProperties(ds)
-
+    chart.extraBottomOffset = 10f;
+    chart.extraLeftOffset = 30f;
+    chart.extraRightOffset = 30f;
     ds.valueFormatter = PercentFormatter(chart)
+    ds.valueTextColor = Color.White.toArgb()
+    ds.valueLineColor = Color.White.toArgb()
     chart.data = PieData(ds)
     chart.invalidate()
 }
@@ -249,7 +280,7 @@ private fun updateLineChartWithData(
 
     val ds = LineDataSet(entries, "")
     setLineChartProperties(ds)
-
+    ds.color = Color.White.toArgb()
     chart.data = LineData(ds)
     chart.fitScreen()
     chart.setVisibleXRange(0f, (7 * 24 * 3600 * 1000).toFloat()) // between 0 and 10 days
@@ -262,9 +293,6 @@ private fun setLineChartProperties(ds: LineDataSet) {
         valueTextSize = 18f
         valueTypeface = Typeface.DEFAULT
         setDrawValues(false)
-        colors = listOf(
-            Color.Black.toArgb(),
-        )
         circleColors = listOf(Color.Blue.toArgb())
     }
 }

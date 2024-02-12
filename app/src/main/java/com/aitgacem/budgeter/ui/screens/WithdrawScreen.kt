@@ -19,7 +19,7 @@ import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material3.Button
 import androidx.compose.material3.DatePicker
-import androidx.compose.material3.DisplayMode
+import androidx.compose.material3.DatePickerState
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -31,7 +31,6 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -54,7 +53,6 @@ import com.aitgacem.budgeter.ui.screens.destinations.HomeScreenDestination
 import com.aitgacem.budgeter.ui.viewmodels.WithdrawViewModel
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
-import java.util.Calendar
 
 @Destination
 @OptIn(ExperimentalMaterial3Api::class)
@@ -130,10 +128,7 @@ private fun AddTransactionContent(
         withdrawViewModel.setUpUpdate(oldTransaction)
     }
 
-    val state = rememberDatePickerState(
-        initialDisplayMode = DisplayMode.Input,
-        initialSelectedDateMillis = oldTransaction?.date ?: Calendar.getInstance().timeInMillis
-    )
+    val state: DatePickerState = withdrawViewModel.datePickerState
 
     LazyColumn(
         verticalArrangement = Arrangement.spacedBy(8.dp),

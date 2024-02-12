@@ -1,9 +1,26 @@
 # <img src="./app/src/main/res/drawable/play_store_512.png" alt="drawing" width="25"/> Budgeter
-Budgeter is a simple budgeting app.
+
+Budgeter is a simple budgeting app, this is still in very early stages.
+
+## Screenshots
+
+<table>
+  <tr>
+    <td><img src="screenshots/Screenshot_1.png" alt="Screenshot 1"></td>
+    <td><img src="screenshots/Screenshot_2.png" alt="Screenshot 2"></td>
+    <td><img src="screenshots/Screenshot_3.png" alt="Screenshot 3"></td>
+  </tr>
+   <tr>
+    <td><img src="screenshots/Screenshot_4.png" alt="Screenshot 4"></td>
+    <td><img src="screenshots/Screenshot_5.png" alt="Screenshot 5"></td>
+    <td><img src="screenshots/Screenshot_6.png" alt="Screenshot 6"></td>
+  </tr>
+</table>
 
 ## Features
 
 Features include:
+
 * Adding and withdrawing of funds.
 * Categories to organize your spending.
 * Balance tracking after each transaction.

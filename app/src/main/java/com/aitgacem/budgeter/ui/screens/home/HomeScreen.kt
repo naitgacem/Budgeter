@@ -73,16 +73,14 @@ fun NavBar(
     navController: NavController,
 ) {
     NavigationBar {
-        BottomBarDestination.values().forEach { destination ->
+        BottomBarDestination.entries.forEach { destination ->
 
             val currentDestination = navController.appCurrentDestinationAsState().value
                 ?: NavGraphs.home.startAppDestination
-            val isSelected = currentDestination == destination.direction
-
             NavigationBarItem(
-                selected = isSelected,
+                selected = currentDestination == destination.direction,
                 onClick = {
-                    if (isSelected) {
+                    if (currentDestination == destination.direction) {
                         navController.popBackStack(destination.direction, false)
                         return@NavigationBarItem
                     }
