@@ -1,13 +1,9 @@
 package com.aitgacem.budgeter.ui.fragments
 
-import android.R
-import android.graphics.Color
 import android.os.Bundle
-import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.aitgacem.budgeter.databinding.FragmentAnalyticsScreenBinding
@@ -15,6 +11,7 @@ import com.aitgacem.budgeter.ui.components.Category
 import com.aitgacem.budgeter.ui.viewmodels.AnalyticsViewModel
 import com.github.aachartmodel.aainfographics.aachartcreator.AAChartModel
 import com.github.aachartmodel.aainfographics.aachartcreator.AAChartType
+import com.github.aachartmodel.aainfographics.aachartcreator.AAChartZoomType
 import com.github.aachartmodel.aainfographics.aachartcreator.AASeriesElement
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -83,12 +80,6 @@ class AnalyticsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        val a = TypedValue()
-        val theme = requireContext().resources.newTheme()
-
-        requireContext().theme.resolveAttribute(R.attr.colorBackground, a, true)
-
         val pieChart = binding.pieChart
         val pieChartModel: AAChartModel = AAChartModel()
             .chartType(AAChartType.Pie)
@@ -108,11 +99,11 @@ class AnalyticsFragment : Fragment() {
 
         val lineChart = binding.lineChart
         val lineChartModel: AAChartModel = AAChartModel()
-            .chartType(AAChartType.Line)
+            .chartType(AAChartType.Spline)
             .title("Daily Balance")
             .dataLabelsEnabled(true)
             .categories(testDays.map {
-                it.first.toString()
+                it.first.toString() + "Jan"
             }.toTypedArray())
             .series(
                 arrayOf(
@@ -123,12 +114,11 @@ class AnalyticsFragment : Fragment() {
                         }.toTypedArray())
                 )
             ).dataLabelsEnabled(false)
+            .legendEnabled(false)
+            .zoomType(AAChartZoomType.X)
 
-        if (a.type >= TypedValue.TYPE_FIRST_COLOR_INT && a.type <= TypedValue.TYPE_LAST_COLOR_INT) {
-            lineChartModel.backgroundColor("")
-            pieChartModel.backgroundColor("")
-            pieChartModel.axesTextColor = "#FFFFFF"
-        }
+
+
         pieChart.aa_drawChartWithChartModel(pieChartModel)
         lineChart.aa_drawChartWithChartModel(lineChartModel)
     }

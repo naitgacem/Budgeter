@@ -4,8 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="?android:attr/colorBackground">
+    android:orientation="vertical">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -15,13 +14,13 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:paddingVertical="8dp">
+            android:orientation="vertical">
 
             <com.github.aachartmodel.aainfographics.aachartcreator.AAChartView
                 android:id="@+id/line_chart"
                 android:layout_width="match_parent"
-                android:layout_height="512dp">
+                android:layout_height="512dp"
+                android:paddingHorizontal="8dp">
 
             </com.github.aachartmodel.aainfographics.aachartcreator.AAChartView>
 
