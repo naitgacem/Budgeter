@@ -20,7 +20,6 @@ import dagger.hilt.android.AndroidEntryPoint
 class AnalyticsFragment : Fragment() {
     private lateinit var binding: FragmentAnalyticsScreenBinding
     private val viewModel: AnalyticsViewModel by viewModels()
-    private var currMonth = mutableListOf<Pair<Long, Double>>()
     private val testDays = (1..30).map {
         it to when (it) {
             1 -> 123.45

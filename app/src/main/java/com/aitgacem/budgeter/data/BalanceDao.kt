@@ -39,4 +39,13 @@ interface BalanceDao {
 
     @Query("SELECT balance.date, balance.balance from balance order by date desc")
     fun getBalanceChartData(): LiveData<Map<@MapColumn("date") Long, @MapColumn("balance") Double>>
+
+    @Query(
+        "SELECT balance.date, balance.balance from balance where balance.date >= :start " +
+                "and balance.date <= :end order by date desc"
+    )
+    fun getBalanceBetween(start: Long, end: Long): LiveData<Map<@MapColumn("date") Long, @MapColumn(
+        "balance"
+    ) Double>>
+
 }
