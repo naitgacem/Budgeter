@@ -65,6 +65,7 @@ class AnalyticsFragment : Fragment() {
         Pair(Category.Groceries, 1500.0),
         Pair(Category.Food, 600.0),
     )
+    private var pieData: List<Pair<Category, Double>> = mutableListOf()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -102,9 +103,9 @@ class AnalyticsFragment : Fragment() {
 
         val lineChart = binding.lineChart
 
-        pieChart.aa_drawChartWithChartModel(pieChartModel)
 
-        viewModel.curMonthData.observe(viewLifecycleOwner) { map ->
+
+        viewModel.curMonthBalanceData.observe(viewLifecycleOwner) { map ->
             chartData = mapToList(map)
             lineChart.aa_drawChartWithChartModel(
                 AAChartModel()
@@ -125,8 +126,35 @@ class AnalyticsFragment : Fragment() {
                     ).dataLabelsEnabled(false)
                     .legendEnabled(false)
                     .zoomType(AAChartZoomType.X)
-                    .xAxisTickInterval(1)
             )
+        }
+
+        viewModel.curMonthSpendingData.observe(viewLifecycleOwner) { list ->
+            pieData = list.filter {
+                it.category != Category.Deposit
+            }.map {
+                Pair(it.category, it.value)
+            }
+
+            pieChart.aa_drawChartWithChartModel(
+                AAChartModel()
+                    .chartType(AAChartType.Pie)
+                    .title("Spending by category")
+                    .dataLabelsEnabled(true)
+                    .series(
+                        arrayOf(
+                            AASeriesElement()
+                                .name("Total:")
+                                .data(
+                                    pieData.map {
+                                        arrayOf(it.first.name, it.second)
+                                    }.toTypedArray()
+                                )
+                        )
+                    )
+                    .dataLabelsEnabled(false)
+            )
+
         }
 
     }

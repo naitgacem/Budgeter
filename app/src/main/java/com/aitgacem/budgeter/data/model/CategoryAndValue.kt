@@ -8,5 +8,5 @@ import com.aitgacem.budgeter.ui.components.Category
 @Entity
 data class CategoryAndValue(
     @PrimaryKey var category: Category,
-    @ColumnInfo var value: Float,
+    @ColumnInfo var value: Double,
 )

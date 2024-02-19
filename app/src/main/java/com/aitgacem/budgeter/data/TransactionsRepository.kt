@@ -193,7 +193,10 @@ class TransactionsRepository(private val db: TransactionDatabase) {
 
     fun getDailyBalance(start: Long, end: Long): LiveData<Map<Long, Double>> {
         return balanceDao.getBalanceBetween(start, end)
+    }
 
+    fun getSpending(): LiveData<List<CategoryAndValue>> {
+        return categoryDao.getCatAndValue()
     }
 
 }
