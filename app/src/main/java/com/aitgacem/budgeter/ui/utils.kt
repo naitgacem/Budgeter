@@ -35,3 +35,32 @@ fun getDayMonthYearFromTimestamp(timestamp: Long): Triple<Int, Int, Int> {
 
     return Triple(day, month, year)
 }
+
+fun getCurrentMonthStart(): Long {
+    val calendar = Calendar.getInstance()
+    calendar.set(Calendar.DAY_OF_MONTH, 1)
+    calendar.set(Calendar.HOUR_OF_DAY, 0)
+    calendar.set(Calendar.MINUTE, 0)
+    calendar.set(Calendar.SECOND, 0)
+    calendar.set(Calendar.MILLISECOND, 0)
+    return calendar.timeInMillis
+}
+
+fun Long.oneMonthLater(): Long {
+    val calendar = Calendar.getInstance()
+    calendar.timeInMillis = this
+    calendar.add(Calendar.MONTH, 1)
+    return calendar.timeInMillis
+}
+
+fun mapToList(map: Map<Long, Double>): List<Pair<Int, Double>> {
+    return map.entries.map {
+        it.key.getDayOfMonth() to it.value
+    }
+}
+
+fun Long.getDayOfMonth(): Int {
+    val calendar = Calendar.getInstance()
+    calendar.timeInMillis = this
+    return calendar.get(Calendar.DAY_OF_MONTH)
+}

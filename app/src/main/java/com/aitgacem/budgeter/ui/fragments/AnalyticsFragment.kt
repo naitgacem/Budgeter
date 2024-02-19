@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.aitgacem.budgeter.databinding.FragmentAnalyticsScreenBinding
 import com.aitgacem.budgeter.ui.components.Category
+import com.aitgacem.budgeter.ui.mapToList
 import com.aitgacem.budgeter.ui.viewmodels.AnalyticsViewModel
 import com.github.aachartmodel.aainfographics.aachartcreator.AAChartModel
 import com.github.aachartmodel.aainfographics.aachartcreator.AAChartType
@@ -20,7 +21,7 @@ import dagger.hilt.android.AndroidEntryPoint
 class AnalyticsFragment : Fragment() {
     private lateinit var binding: FragmentAnalyticsScreenBinding
     private val viewModel: AnalyticsViewModel by viewModels()
-    private val testDays = (1..30).map {
+    private val testDays: List<Pair<Int, Double>> = (1..30).map {
         it to when (it) {
             1 -> 123.45
             2 -> -987.65
@@ -55,6 +56,8 @@ class AnalyticsFragment : Fragment() {
             else -> 0.0
         }
     }
+    private var chartData: List<Pair<Int, Double>> = mutableListOf()
+
     private val testCat = listOf(
         Pair(Category.Healthcare, 2400.0),
         Pair(Category.Entertainment, 500.0),
@@ -79,6 +82,7 @@ class AnalyticsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         val pieChart = binding.pieChart
         val pieChartModel: AAChartModel = AAChartModel()
             .chartType(AAChartType.Pie)
@@ -97,28 +101,33 @@ class AnalyticsFragment : Fragment() {
             ).dataLabelsEnabled(false)
 
         val lineChart = binding.lineChart
-        val lineChartModel: AAChartModel = AAChartModel()
-            .chartType(AAChartType.Spline)
-            .title("Daily Balance")
-            .dataLabelsEnabled(true)
-            .categories(testDays.map {
-                it.first.toString() + "Jan"
-            }.toTypedArray())
-            .series(
-                arrayOf(
-                    AASeriesElement()
-                        .name("Balance: ")
-                        .data(testDays.map {
-                            it.second
-                        }.toTypedArray())
-                )
-            ).dataLabelsEnabled(false)
-            .legendEnabled(false)
-            .zoomType(AAChartZoomType.X)
-
-
 
         pieChart.aa_drawChartWithChartModel(pieChartModel)
-        lineChart.aa_drawChartWithChartModel(lineChartModel)
+
+        viewModel.curMonthData.observe(viewLifecycleOwner) { map ->
+            chartData = mapToList(map)
+            lineChart.aa_drawChartWithChartModel(
+                AAChartModel()
+                    .chartType(AAChartType.Spline)
+                    .title("Daily Balance")
+                    .dataLabelsEnabled(true)
+                    .categories(chartData.map {
+                        it.first.toString() + "Jan"
+                    }.toTypedArray())
+                    .series(
+                        arrayOf(
+                            AASeriesElement()
+                                .name("Balance: ")
+                                .data(chartData.map {
+                                    it.second
+                                }.toTypedArray())
+                        )
+                    ).dataLabelsEnabled(false)
+                    .legendEnabled(false)
+                    .zoomType(AAChartZoomType.X)
+                    .xAxisTickInterval(1)
+            )
+        }
+
     }
 }

@@ -1,7 +1,6 @@
 package com.aitgacem.budgeter.data
 
 import androidx.lifecycle.LiveData
-import androidx.room.ColumnInfo
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
@@ -42,10 +41,9 @@ interface BalanceDao {
 
     @Query(
         "SELECT balance.date, balance.balance from balance where balance.date >= :start " +
-                "and balance.date <= :end order by date desc"
+                "and balance.date < :end order by date asc"
     )
-    fun getBalanceBetween(start: Long, end: Long): LiveData<Map<@MapColumn("date") Long, @MapColumn(
-        "balance"
-    ) Double>>
+    fun getBalanceBetween(start: Long, end: Long): LiveData<Map<@MapColumn("date") Long,
+            @MapColumn("balance") Double>>
 
 }
