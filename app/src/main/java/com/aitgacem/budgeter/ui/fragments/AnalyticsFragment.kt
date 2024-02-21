@@ -1,6 +1,7 @@
 package com.aitgacem.budgeter.ui.fragments
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,8 +13,14 @@ import com.aitgacem.budgeter.ui.mapToList
 import com.aitgacem.budgeter.ui.viewmodels.AnalyticsViewModel
 import com.github.aachartmodel.aainfographics.aachartcreator.AAChartModel
 import com.github.aachartmodel.aainfographics.aachartcreator.AAChartType
+import com.github.aachartmodel.aainfographics.aachartcreator.AAChartView
 import com.github.aachartmodel.aainfographics.aachartcreator.AAChartZoomType
+import com.github.aachartmodel.aainfographics.aachartcreator.AAMoveOverEventMessageModel
 import com.github.aachartmodel.aainfographics.aachartcreator.AASeriesElement
+import com.github.aachartmodel.aainfographics.aachartcreator.aa_toAAOptions
+import com.github.aachartmodel.aainfographics.aaoptionsmodel.AAInactive
+import com.github.aachartmodel.aainfographics.aaoptionsmodel.AAStates
+import com.github.aachartmodel.aainfographics.aaoptionsmodel.AATooltip
 import dagger.hilt.android.AndroidEntryPoint
 
 
@@ -52,7 +59,6 @@ class AnalyticsFragment : Fragment() {
             lineChart.aa_drawChartWithChartModel(
                 AAChartModel()
                     .chartType(AAChartType.Spline)
-                    .title("Daily Balance")
                     .dataLabelsEnabled(true)
                     .categories(chartData.map {
                         it.first.toString() + "Jan"
@@ -69,6 +75,8 @@ class AnalyticsFragment : Fragment() {
                     .legendEnabled(false)
                     .zoomType(AAChartZoomType.X)
                     .yAxisTitle("")
+                    .tooltipEnabled(false)
+
             )
         }
 
@@ -79,7 +87,7 @@ class AnalyticsFragment : Fragment() {
                 Pair(it.category, it.value)
             }
 
-            pieChart.aa_drawChartWithChartModel(
+            pieChart.aa_drawChartWithChartOptions(
                 AAChartModel()
                     .chartType(AAChartType.Pie)
                     .title("Spending by category")
@@ -93,9 +101,15 @@ class AnalyticsFragment : Fragment() {
                                         arrayOf(it.first.name, it.second)
                                     }.toTypedArray()
                                 )
+                                .allowPointSelect(false)
+                                .states(AAStates().inactive(AAInactive().enabled(false)))
+                                .tooltip(AATooltip().followTouchMove(false))
                         )
                     )
                     .dataLabelsEnabled(false)
+                    .tooltipEnabled(true)
+                    .aa_toAAOptions()
+
             )
 
         }
