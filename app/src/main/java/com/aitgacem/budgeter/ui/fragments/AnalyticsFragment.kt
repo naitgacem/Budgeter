@@ -126,6 +126,7 @@ class AnalyticsFragment : Fragment() {
                     ).dataLabelsEnabled(false)
                     .legendEnabled(false)
                     .zoomType(AAChartZoomType.X)
+                    .yAxisTitle("")
             )
         }
 

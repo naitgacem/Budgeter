@@ -121,7 +121,7 @@ dependencies {
 //---------------------------------------------------------------------------------------------
     //CHARTING
     implementation "com.patrykandpatrick.vico:views:1.13.1"
-    implementation 'com.github.AAChartModel:AAChartCore-Kotlin:-SNAPSHOT'
+    implementation 'com.github.AAChartModel:AAChartCore-Kotlin:7.2.0'
 
 //------------------------------------------------------------------------------------------------
     //TESTING
