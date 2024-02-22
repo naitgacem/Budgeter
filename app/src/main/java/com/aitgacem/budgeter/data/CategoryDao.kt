@@ -11,8 +11,8 @@ import com.aitgacem.budgeter.ui.components.Category
 
 @Dao
 interface CategoryDao {
-    @Query("select * from categories where name  = :category")
-    suspend fun getCategoryAmount(category: Category): CategoryEntity?
+    @Query("select * from categories where name  = :category and month = :month and year = :year")
+    suspend fun getCategoryAmount(category: Category, month: Int, year: Int): CategoryEntity?
 
     @Insert
     suspend fun insert(categoryEntity: CategoryEntity): Long
@@ -22,4 +22,7 @@ interface CategoryDao {
 
     @Query("SELECT name as category, total as value from categories")
     fun getCatAndValue(): LiveData<List<CategoryAndValue>>
+
+    @Query("SELECT * from categories")
+    fun getDump(): LiveData<List<CategoryEntity>>
 }

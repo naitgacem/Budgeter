@@ -31,6 +31,8 @@ data class BalanceEntity(
 data class CategoryEntity(
     @PrimaryKey(autoGenerate = true) val categoryId: Long,
     val name: Category,
-    val total: Double
+    val total: Double,
+    val month: Int,
+    val year: Int,
 )
 

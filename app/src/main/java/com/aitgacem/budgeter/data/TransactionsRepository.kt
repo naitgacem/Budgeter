@@ -10,6 +10,7 @@ import com.aitgacem.budgeter.data.model.TransactionEntity
 import com.aitgacem.budgeter.ui.components.Category
 import com.aitgacem.budgeter.ui.components.ItemType.Date
 import com.aitgacem.budgeter.ui.components.ItemType.Transaction
+import com.aitgacem.budgeter.ui.getDayMonthYearFromTimestamp
 import java.util.Calendar
 
 
@@ -98,10 +99,12 @@ class TransactionsRepository(private val db: TransactionDatabase) {
     }
 
     private suspend fun updateCatOnInsert(transaction: Transaction): Long {
-        val catEntity = categoryDao.getCategoryAmount(transaction.category)
-        val prevAmount = catEntity?.total ?: 0.0
+        val (_, month, year) = getDayMonthYearFromTimestamp(transaction.date)
+        val catEntity = categoryDao.getCategoryAmount(transaction.category, month, year)
 
-        val newCat = CategoryEntity(0, transaction.category, transaction.amount + prevAmount)
+        val prevAmount = catEntity?.total ?: 0.0
+        val newCat =
+            CategoryEntity(0, transaction.category, transaction.amount + prevAmount, month, year)
 
         val catId: Long = when (catEntity) {
             null -> categoryDao.insert(newCat)
@@ -119,8 +122,9 @@ class TransactionsRepository(private val db: TransactionDatabase) {
         transaction: Transaction
     ): Long {
         //Remove from old category
+        val (_, month, year) = getDayMonthYearFromTimestamp(oldTransaction.date)
         val oldCatValue =
-            categoryDao.getCategoryAmount(oldTransaction.category)!! //has to exist
+            categoryDao.getCategoryAmount(oldTransaction.category, month, year)!! //has to exist
         categoryDao.update(
             oldCatValue.copy(
                 total = oldCatValue.total - oldTransaction.amount
@@ -169,18 +173,14 @@ class TransactionsRepository(private val db: TransactionDatabase) {
         return balanceDao.getLatestBalance()
     }
 
-    suspend fun loadCategoryTotal(category: Category): Double {
-        return categoryDao.getCategoryAmount(category)?.total ?: 0.0
+    suspend fun loadCategoryTotal(category: Category, month: Int, year: Int): Double {
+        return categoryDao.getCategoryAmount(category, month, year)?.total ?: 0.0
     }
 
     fun readRecentTransactionsFromDatabase(): LiveData<List<Transaction>> {
         val oneWeekAgo = Calendar.getInstance()
         oneWeekAgo.add(Calendar.DAY_OF_WEEK, -7)
         return transactionDao.loadNewerThan(oneWeekAgo.timeInMillis)
-    }
-
-    fun getCategoryAndValue(): LiveData<List<CategoryAndValue>> {
-        return categoryDao.getCatAndValue()
     }
 
     fun getDayAndTransactions(): LiveData<Map<Date, List<Transaction>>> {
@@ -197,6 +197,10 @@ class TransactionsRepository(private val db: TransactionDatabase) {
 
     fun getSpending(): LiveData<List<CategoryAndValue>> {
         return categoryDao.getCatAndValue()
+    }
+
+    fun dumpCat(): LiveData<List<CategoryEntity>> {
+        return categoryDao.getDump()
     }
 
 }
