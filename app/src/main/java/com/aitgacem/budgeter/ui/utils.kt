@@ -53,6 +53,14 @@ fun Long.oneMonthLater(): Long {
     return calendar.timeInMillis
 }
 
+fun Long.oneMonthEarlier(): Long {
+    val calendar = Calendar.getInstance()
+    calendar.timeInMillis = this
+    calendar.add(Calendar.MONTH, -1)
+    return calendar.timeInMillis
+}
+
+
 fun mapToList(map: Map<Long, Double>): List<Pair<Int, Double>> {
     return map.entries.map {
         it.key.getDayOfMonth() to it.value
@@ -63,4 +71,22 @@ fun Long.getDayOfMonth(): Int {
     val calendar = Calendar.getInstance()
     calendar.timeInMillis = this
     return calendar.get(Calendar.DAY_OF_MONTH)
+}
+
+fun Int?.toMonthStr(short: Boolean = false): String {
+    return when (this) {
+        0 -> if (short) "Jan" else "January"
+        1 -> if (short) "Feb" else "February"
+        2 -> if (short) "Mar" else "March"
+        3 -> if (short) "Apr" else "April"
+        4 -> if (short) "May" else "May"
+        5 -> if (short) "Jun" else "June"
+        6 -> if (short) "Jul" else "July"
+        7 -> if (short) "Aug" else "August"
+        8 -> if (short) "Sep" else "September"
+        9 -> if (short) "Oct" else "October"
+        10 -> if (short) "Nov" else "November"
+        11 -> if (short) "Dec" else "December"
+        else -> ""
+    }
 }

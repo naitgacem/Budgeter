@@ -195,8 +195,8 @@ class TransactionsRepository(private val db: TransactionDatabase) {
         return balanceDao.getBalanceBetween(start, end)
     }
 
-    fun getSpending(): LiveData<List<CategoryAndValue>> {
-        return categoryDao.getCatAndValue()
+    fun getSpending(month: Int, year: Int): LiveData<List<CategoryAndValue>> {
+        return categoryDao.getCatAndValue(month, year)
     }
 
     fun dumpCat(): LiveData<List<CategoryEntity>> {

@@ -6,9 +6,11 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import com.aitgacem.budgeter.R
 import com.aitgacem.budgeter.databinding.FragmentAnalyticsScreenBinding
 import com.aitgacem.budgeter.ui.components.Category
 import com.aitgacem.budgeter.ui.mapToList
+import com.aitgacem.budgeter.ui.toMonthStr
 import com.aitgacem.budgeter.ui.viewmodels.AnalyticsViewModel
 import com.github.aachartmodel.aainfographics.aachartcreator.AAChartModel
 import com.github.aachartmodel.aainfographics.aachartcreator.AAChartType
@@ -17,6 +19,7 @@ import com.github.aachartmodel.aainfographics.aachartcreator.AASeriesElement
 import com.github.aachartmodel.aainfographics.aachartcreator.aa_toAAOptions
 import com.github.aachartmodel.aainfographics.aaoptionsmodel.AAInactive
 import com.github.aachartmodel.aainfographics.aaoptionsmodel.AAStates
+import com.github.aachartmodel.aainfographics.aaoptionsmodel.AAStyle
 import com.github.aachartmodel.aainfographics.aaoptionsmodel.AATooltip
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -49,7 +52,7 @@ class AnalyticsFragment : Fragment() {
         val pieChart = binding.pieChart
         val lineChart = binding.lineChart
 
-
+        binding.viewType.check(R.id.month_btn)
 
         viewModel.curMonthBalanceData.observe(viewLifecycleOwner) { map ->
             chartData = mapToList(map)
@@ -58,7 +61,7 @@ class AnalyticsFragment : Fragment() {
                     .chartType(AAChartType.Spline)
                     .dataLabelsEnabled(true)
                     .categories(chartData.map {
-                        it.first.toString() + "Jan"
+                        "${it.first} ${viewModel.curMonth.value.toMonthStr(true)}"
                     }.toTypedArray())
                     .series(
                         arrayOf(
@@ -87,7 +90,6 @@ class AnalyticsFragment : Fragment() {
             pieChart.aa_drawChartWithChartOptions(
                 AAChartModel()
                     .chartType(AAChartType.Pie)
-                    .title("Spending by category")
                     .dataLabelsEnabled(true)
                     .series(
                         arrayOf(
@@ -111,5 +113,15 @@ class AnalyticsFragment : Fragment() {
 
         }
 
+        viewModel.curMonth.observe(viewLifecycleOwner) {
+            binding.monthDsp.text = it.toMonthStr()
+        }
+
+        viewModel.curYear.observe(viewLifecycleOwner) {
+            binding.yearDsp.text = it.toString()
+        }
+
+        binding.nextBtn.setOnClickListener { viewModel.moveForward() }
+        binding.prevButton.setOnClickListener { viewModel.moveBackward() }
     }
 }

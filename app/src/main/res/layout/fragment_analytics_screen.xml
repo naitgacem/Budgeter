@@ -30,19 +30,41 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="January 2024"
-                    style="@style/TextAppearance.Material3.HeadlineMedium"
+                    android:text="January"
+                    android:id="@+id/month_dsp"
+                    style="@style/TextAppearance.Material3.HeadlineSmall"
                     android:layout_alignParentStart="true"
                     android:layout_marginStart="16dp"
                     android:layout_centerVertical="true" />
 
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="2024"
+                    android:id="@+id/year_dsp"
+                    style="@style/TextAppearance.Material3.HeadlineSmall"
+                    android:layout_toEndOf="@id/month_dsp"
+                    android:layout_marginStart="4dp"
+                    android:layout_centerVertical="true" />
+
+
+            </RelativeLayout>
+
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="16dp">
+
                 <com.google.android.material.button.MaterialButtonToggleGroup
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"
-                    app:singleSelection="true">
+                    android:id="@+id/view_type"
+                    app:singleSelection="true"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
 
-                    <Button
+                    <com.google.android.material.button.MaterialButton
                         android:id="@+id/month_btn"
                         style="@style/Widget.Material3.Button.OutlinedButton"
                         android:layout_width="wrap_content"
@@ -51,8 +73,8 @@
                         android:text="Month" />
 
                     <com.google.android.material.button.MaterialButton
-                        style="@style/Widget.Material3.Button.OutlinedButton"
                         android:id="@+id/year_btn"
+                        style="@style/Widget.Material3.Button.OutlinedButton"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="16dp"
@@ -60,33 +82,28 @@
                         android:text="Year" />
                 </com.google.android.material.button.MaterialButtonToggleGroup>
 
-            </RelativeLayout>
-
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="end"
-                android:layout_marginEnd="16dp"
-                android:orientation="horizontal">
-
                 <com.google.android.material.button.MaterialButton
-                    android:id="@+id/prev_button"
                     style="@style/Widget.Material3.Button.IconButton.Filled.Tonal"
+                    android:id="@+id/prev_button"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
-                    app:icon="@drawable/ic_arrow_back" />
+                    app:icon="@drawable/ic_arrow_back"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <com.google.android.material.button.MaterialButton
-                    style="@style/Widget.Material3.Button.IconButton.Filled.Tonal"
                     android:id="@+id/next_btn"
+                    style="@style/Widget.Material3.Button.IconButton.Filled.Tonal"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    app:icon="@drawable/ic_arrow_forward" />
+                    android:gravity="end"
+                    app:icon="@drawable/ic_arrow_forward"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/prev_button" />
 
 
-            </LinearLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
 
             <androidx.constraintlayout.widget.ConstraintLayout
