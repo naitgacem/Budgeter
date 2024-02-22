@@ -23,6 +23,9 @@ class LongDateConverterTest {
                 )
             ).isWithin(24 * 3600 * 1000L).of(timestamp)
         }
+        val a = getDayMonthYearFromTimestamp(43321222146L)
+        assertThat(a.second).isEqualTo(4)
+        assertThat(a.third).isEqualTo(1971)
     }
 
 }

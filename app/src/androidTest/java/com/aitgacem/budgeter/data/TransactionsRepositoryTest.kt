@@ -177,10 +177,10 @@ class TransactionsRepositoryTest {
         assertThat(tr4new.category).isEqualTo(Category.Education)
         assertThat(tr5new.category).isEqualTo(Category.Food)
 
-        assertThat(repo.loadCategoryTotal(Category.Education)).isWithin(0.001).of(110.0)
-        assertThat(repo.loadCategoryTotal(Category.Healthcare)).isWithin(0.001).of(30.0)
-        assertThat(repo.loadCategoryTotal(Category.Entertainment)).isWithin(0.001).of(0.0)
-        assertThat(repo.loadCategoryTotal(Category.Food)).isWithin(0.001).of(15.0)
+        assertThat(repo.loadCategoryTotal(Category.Education, 0, 1970)).isWithin(0.001).of(110.0)
+        assertThat(repo.loadCategoryTotal(Category.Healthcare, 0, 1970)).isWithin(0.001).of(30.0)
+        assertThat(repo.loadCategoryTotal(Category.Entertainment, 0, 1970)).isWithin(0.001).of(0.0)
+        assertThat(repo.loadCategoryTotal(Category.Food, 0, 1970)).isWithin(0.001).of(15.0)
 
         assertThat(repo.readBalance(date = 10)).isWithin(0.001).of(-30.0)
         assertThat(repo.readBalance(date = 12)).isWithin(0.001).of(-60.0)
@@ -260,5 +260,22 @@ class TransactionsRepositoryTest {
         assertThat(repo.readBalance(date = 1)).isWithin(0.001).of(0.0)
         assertThat(repo.readBalance(date = 70)).isWithin(0.001).of(-85.0)
 
+    }
+
+    @Test
+    fun categoryTypeChange() = runBlockingTest {
+        val repo = TransactionsRepository(db)
+        val tr1 = Transaction(1, "100", 100.0, 23, 0, Category.Education)
+        repo.writeTransactionToDatabase(tr1)
+
+        val tr2 = Transaction(1, "test", 200.0, 43321222146L, 0, Category.Food)
+        repo.updateTransaction(tr2, tr1)
+
+        val a = repo.loadCategoryTotal(Category.Education, 0, 1970)
+        val b = repo.loadCategoryTotal(Category.Food, 4, 1971)
+        val list = repo.dumpCat().getOrAwaitValue()
+        print(list)
+        assertThat(a).isWithin(0.0001).of(0.0)
+        assertThat(b).isWithin(0.0001).of(200.0)
     }
 }
