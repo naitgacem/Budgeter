@@ -35,18 +35,19 @@ class AnalyticsViewModel @Inject constructor(
         repository.getSpending(curMonth.value ?: 0, _curYear.value ?: 0)
     }
 
+
     fun moveForward() {
         curMonthStart = curMonthStart.oneMonthLater()
 
-        _curMonth.value = getDayMonthYearFromTimestamp(curMonthStart).second
         _curYear.value = getDayMonthYearFromTimestamp(curMonthStart).third
+        _curMonth.value = getDayMonthYearFromTimestamp(curMonthStart).second
     }
 
     fun moveBackward() {
         curMonthStart = curMonthStart.oneMonthEarlier()
 
-        _curMonth.value = getDayMonthYearFromTimestamp(curMonthStart).second
         _curYear.value = getDayMonthYearFromTimestamp(curMonthStart).third
+        _curMonth.value = getDayMonthYearFromTimestamp(curMonthStart).second
     }
 }
 
