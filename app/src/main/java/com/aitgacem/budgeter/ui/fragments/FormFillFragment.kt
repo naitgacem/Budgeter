@@ -130,11 +130,12 @@ class FormFillFragment : Fragment() {
 
     private fun setupTransitions() {
         enterTransition = MaterialSharedAxis(MaterialSharedAxis.Z, true).apply {
-            duration = 600
+            duration = 200
         }
         returnTransition = MaterialSharedAxis(MaterialSharedAxis.Z, false).apply {
-            duration = 600
+            duration = 200
         }
+
     }
 }
 

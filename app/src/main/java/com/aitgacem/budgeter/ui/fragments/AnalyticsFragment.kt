@@ -30,6 +30,7 @@ import com.github.aachartmodel.aainfographics.aaoptionsmodel.AAItemStyle
 import com.github.aachartmodel.aainfographics.aaoptionsmodel.AALegend
 import com.github.aachartmodel.aainfographics.aaoptionsmodel.AAStates
 import com.github.aachartmodel.aainfographics.aaoptionsmodel.AATooltip
+import com.google.android.material.transition.MaterialSharedAxis
 import dagger.hilt.android.AndroidEntryPoint
 
 
@@ -57,6 +58,7 @@ class AnalyticsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setupTransitions()
         viewModel.chartViewType.observe(viewLifecycleOwner) {
             viewType = it
             if (it == ChartViewType.YEAR_VIEW) {
@@ -194,6 +196,15 @@ class AnalyticsFragment : Fragment() {
 
             )
 
+        }
+    }
+
+    private fun setupTransitions() {
+        enterTransition = MaterialSharedAxis(MaterialSharedAxis.Z, true).apply {
+            duration = 200
+        }
+        returnTransition = MaterialSharedAxis(MaterialSharedAxis.Z, false).apply {
+            duration = 200
         }
     }
 }

@@ -16,6 +16,7 @@ import com.aitgacem.budgeter.ui.components.ItemType
 import com.aitgacem.budgeter.ui.components.toIcon
 import com.aitgacem.budgeter.ui.toFormattedDate
 import com.aitgacem.budgeter.ui.viewmodels.FormFillViewModel
+import com.google.android.material.transition.MaterialSharedAxis
 
 class DetailsFragment : Fragment() {
     private lateinit var binding: FragmentDetailsBinding
@@ -40,6 +41,8 @@ class DetailsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setupTransitions()
+
         with(viewModel) {
             amount.observe(viewLifecycleOwner) {
                 binding.transactionAmount.text = it.toString()
@@ -93,6 +96,21 @@ class DetailsFragment : Fragment() {
                     false
                 }
             }
+        }
+    }
+
+    private fun setupTransitions() {
+        exitTransition = MaterialSharedAxis(MaterialSharedAxis.Z, true).apply {
+            duration = 200
+        }
+        reenterTransition = MaterialSharedAxis(MaterialSharedAxis.Z, false).apply {
+            duration = 200
+        }
+        enterTransition = MaterialSharedAxis(MaterialSharedAxis.Z, true).apply {
+            duration = 200
+        }
+        returnTransition = MaterialSharedAxis(MaterialSharedAxis.Z, false).apply {
+            duration = 200
         }
     }
 }

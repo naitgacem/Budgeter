@@ -13,6 +13,7 @@ import com.aitgacem.budgeter.ui.components.DayDecorator
 import com.aitgacem.budgeter.ui.components.HistoryRvAdapter
 import com.aitgacem.budgeter.ui.viewmodels.TransactionsViewModel
 import com.google.android.material.search.SearchView
+import com.google.android.material.transition.MaterialSharedAxis
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -32,12 +33,12 @@ class TransactionsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentTransactionsBinding.inflate(layoutInflater, container, false)
+        setupTransitions()
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         val listAdapter = HistoryRvAdapter {
             val action = TransactionsFragmentDirections.loadTransactionDetails(it)
             view.findNavController().navigate(action)
@@ -58,6 +59,15 @@ class TransactionsFragment : Fragment() {
             searchView.hide()
             viewModel.updateFilter(searchView.text.toString())
             false
+        }
+    }
+
+    private fun setupTransitions() {
+        enterTransition = MaterialSharedAxis(MaterialSharedAxis.Z, true).apply {
+            duration = 200
+        }
+        returnTransition = MaterialSharedAxis(MaterialSharedAxis.Z, false).apply {
+            duration = 200
         }
     }
 }

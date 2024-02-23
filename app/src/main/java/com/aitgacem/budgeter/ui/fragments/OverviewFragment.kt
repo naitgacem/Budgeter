@@ -69,10 +69,10 @@ class OverviewFragment : Fragment() {
 
     private fun setupTransitions() {
         exitTransition = MaterialSharedAxis(MaterialSharedAxis.Z, true).apply {
-            duration = 600
+            duration = 200
         }
         reenterTransition = MaterialSharedAxis(MaterialSharedAxis.Z, false).apply {
-            duration = 600
+            duration = 200
         }
     }
 }
