@@ -1,14 +1,9 @@
 package com.aitgacem.budgeter.ui.viewmodels
 
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
 import androidx.lifecycle.viewModelScope
-import androidx.lifecycle.viewmodel.initializer
-import androidx.lifecycle.viewmodel.viewModelFactory
-import com.aitgacem.budgeter.Budgeter
 import com.aitgacem.budgeter.data.TransactionsRepository
-import com.aitgacem.budgeter.data.model.Transaction
+import com.aitgacem.budgeter.ui.components.ItemType.Transaction
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
@@ -24,8 +19,8 @@ class TransactionDetailsViewModel @Inject constructor(
 
     fun loadTransaction(id: Long) {
         viewModelScope.launch {
-            val loadedTransaction = repository.loadTransaction(id)
-            _transaction.value = loadedTransaction
+//            val loadedTransaction = repository.loadTransaction(id)
+//            _transaction.value = loadedTransaction
         }
     }
 }

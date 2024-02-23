@@ -22,16 +22,16 @@ enum class Category : Parcelable {
 
 fun Category.toIcon(): Int {
     return when (this) {
-        Category.Transportation -> R.drawable.ic_apartment
-        Category.Groceries -> R.drawable.ic_apartment
+        Category.Transportation -> R.drawable.ic_directions_bus
+        Category.Groceries -> R.drawable.ic_shopping_cart
         Category.Travel -> R.drawable.ic_map
-        Category.Utilities -> R.drawable.ic_movie
+        Category.Utilities -> R.drawable.ic_call
         Category.Entertainment -> R.drawable.ic_movie
         Category.Housing -> R.drawable.ic_apartment
         Category.Education -> R.drawable.ic_school
         Category.Healthcare -> R.drawable.ic_spa
         Category.Food -> R.drawable.ic_restaurant
-        Category.Others -> R.drawable.ic_movie
+        Category.Others -> R.drawable.ic_edit_note
         Category.Deposit -> R.drawable.ic_arrow_upward
     }
 }

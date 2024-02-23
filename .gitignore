@@ -9,3 +9,5 @@
 .cxx
 local.properties
 /buildSrc/.gradle/*
+/app/seeds.txt
+/app/usage.txt

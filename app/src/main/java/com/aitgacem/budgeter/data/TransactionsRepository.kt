@@ -1,178 +1,214 @@
 package com.aitgacem.budgeter.data
 
 import androidx.annotation.WorkerThread
+import androidx.lifecycle.LiveData
 import androidx.room.withTransaction
-import com.aitgacem.budgeter.data.model.Balance
+import com.aitgacem.budgeter.data.model.BalanceEntity
 import com.aitgacem.budgeter.data.model.CategoryAndValue
-import com.aitgacem.budgeter.data.model.DateAndBalance
-import com.aitgacem.budgeter.data.model.Transaction
+import com.aitgacem.budgeter.data.model.CategoryEntity
+import com.aitgacem.budgeter.data.model.TransactionEntity
 import com.aitgacem.budgeter.ui.components.Category
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.withContext
+import com.aitgacem.budgeter.ui.components.ItemType.Date
+import com.aitgacem.budgeter.ui.components.ItemType.Transaction
+import com.aitgacem.budgeter.ui.getDayMonthYearFromTimestamp
 import java.util.Calendar
+
 
 @WorkerThread
 class TransactionsRepository(private val db: TransactionDatabase) {
 
     private val transactionDao = db.transactionDao()
     private val balanceDao = db.balanceDao()
-    private val analyticsDao = db.analyticsDao()
+    private val categoryDao = db.categoryDao()
 
     suspend fun writeTransactionToDatabase(transaction: Transaction) {
+        val signedAmount = getSignedAmount(transaction)
         db.withTransaction {
-            transactionDao.insert(transaction)
-            updateCategoryAndValue(transaction)
-            updateBalance(transaction)
-        }
-    }
 
-    suspend fun updateTransaction(transaction: Transaction, oldTransaction: Transaction?) {
-        db.withTransaction {
-            transactionDao.update(transaction)
-            if (oldTransaction == null) {
-                updateCategoryAndValue(transaction)
-            } else {
-                updateCategoryAndValue(transaction, oldTransaction)
+        val balanceEntity = balanceDao.getBalanceEntityOnDay(transaction.date)
+            val prevBalance = balanceDao.getBalanceEntityAtDay(transaction.date)?.balance ?: 0.0
+            val newBalance = BalanceEntity(0, transaction.date, prevBalance + signedAmount)
+            val balanceId: Long = when (balanceEntity) {
+                null -> balanceDao.insert(newBalance)
+
+                else -> {
+                    balanceDao.updateBalance(newBalance.copy(dateId = balanceEntity.dateId))
+                    balanceEntity.dateId
+                }
             }
-            updateBalance(transaction, oldTransaction?.amount)
+            //--------------------------------------------------------------------------
+            val catId: Long = updateCatOnInsert(transaction)
+            //----------------------------------------------------------------------------------------
+
+            transactionDao.insert(
+                TransactionEntity(
+                    id = 0,
+                    title = transaction.title,
+                    amount = transaction.amount,
+                    dateId = balanceId,
+                    time = transaction.time,
+                    categoryId = catId
+                )
+            )
+            // Now we need to update the balance for all days after this one
+            val daysAfter = balanceDao.getDayBalancesAfterDate(transaction.date)
+            updateBalances(daysAfter, signedAmount)
         }
     }
 
-    private suspend fun updateBalance(
-        transaction: Transaction,
-        oldTransactionValue: Float? = null,
-    ) {
-        var predecessor =
-            balanceDao.loadPredecessor(date = transaction.date, id = transaction.id)?.amount
-                ?: 0.toFloat()
 
-        val amount =
-            if (transaction.category == Category.Deposit) transaction.amount else transaction.amount.unaryMinus()
+    suspend fun updateTransaction(transaction: Transaction, oldTransaction: Transaction) {
+        val signedOldTransactionAmount = getSignedAmount(oldTransaction)
 
-        if (oldTransactionValue != null) {
-            balanceDao.updateBalance(
-                Balance(transaction.id, transaction.date, predecessor + amount)
+        db.withTransaction {
+            //Remove from old day
+            val daysAfterOld = balanceDao.getDayBalancesStarting(oldTransaction.date)
+            updateBalances(daysAfterOld, -1 * signedOldTransactionAmount)
+
+            //Add to new day
+            val signedAmount = getSignedAmount(transaction)
+            val balanceEntity = balanceDao.getBalanceEntityOnDay(transaction.date)
+
+            val prevBalance = balanceDao.getBalanceEntityAtDay(transaction.date)?.balance ?: 0.0
+            val newBalance = BalanceEntity(0, transaction.date, prevBalance + signedAmount)
+
+            val balanceId: Long = when (balanceEntity) {
+                null -> balanceDao.insert(newBalance)
+                else -> {
+                    balanceDao.updateBalance(newBalance.copy(dateId = balanceEntity.dateId))
+                    balanceEntity.dateId
+                }
+            }
+            val catId: Long = updateCatOnUpdate(oldTransaction, transaction)
+
+            transactionDao.updateTransaction(
+                TransactionEntity(
+                    oldTransaction.id,
+                    transaction.title,
+                    transaction.amount,
+                    balanceId,
+                    transaction.time,
+                    catId
+                )
             )
-        } else {
-            balanceDao.insert(
-                Balance(transaction.id, transaction.date, predecessor + amount)
-            )
+
+            // Now we need to update the balance for all days after this one
+            val daysAfterNew = balanceDao.getDayBalancesAfterDate(transaction.date)
+            updateBalances(daysAfterNew, signedAmount)
         }
+    }
 
-        predecessor += amount
+    private suspend fun updateCatOnInsert(transaction: Transaction): Long {
+        val (_, month, year) = getDayMonthYearFromTimestamp(transaction.date)
+        val catEntity = categoryDao.getCategoryAmount(transaction.category, month, year)
 
-        val newerBalances = balanceDao.loadNewerThan(
-            transaction.date, transaction.id
+        val prevAmount = catEntity?.total ?: 0.0
+        val newCat =
+            CategoryEntity(0, transaction.category, transaction.amount + prevAmount, month, year)
+
+        val catId: Long = when (catEntity) {
+            null -> categoryDao.insert(newCat)
+
+            else -> {
+                categoryDao.update(newCat.copy(categoryId = catEntity.categoryId))
+                catEntity.categoryId
+            }
+        }
+        return catId
+    }
+
+    private suspend fun updateCatOnUpdate(
+        oldTransaction: Transaction,
+        transaction: Transaction
+    ): Long {
+        //Remove from old category
+        val (_, month, year) = getDayMonthYearFromTimestamp(oldTransaction.date)
+        val oldCatValue =
+            categoryDao.getCategoryAmount(oldTransaction.category, month, year)!! //has to exist
+        categoryDao.update(
+            oldCatValue.copy(
+                total = oldCatValue.total - oldTransaction.amount
+            )
         )
+        //Add to new category
+        return updateCatOnInsert(transaction)
+    }
 
-        for (balance in newerBalances) {
-            val loadedTransaction = transactionDao.loadTransaction(balance.id)
-            require(loadedTransaction != null)
-            if (loadedTransaction.category == Category.Deposit) {
-                predecessor += loadedTransaction.amount
-            } else {
-                predecessor -= loadedTransaction.amount
-            }
-            balanceDao.updateBalance(balance.copy(amount = predecessor))
+
+    private fun getSignedAmount(transaction: Transaction): Double {
+        return if (transaction.category == Category.Deposit) {
+            transaction.amount
+        } else {
+            -1 * transaction.amount
         }
     }
 
-    suspend fun readAllTransactionsFromDatabase(): Flow<List<Transaction>> {
-        return withContext(Dispatchers.IO) {
-            db.transactionDao().getAll()
+    private suspend fun updateBalances(
+        balances: List<BalanceEntity>,
+        signedAmount: Double
+    ) {
+        for (day in balances) {
+            balanceDao.updateBalance(
+                day.copy(
+                    balance = day.balance + signedAmount
+                )
+            )
         }
     }
 
-    suspend fun readBalance(): Flow<Float?> {
-        return withContext(Dispatchers.IO) {
-            balanceDao.loadLastBalance()
-        }
-    }
 
-    suspend fun readBalance(id: Long): Float {
-        return balanceDao.loadBalance(id)
-    }
-
-    suspend fun readRecentTransactionsFromDatabase(): Flow<List<Transaction>> {
-        val oneWeekAgo = Calendar.getInstance()
-        oneWeekAgo.add(Calendar.DAY_OF_WEEK, -7)
-        return withContext(Dispatchers.IO) {
-            db.transactionDao().loadNewerThan(oneWeekAgo.timeInMillis)
-        }
+    fun readAllTransactionsFromDatabase(): LiveData<List<Transaction>> {
+        return transactionDao.getTransactions()
     }
 
     suspend fun loadTransaction(id: Long): Transaction? {
-        return db.transactionDao().loadTransaction(id)
+        return transactionDao.getTransactionById(id)
     }
 
-    fun getCategoryAndValue(): Flow<List<CategoryAndValue>> {
-        return analyticsDao.getAllData()
+    suspend fun readBalance(date: Long): Double {
+        return balanceDao.getBalanceEntityAtDay(date)?.balance ?: 0.0
     }
 
-    fun getBalanceByDate(): Flow<List<DateAndBalance>> {
-        return balanceDao.getBalanceByDate()
+    fun readLatestBalance(): LiveData<Double?> {
+        return balanceDao.getLatestBalance()
     }
 
-    private suspend fun updateCategoryAndValue(
-        transaction: Transaction,
-    ) {
-        if (transaction.category == Category.Deposit) {
-            return
-        }
-        val oldCategoryAndValue =
-            analyticsDao.getCategoryAmount(category = transaction.category.name)
-        if (oldCategoryAndValue != null) {
-            analyticsDao.updateCategoryAmount(
-                oldCategoryAndValue.copy(
-                    value = oldCategoryAndValue.value + transaction.amount
-                )
-            )
-        } else {
-            analyticsDao.insert(
-                CategoryAndValue(
-                    transaction.category, transaction.amount
-                )
-            )
-        }
+    suspend fun loadCategoryTotal(category: Category, month: Int, year: Int): Double {
+        return categoryDao.getCategoryAmount(category, month, year)?.total ?: 0.0
     }
 
-    private suspend fun updateCategoryAndValue(
-        transaction: Transaction,
-        oldTransaction: Transaction,
-    ) {
-        if (transaction.category == Category.Deposit) {
-            return
-        }
-        val oldEntry = analyticsDao.getCategoryAmount(category = oldTransaction.category.name)
-        require(oldEntry != null) //it already exists since we are updating
+    fun readRecentTransactionsFromDatabase(): LiveData<List<Transaction>> {
+        val oneWeekAgo = Calendar.getInstance()
+        oneWeekAgo.add(Calendar.DAY_OF_WEEK, -7)
+        return transactionDao.loadNewerThan(oneWeekAgo.timeInMillis)
+    }
 
-        if (oldTransaction.category == transaction.category) {
-            val diff = transaction.amount - oldTransaction.amount
-            analyticsDao.updateCategoryAmount(
-                oldEntry.copy(
-                    value = oldEntry.value + diff
-                )
-            )
-        } else {
-            val newEntry = analyticsDao.getCategoryAmount(category = transaction.category.name)
-            analyticsDao.updateCategoryAmount(
-                oldEntry.copy(value = oldEntry.value - transaction.amount)
-            )
+    fun getDayAndTransactions(filter: String): LiveData<Map<Date, List<Transaction>>> {
+        return transactionDao.getDayTransactions(filter)
+    }
 
-            if (newEntry != null) {
-                analyticsDao.updateCategoryAmount(
-                    newEntry.copy(
-                        value = newEntry.value + transaction.amount
-                    )
-                )
-            } else {
-                analyticsDao.insert(
-                    CategoryAndValue(
-                        transaction.category, transaction.amount
-                    )
-                )
-            }
+    fun getDailyBalance(start: Long, end: Long): LiveData<Map<Long, Double>> {
+        return balanceDao.getBalanceBetween(start, end)
+    }
+
+    fun getSpending(month: Int, year: Int): LiveData<List<CategoryAndValue>> {
+        return categoryDao.getCatAndValue(month, year)
+    }
+
+    fun getSpendingYear(year: Int): LiveData<List<CategoryAndValue>> {
+        return categoryDao.getCatAndValue(year)
+    }
+
+    fun dumpCat(): LiveData<List<CategoryEntity>> {
+        return categoryDao.getDump()
+    }
+
+    suspend fun deleteTransaction(transaction: Transaction) {
+        val zero = transaction.copy(amount = 0.0)
+        db.withTransaction {
+            updateTransaction(zero, transaction)
+            transactionDao.deleteTransaction(transaction.id)
         }
     }
+
 }

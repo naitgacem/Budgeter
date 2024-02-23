@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+    <item
+        android:id="@+id/overview_dest"
+        android:icon="@drawable/ic_home"
+        android:title="Home" />
+    <item
+        android:id="@+id/analytics_dest"
+        android:icon="@drawable/ic_analytics"
+        android:title="Anayltics" />
+    <item
+        android:id="@+id/transactions_dest"
+        android:icon="@drawable/ic_swap_vert"
+        android:title="Transactions" />
+</menu>

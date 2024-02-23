@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/overview_dest">
+
+    <fragment
+        android:id="@+id/overview_dest"
+        android:name="com.aitgacem.budgeter.ui.fragments.OverviewFragment"
+        android:label="OverviewFragment"
+        tools:layout="@layout/fragment_overview_screen">
+        <action
+            android:id="@+id/deposit_action"
+            app:destination="@id/formFill_dest" />
+        <action
+            android:id="@+id/goto_analytics"
+            app:destination="@id/analytics_dest" />
+        <action
+            android:id="@+id/goto_transactions"
+            app:destination="@id/transactions_dest" />
+    </fragment>
+    <fragment
+        android:id="@+id/analytics_dest"
+        android:name="com.aitgacem.budgeter.ui.fragments.AnalyticsFragment"
+        android:label="AnalyticsFragment"
+        tools:layout="@layout/fragment_analytics_screen" />
+    <fragment
+        android:id="@+id/transactions_dest"
+        android:name="com.aitgacem.budgeter.ui.fragments.TransactionsFragment"
+        android:label="TransactionsFragment"
+        tools:layout="@layout/fragment_transactions" />
+    <fragment
+        android:id="@+id/formFill_dest"
+        android:name="com.aitgacem.budgeter.ui.fragments.FormFillFragment"
+        android:label="FormFillFragment"
+        tools:layout="@layout/fragment_formfill">
+
+        <argument
+            android:name="is_deposit"
+            app:argType="boolean" />
+        <argument
+            android:name="transaction"
+            app:argType="com.aitgacem.budgeter.ui.components.ItemType$Transaction"
+            app:nullable="true"
+            android:defaultValue="@null" />
+    </fragment>
+    <fragment
+        android:id="@+id/details_dest"
+        android:name="com.aitgacem.budgeter.ui.fragments.DetailsFragment"
+        android:label="DetailsFragment"
+        tools:layout="@layout/fragment_details">
+        <argument
+            android:name="transaction"
+            app:argType="com.aitgacem.budgeter.ui.components.ItemType$Transaction" />
+        <action
+            android:id="@+id/edit_tranaction"
+            app:destination="@id/formFill_dest" />
+    </fragment>
+    <action
+        android:id="@+id/load_transaction_details"
+        app:destination="@id/details_dest" />
+</navigation>

@@ -1,29 +1,46 @@
 package com.aitgacem.budgeter
 
 import android.os.Bundle
+import android.view.View.GONE
+import android.view.View.VISIBLE
 import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
-import com.aitgacem.budgeter.ui.AppTheme
-import com.aitgacem.budgeter.ui.screens.NavGraphs
-import com.ramcosta.composedestinations.DestinationsNavHost
+import androidx.appcompat.app.AppCompatActivity
+import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.ui.AppBarConfiguration
+import androidx.navigation.ui.setupWithNavController
+import com.aitgacem.budgeter.data.TransactionDatabase
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import dagger.hilt.android.AndroidEntryPoint
 import java.lang.ref.WeakReference
+import javax.inject.Inject
 
-object CurrentActivityHolder {
-    var currentActivity: WeakReference<ComponentActivity>? = null
-}
 @AndroidEntryPoint
-class MainActivity : ComponentActivity() {
+class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setContentView(R.layout.main_activity)
 
-        setContent {
-            AppTheme {
-                DestinationsNavHost(navGraph = NavGraphs.root)
+        val navHostFragment =
+            supportFragmentManager.findFragmentById(R.id.main_activity_host) as NavHostFragment
+        val navController = navHostFragment.navController
+
+        val bottomBar = findViewById<BottomNavigationView>(R.id.bottom_nav)
+        val fullScreenDest = setOf(
+            R.id.details_dest,
+            R.id.formFill_dest,
+        )
+        navController.addOnDestinationChangedListener { _, destination, _ ->
+            if (destination.id in fullScreenDest) {
+                bottomBar.visibility = GONE
+            } else {
+                bottomBar.visibility = VISIBLE
             }
         }
-        CurrentActivityHolder.currentActivity = WeakReference(this)
+        bottomBar.setupWithNavController(navController)
+
     }
+
+
 }
 
 

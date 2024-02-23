@@ -1,33 +1,66 @@
 package com.aitgacem.budgeter.data
 
+import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
+import androidx.room.MapColumn
 import androidx.room.Query
 import androidx.room.Update
-import com.aitgacem.budgeter.data.model.Transaction
-import kotlinx.coroutines.flow.Flow
+import com.aitgacem.budgeter.data.model.TransactionEntity
+import com.aitgacem.budgeter.ui.components.ItemType.*
 
 @Dao
-interface TransactionDao {
-    @Query("SELECT * FROM `transaction` order by date desc, id desc")
-    fun getAll(): Flow<List<Transaction>>
-
-    @Query("SELECT * FROM `transaction` where id = :id ")
-    suspend fun loadTransaction(id: Long): Transaction?
-
-    @Query("SELECT * FROM `transaction` where date >= :date order by date desc, id desc")
-    fun loadNewerThan(date: Long): Flow<List<Transaction>>
-
-    @Query("SELECT * FROM `transaction` where (date > :date) or (date == :date and id > :id)")
-    fun loadNewerThan(date: Long, id: Long): Flow<List<Transaction>>
+interface TransactionWithDetailsDao {
 
     @Insert
-    suspend fun insert(transaction: Transaction)
+    suspend fun insert(transaction: TransactionEntity)
 
     @Delete
-    suspend fun delete(transaction: Transaction)
+    suspend fun delete(transactionWithDetails: TransactionEntity)
 
     @Update
-    suspend fun update(transaction: Transaction)
+    suspend fun updateTransaction(updatedTransaction: TransactionEntity)
+
+
+    @Query(
+        "SELECT transactions.id, transactions.title, transactions.amount, balance.date as date, transactions.time, categories.name as category " +
+                "FROM transactions " +
+                "INNER JOIN categories ON transactions.categoryId = categories.categoryId " +
+                "INNER JOIN balance ON transactions.dateId = balance.dateId " +
+                "order by date desc"
+    )
+    fun getTransactions(): LiveData<List<Transaction>>
+
+    @Query(
+        "SELECT transactions.id, transactions.title, transactions.amount, balance.date as date, transactions.time, categories.name as category " +
+                "FROM transactions " +
+                "INNER JOIN categories ON transactions.categoryId = categories.categoryId " +
+                "INNER JOIN balance ON transactions.dateId = balance.dateId " +
+                "WHERE transactions.id = :transactionId"
+    )
+    suspend fun getTransactionById(transactionId: Long): Transaction?
+
+    @Query(
+        "SELECT transactions.id, transactions.title, transactions.amount, balance.date as date, transactions.time, categories.name as category " +
+                "FROM transactions " +
+                "INNER JOIN categories ON transactions.categoryId = categories.categoryId " +
+                "INNER JOIN balance ON transactions.dateId = balance.dateId " +
+                "WHERE date >= :date"
+    )
+    fun loadNewerThan(date: Long): LiveData<List<Transaction>>
+
+    @Query(
+        "SELECT balance.date, transactions.id, transactions.title, transactions.amount, " +
+                "transactions.time, categories.name as category " +
+                "from balance " +
+                "join transactions on balance.dateId = transactions.dateId " +
+                "join categories on categories.categoryId == transactions.categoryId " +
+                "where  :filter = '' or transactions.title like '%' || :filter || '%' " +
+                "order by date desc"
+    )
+    fun getDayTransactions(filter: String): LiveData<Map<@MapColumn(columnName = "date") Date, List<Transaction>>>
+
+    @Query("DELETE from transactions where id = :id")
+    fun deleteTransaction(id: Long)
 }
