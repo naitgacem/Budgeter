@@ -11,7 +11,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.aitgacem.budgeter.databinding.FragmentTransactionsBinding
 import com.aitgacem.budgeter.ui.components.DayDecorator
 import com.aitgacem.budgeter.ui.components.HistoryRvAdapter
-import com.aitgacem.budgeter.ui.components.ItemType
 import com.aitgacem.budgeter.ui.viewmodels.TransactionsViewModel
 import com.google.android.material.search.SearchView
 import dagger.hilt.android.AndroidEntryPoint
