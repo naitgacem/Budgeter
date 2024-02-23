@@ -8,7 +8,6 @@ import androidx.room.MapColumn
 import androidx.room.Query
 import androidx.room.Update
 import com.aitgacem.budgeter.data.model.TransactionEntity
-import com.aitgacem.budgeter.ui.components.ItemType
 import com.aitgacem.budgeter.ui.components.ItemType.*
 
 @Dao
@@ -57,7 +56,8 @@ interface TransactionWithDetailsDao {
                 "from balance " +
                 "join transactions on balance.dateId = transactions.dateId " +
                 "join categories on categories.categoryId == transactions.categoryId " +
+                "where  :filter = '' or transactions.title like '%' || :filter || '%' " +
                 "order by date desc"
     )
-    fun getDayTransactions(): LiveData<Map<@MapColumn(columnName = "date") Date, List<Transaction>>>
+    fun getDayTransactions(filter: String): LiveData<Map<@MapColumn(columnName = "date") Date, List<Transaction>>>
 }

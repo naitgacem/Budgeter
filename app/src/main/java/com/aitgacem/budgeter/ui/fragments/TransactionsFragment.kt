@@ -52,10 +52,8 @@ class TransactionsFragment : Fragment() {
         viewModel.filteredList.observe(viewLifecycleOwner) { it ->
             val new = mutableListOf<ItemType>()
             for ((key, value) in it) {
-                if (value.isNotEmpty()) {
-                    new.addAll(mutableListOf(key))
-                    new.addAll(value)
-                }
+                new.addAll(mutableListOf(key))
+                new.addAll(value)
             }
             listAdapter.submitList(new)
         }

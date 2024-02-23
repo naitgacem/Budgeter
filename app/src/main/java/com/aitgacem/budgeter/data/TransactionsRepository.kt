@@ -183,8 +183,8 @@ class TransactionsRepository(private val db: TransactionDatabase) {
         return transactionDao.loadNewerThan(oneWeekAgo.timeInMillis)
     }
 
-    fun getDayAndTransactions(): LiveData<Map<Date, List<Transaction>>> {
-        return transactionDao.getDayTransactions()
+    fun getDayAndTransactions(filter: String): LiveData<Map<Date, List<Transaction>>> {
+        return transactionDao.getDayTransactions(filter)
     }
 
     fun getDailyBalance(start: Long, end: Long): LiveData<Map<Long, Double>> {
