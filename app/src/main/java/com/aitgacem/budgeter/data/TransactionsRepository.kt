@@ -203,4 +203,12 @@ class TransactionsRepository(private val db: TransactionDatabase) {
         return categoryDao.getDump()
     }
 
+    suspend fun deleteTransaction(transaction: Transaction) {
+        val zero = transaction.copy(amount = 0.0)
+        db.withTransaction {
+            updateTransaction(zero, transaction)
+            transactionDao.deleteTransaction(transaction.id)
+        }
+    }
+
 }

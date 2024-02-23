@@ -60,4 +60,7 @@ interface TransactionWithDetailsDao {
                 "order by date desc"
     )
     fun getDayTransactions(filter: String): LiveData<Map<@MapColumn(columnName = "date") Date, List<Transaction>>>
+
+    @Query("DELETE from transactions where id = :id")
+    fun deleteTransaction(id: Long)
 }

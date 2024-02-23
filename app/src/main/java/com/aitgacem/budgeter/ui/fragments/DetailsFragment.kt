@@ -84,6 +84,8 @@ class DetailsFragment : Fragment() {
                 }
 
                 R.id.delete_btn -> {
+                    viewModel.deleteTransaction(transaction)
+                    findNavController().popBackStack()
                     true
                 }
 

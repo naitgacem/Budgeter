@@ -85,4 +85,11 @@ class FormFillViewModel @Inject constructor(
             repository.updateTransaction(transaction, old)
         }
     }
+
+    fun deleteTransaction(transaction: Transaction) {
+        viewModelScope.launch {
+            repository.deleteTransaction(transaction)
+        }
+    }
+
 }
