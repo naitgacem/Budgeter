@@ -30,3 +30,7 @@
 #-------------------------------------------------
 -keepnames class androidx.navigation.fragment.NavHostFragment
 -keepnames class * extends android.os.Parcelable
+#-------------------------------------------------
+# AAchart library
+#-------------------------------------------------
+-keep class com.github.aachartmodel.aainfographics.** { *; }
