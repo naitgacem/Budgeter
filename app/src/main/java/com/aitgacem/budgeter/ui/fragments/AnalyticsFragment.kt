@@ -11,7 +11,6 @@ import androidx.fragment.app.viewModels
 import com.aitgacem.budgeter.R
 import com.aitgacem.budgeter.databinding.FragmentAnalyticsScreenBinding
 import com.aitgacem.budgeter.ui.components.Category
-import com.aitgacem.budgeter.ui.getDayOfMonth
 import com.aitgacem.budgeter.ui.mapToList
 import com.aitgacem.budgeter.ui.mapYear
 import com.aitgacem.budgeter.ui.toMonthStr
@@ -24,9 +23,7 @@ import com.github.aachartmodel.aainfographics.aachartcreator.AASeriesElement
 import com.github.aachartmodel.aainfographics.aachartcreator.aa_toAAOptions
 import com.github.aachartmodel.aainfographics.aaoptionsmodel.AAInactive
 import com.github.aachartmodel.aainfographics.aaoptionsmodel.AAStates
-import com.github.aachartmodel.aainfographics.aaoptionsmodel.AAStyle
 import com.github.aachartmodel.aainfographics.aaoptionsmodel.AATooltip
-import com.google.android.material.button.MaterialButtonToggleGroup
 import dagger.hilt.android.AndroidEntryPoint
 
 
@@ -35,8 +32,6 @@ class AnalyticsFragment : Fragment() {
     private lateinit var binding: FragmentAnalyticsScreenBinding
     private val viewModel: AnalyticsViewModel by viewModels()
     private var chartData: List<Pair<Int, Double>> = mutableListOf()
-    private var yearData: List<Pair<Int, Double>> = mutableListOf()
-
     private var pieData: List<Pair<Category, Double>> = mutableListOf()
 
     override fun onCreate(savedInstanceState: Bundle?) {
