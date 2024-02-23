@@ -1,6 +1,7 @@
 package com.aitgacem.budgeter.ui.fragments
 
 import android.os.Bundle
+import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.View.GONE
@@ -16,13 +17,17 @@ import com.aitgacem.budgeter.ui.mapYear
 import com.aitgacem.budgeter.ui.toMonthStr
 import com.aitgacem.budgeter.ui.viewmodels.AnalyticsViewModel
 import com.aitgacem.budgeter.ui.viewmodels.ChartViewType
+import com.github.aachartmodel.aainfographics.aachartcreator.AAChartFontWeightType
 import com.github.aachartmodel.aainfographics.aachartcreator.AAChartModel
 import com.github.aachartmodel.aainfographics.aachartcreator.AAChartType
 import com.github.aachartmodel.aainfographics.aachartcreator.AAChartView
 import com.github.aachartmodel.aainfographics.aachartcreator.AAChartZoomType
 import com.github.aachartmodel.aainfographics.aachartcreator.AASeriesElement
 import com.github.aachartmodel.aainfographics.aachartcreator.aa_toAAOptions
+import com.github.aachartmodel.aainfographics.aaoptionsmodel.AADataLabels
 import com.github.aachartmodel.aainfographics.aaoptionsmodel.AAInactive
+import com.github.aachartmodel.aainfographics.aaoptionsmodel.AAItemStyle
+import com.github.aachartmodel.aainfographics.aaoptionsmodel.AALegend
 import com.github.aachartmodel.aainfographics.aaoptionsmodel.AAStates
 import com.github.aachartmodel.aainfographics.aaoptionsmodel.AATooltip
 import dagger.hilt.android.AndroidEntryPoint
@@ -93,7 +98,16 @@ class AnalyticsFragment : Fragment() {
         }
     }
 
+
     private fun setupPieChart(pieChart: AAChartView) {
+
+        val typedValue = TypedValue()
+        requireActivity().theme.resolveAttribute(android.R.attr.colorForeground, typedValue, true)
+        val foregroundColor =
+            "#" + TypedValue.coerceToString(typedValue.type, typedValue.data).substring(3)
+
+
+
         viewModel.curMonthSpendingData.observe(viewLifecycleOwner) { list ->
             pieData = list.filter {
                 it.category != Category.Deposit
@@ -106,27 +120,37 @@ class AnalyticsFragment : Fragment() {
             } else {
                 binding.noDataPie.visibility = GONE
             }
+
             pieChart.aa_drawChartWithChartOptions(
                 AAChartModel()
                     .chartType(AAChartType.Pie)
-                    .dataLabelsEnabled(true)
                     .series(
                         arrayOf(
                             AASeriesElement()
-                                .name("Total:")
+                                .name("Total")
                                 .data(
                                     pieData.map {
                                         arrayOf(it.first.name, it.second)
                                     }.toTypedArray()
+
                                 )
                                 .allowPointSelect(false)
                                 .states(AAStates().inactive(AAInactive().enabled(false)))
-                                .tooltip(AATooltip().followTouchMove(false))
+                                .tooltip(AATooltip().followTouchMove(true))
+                                .dataLabels(AADataLabels().enabled(false))
+
                         )
                     )
-                    .dataLabelsEnabled(false)
                     .tooltipEnabled(true)
+                    .backgroundColor("")
+
                     .aa_toAAOptions()
+                    .legend(
+                        AALegend().itemStyle(
+                            AAItemStyle().color(foregroundColor)
+                                .fontWeight(AAChartFontWeightType.Thin)
+                        )
+                    )
 
             )
 
@@ -166,6 +190,8 @@ class AnalyticsFragment : Fragment() {
                     .zoomType(AAChartZoomType.X)
                     .yAxisTitle("")
                     .tooltipEnabled(true)
+                    .backgroundColor("")
+
             )
 
         }
