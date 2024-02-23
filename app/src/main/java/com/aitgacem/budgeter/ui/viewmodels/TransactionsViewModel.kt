@@ -9,8 +9,5 @@ import javax.inject.Inject
 class TransactionsViewModel @Inject constructor(
     private val repository: TransactionsRepository,
 ) : ViewModel() {
-
-    val transactionsLiveData = repository.readAllTransactionsFromDatabase()
-
     val transactions = repository.getDayAndTransactions()
 }
