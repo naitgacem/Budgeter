@@ -3,15 +3,20 @@ package com.aitgacem.budgeter.ui.fragments
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
+import android.view.View.GONE
+import android.view.View.VISIBLE
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.aitgacem.budgeter.R
 import com.aitgacem.budgeter.databinding.FragmentAnalyticsScreenBinding
 import com.aitgacem.budgeter.ui.components.Category
+import com.aitgacem.budgeter.ui.getDayOfMonth
 import com.aitgacem.budgeter.ui.mapToList
+import com.aitgacem.budgeter.ui.mapYear
 import com.aitgacem.budgeter.ui.toMonthStr
 import com.aitgacem.budgeter.ui.viewmodels.AnalyticsViewModel
+import com.aitgacem.budgeter.ui.viewmodels.ChartViewType
 import com.github.aachartmodel.aainfographics.aachartcreator.AAChartModel
 import com.github.aachartmodel.aainfographics.aachartcreator.AAChartType
 import com.github.aachartmodel.aainfographics.aachartcreator.AAChartZoomType
@@ -21,6 +26,7 @@ import com.github.aachartmodel.aainfographics.aaoptionsmodel.AAInactive
 import com.github.aachartmodel.aainfographics.aaoptionsmodel.AAStates
 import com.github.aachartmodel.aainfographics.aaoptionsmodel.AAStyle
 import com.github.aachartmodel.aainfographics.aaoptionsmodel.AATooltip
+import com.google.android.material.button.MaterialButtonToggleGroup
 import dagger.hilt.android.AndroidEntryPoint
 
 
@@ -29,6 +35,7 @@ class AnalyticsFragment : Fragment() {
     private lateinit var binding: FragmentAnalyticsScreenBinding
     private val viewModel: AnalyticsViewModel by viewModels()
     private var chartData: List<Pair<Int, Double>> = mutableListOf()
+    private var yearData: List<Pair<Int, Double>> = mutableListOf()
 
     private var pieData: List<Pair<Category, Double>> = mutableListOf()
 
@@ -48,20 +55,45 @@ class AnalyticsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        var viewType = ChartViewType.MONTH_VIEW
+        viewModel.chartViewType.observe(viewLifecycleOwner) {
+            viewType = it
+            if (it == ChartViewType.YEAR_VIEW) {
+                binding.monthDsp.visibility = GONE
+            } else {
+                binding.monthDsp.visibility = VISIBLE
+            }
+        }
 
         val pieChart = binding.pieChart
         val lineChart = binding.lineChart
 
         binding.viewType.check(R.id.month_btn)
-
+        binding.viewType.addOnButtonCheckedListener { group, checkedId, isChecked ->
+            if (isChecked && checkedId == R.id.month_btn) {
+                viewModel.switchViewType(ChartViewType.MONTH_VIEW)
+            } else if (isChecked && checkedId == R.id.year_btn) {
+                viewModel.switchViewType(ChartViewType.YEAR_VIEW)
+            }
+        }
         viewModel.curMonthBalanceData.observe(viewLifecycleOwner) { map ->
-            chartData = mapToList(map)
+            chartData = if (viewType == ChartViewType.MONTH_VIEW) mapToList(map) else mapYear(map)
+            if (chartData.isEmpty()) {
+                binding.noDataLine.visibility = VISIBLE
+                binding.noDataLine.bringToFront()
+            } else {
+                binding.noDataLine.visibility = GONE
+            }
+
             lineChart.aa_drawChartWithChartModel(
                 AAChartModel()
                     .chartType(AAChartType.Spline)
                     .dataLabelsEnabled(true)
                     .categories(chartData.map {
-                        "${it.first} ${viewModel.curMonth.value.toMonthStr(true)}"
+                        if (viewType == ChartViewType.MONTH_VIEW)
+                            "${it.first} ${viewModel.curMonth.value.toMonthStr(true)}"
+                        else
+                            it.first.toMonthStr(true)
                     }.toTypedArray())
                     .series(
                         arrayOf(
@@ -75,9 +107,11 @@ class AnalyticsFragment : Fragment() {
                     .legendEnabled(false)
                     .zoomType(AAChartZoomType.X)
                     .yAxisTitle("")
-                    .tooltipEnabled(false)
+                    .tooltipEnabled(true)
+
 
             )
+
         }
 
         viewModel.curMonthSpendingData.observe(viewLifecycleOwner) { list ->
@@ -86,7 +120,12 @@ class AnalyticsFragment : Fragment() {
             }.map {
                 Pair(it.category, it.value)
             }
-
+            if (pieData.isEmpty()) {
+                binding.noDataPie.visibility = VISIBLE
+                binding.noDataPie.bringToFront()
+            } else {
+                binding.noDataPie.visibility = GONE
+            }
             pieChart.aa_drawChartWithChartOptions(
                 AAChartModel()
                     .chartType(AAChartType.Pie)

@@ -46,5 +46,4 @@ interface BalanceDao {
     fun getBalanceBetween(start: Long, end: Long): LiveData<Map<@MapColumn("date") Long,
             @MapColumn("balance") Double>>
 
-
 }

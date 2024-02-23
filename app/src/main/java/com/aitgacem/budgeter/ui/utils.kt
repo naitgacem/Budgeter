@@ -46,10 +46,35 @@ fun getCurrentMonthStart(): Long {
     return calendar.timeInMillis
 }
 
+fun getCurrentYearStart(): Long {
+    val calendar = Calendar.getInstance()
+    calendar.set(Calendar.MONTH, 0)
+    calendar.set(Calendar.DAY_OF_MONTH, 1)
+    calendar.set(Calendar.HOUR_OF_DAY, 0)
+    calendar.set(Calendar.MINUTE, 0)
+    calendar.set(Calendar.SECOND, 0)
+    calendar.set(Calendar.MILLISECOND, 0)
+    return calendar.timeInMillis
+}
+
 fun Long.oneMonthLater(): Long {
     val calendar = Calendar.getInstance()
     calendar.timeInMillis = this
     calendar.add(Calendar.MONTH, 1)
+    return calendar.timeInMillis
+}
+
+fun Long.oneYearLater(): Long {
+    val calendar = Calendar.getInstance()
+    calendar.timeInMillis = this
+    calendar.add(Calendar.YEAR, 1)
+    return calendar.timeInMillis
+}
+
+fun Long.oneYearEarlier(): Long {
+    val calendar = Calendar.getInstance()
+    calendar.timeInMillis = this
+    calendar.add(Calendar.YEAR, -1)
     return calendar.timeInMillis
 }
 
@@ -65,6 +90,21 @@ fun mapToList(map: Map<Long, Double>): List<Pair<Int, Double>> {
     return map.entries.map {
         it.key.getDayOfMonth() to it.value
     }
+}
+
+fun mapYear(map: Map<Long, Double>): List<Pair<Int, Double>> {
+    val calendar = Calendar.getInstance()
+    return map.entries
+        .groupBy { entry ->
+            calendar.apply {
+                timeInMillis = entry.key
+            }
+            calendar.get(Calendar.MONTH)
+        }
+        .mapValues { (_, entries) ->
+            entries.maxByOrNull { it.key }?.value ?: 0.0
+        }
+        .toList()
 }
 
 fun Long.getDayOfMonth(): Int {
