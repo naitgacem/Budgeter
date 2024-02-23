@@ -20,11 +20,14 @@ interface CategoryDao {
     @Update
     suspend fun update(categoryEntity: CategoryEntity)
 
-    @Query("SELECT name as category, total as value from categories where month = :month and year = :year")
+    @Query("SELECT name as category, total as value from categories where month = :month and year = :year and value > 0")
     fun getCatAndValue(month: Int, year: Int): LiveData<List<CategoryAndValue>>
 
 
-    @Query("SELECT name as category, sum(total) as value FROM categories WHERE year = :year GROUP BY name")
+    @Query(
+        "SELECT name as category, sum(total) as value FROM categories WHERE year = :year  GROUP BY name" +
+                " HAVING sum(total) > 0 "
+    )
     fun getCatAndValue(year: Int): LiveData<List<CategoryAndValue>>
 
     @Query("SELECT * from categories")
