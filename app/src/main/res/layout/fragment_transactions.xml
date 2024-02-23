@@ -30,7 +30,7 @@
             android:id="@+id/open_search_bar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="string/cat_searchbar_hint">
+            android:hint="Search transactions">
 
         </com.google.android.material.search.SearchBar>
 
@@ -65,7 +65,6 @@
         android:id="@+id/open_search_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:hint="string/cat_searchbar_hint"
         app:layout_anchor="@id/open_search_bar">
 
         <!-- Content goes here (ScrollView, RecyclerView, etc.). -->
