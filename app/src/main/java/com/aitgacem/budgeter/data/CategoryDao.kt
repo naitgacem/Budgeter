@@ -23,6 +23,10 @@ interface CategoryDao {
     @Query("SELECT name as category, total as value from categories where month = :month and year = :year")
     fun getCatAndValue(month: Int, year: Int): LiveData<List<CategoryAndValue>>
 
+
+    @Query("SELECT name as category, sum(total) as value FROM categories WHERE year = :year GROUP BY name")
+    fun getCatAndValue(year: Int): LiveData<List<CategoryAndValue>>
+
     @Query("SELECT * from categories")
     fun getDump(): LiveData<List<CategoryEntity>>
 }

@@ -46,4 +46,6 @@ interface BalanceDao {
     fun getBalanceBetween(start: Long, end: Long): LiveData<Map<@MapColumn("date") Long,
             @MapColumn("balance") Double>>
 
+    @Query("select balance.balance from balance where balance.date <= :date order by date desc limit 1")
+    fun getBalanceAt(date: Long): LiveData<Double?>
 }

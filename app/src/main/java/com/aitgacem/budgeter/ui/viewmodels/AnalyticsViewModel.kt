@@ -33,7 +33,6 @@ class AnalyticsViewModel @Inject constructor(
     private val _curYear = MutableLiveData(getDayMonthYearFromTimestamp(curMonthStart).third)
     val curYear: LiveData<Int> = _curYear
 
-
     var curMonthBalanceData: LiveData<Map<Long, Double>> = _curMonth.switchMap {
         if (_chartViewType.value == ChartViewType.MONTH_VIEW)
             repository.getDailyBalance(curMonthStart, curMonthStart.oneMonthLater())
@@ -42,7 +41,11 @@ class AnalyticsViewModel @Inject constructor(
     }
 
     var curMonthSpendingData: LiveData<List<CategoryAndValue>> = _curMonth.switchMap {
-        repository.getSpending(curMonth.value ?: 0, _curYear.value ?: 0)
+        if (_chartViewType.value == ChartViewType.MONTH_VIEW)
+            repository.getSpending(curMonth.value ?: 0, _curYear.value ?: 0)
+        else
+            repository.getSpendingYear(_curYear.value ?: 0)
+
     }
 
 

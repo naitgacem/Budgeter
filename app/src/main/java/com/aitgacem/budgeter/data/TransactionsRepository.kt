@@ -195,6 +195,10 @@ class TransactionsRepository(private val db: TransactionDatabase) {
         return categoryDao.getCatAndValue(month, year)
     }
 
+    fun getSpendingYear(year: Int): LiveData<List<CategoryAndValue>> {
+        return categoryDao.getCatAndValue(year)
+    }
+
     fun dumpCat(): LiveData<List<CategoryEntity>> {
         return categoryDao.getDump()
     }
