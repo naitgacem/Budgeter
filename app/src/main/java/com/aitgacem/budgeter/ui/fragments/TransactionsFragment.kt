@@ -49,13 +49,8 @@ class TransactionsFragment : Fragment() {
         val dividerItemDecoration = DayDecorator()
         recyclerView.addItemDecoration(dividerItemDecoration)
 
-        viewModel.filteredList.observe(viewLifecycleOwner) { it ->
-            val new = mutableListOf<ItemType>()
-            for ((key, value) in it) {
-                new.addAll(mutableListOf(key))
-                new.addAll(value)
-            }
-            listAdapter.submitList(new)
+        viewModel.filteredList.observe(viewLifecycleOwner) {
+            listAdapter.submitList(it.flatMap { (key, value) -> listOf(key) + value })
         }
 
         val searchView: SearchView = binding.openSearchView
