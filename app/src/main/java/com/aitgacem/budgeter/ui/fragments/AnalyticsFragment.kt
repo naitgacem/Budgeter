@@ -48,9 +48,7 @@ class AnalyticsFragment : Fragment() {
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         binding = FragmentAnalyticsScreenBinding.inflate(layoutInflater, container, false)
         return binding.root
@@ -124,29 +122,19 @@ class AnalyticsFragment : Fragment() {
             }
 
             pieChart.aa_drawChartWithChartOptions(
-                AAChartModel()
-                    .chartType(AAChartType.Pie)
-                    .series(
-                        arrayOf(
-                            AASeriesElement()
-                                .name("Total")
-                                .data(
-                                    pieData.map {
-                                        arrayOf(it.first.name, it.second)
-                                    }.toTypedArray()
+                AAChartModel().chartType(AAChartType.Pie).series(
+                    arrayOf(
+                        AASeriesElement().name("Total").data(
+                            pieData.map {
+                                arrayOf(it.first.name, it.second)
+                            }.toTypedArray()
 
-                                )
-                                .allowPointSelect(false)
-                                .states(AAStates().inactive(AAInactive().enabled(false)))
-                                .tooltip(AATooltip().followTouchMove(true))
-                                .dataLabels(AADataLabels().enabled(false))
-
-                        )
+                        ).allowPointSelect(false)
+                            .states(AAStates().inactive(AAInactive().enabled(false)))
+                            .tooltip(AATooltip().followTouchMove(true))
+                            .dataLabels(AADataLabels().enabled(false))
                     )
-                    .tooltipEnabled(true)
-                    .backgroundColor("")
-
-                    .aa_toAAOptions()
+                ).tooltipEnabled(true).backgroundColor("").animationDuration(0).aa_toAAOptions()
                     .legend(
                         AALegend().itemStyle(
                             AAItemStyle().color(foregroundColor)
@@ -170,30 +158,20 @@ class AnalyticsFragment : Fragment() {
             }
 
             lineChart.aa_drawChartWithChartModel(
-                AAChartModel()
-                    .chartType(AAChartType.Spline)
-                    .dataLabelsEnabled(true)
+                AAChartModel().chartType(AAChartType.Spline).dataLabelsEnabled(true)
                     .categories(chartData.map {
-                        if (viewType == ChartViewType.MONTH_VIEW)
-                            "${it.first} ${viewModel.curMonth.value.toMonthStr(true)}"
-                        else
-                            it.first.toMonthStr(true)
-                    }.toTypedArray())
-                    .series(
+                        if (viewType == ChartViewType.MONTH_VIEW) "${it.first} ${
+                            viewModel.curMonth.value.toMonthStr(true)
+                        }"
+                        else it.first.toMonthStr(true)
+                    }.toTypedArray()).series(
                         arrayOf(
-                            AASeriesElement()
-                                .name("Balance: ")
-                                .data(chartData.map {
-                                    it.second
-                                }.toTypedArray())
+                            AASeriesElement().name("Balance: ").data(chartData.map {
+                                it.second
+                            }.toTypedArray())
                         )
-                    ).dataLabelsEnabled(false)
-                    .legendEnabled(false)
-                    .zoomType(AAChartZoomType.X)
-                    .yAxisTitle("")
-                    .tooltipEnabled(true)
-                    .backgroundColor("")
-
+                    ).dataLabelsEnabled(false).legendEnabled(false).zoomType(AAChartZoomType.X)
+                    .yAxisTitle("").tooltipEnabled(true).backgroundColor("").animationDuration(0)
             )
 
         }
