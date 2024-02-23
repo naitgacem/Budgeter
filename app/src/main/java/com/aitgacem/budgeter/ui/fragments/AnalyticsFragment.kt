@@ -18,6 +18,7 @@ import com.aitgacem.budgeter.ui.viewmodels.AnalyticsViewModel
 import com.aitgacem.budgeter.ui.viewmodels.ChartViewType
 import com.github.aachartmodel.aainfographics.aachartcreator.AAChartModel
 import com.github.aachartmodel.aainfographics.aachartcreator.AAChartType
+import com.github.aachartmodel.aainfographics.aachartcreator.AAChartView
 import com.github.aachartmodel.aainfographics.aachartcreator.AAChartZoomType
 import com.github.aachartmodel.aainfographics.aachartcreator.AASeriesElement
 import com.github.aachartmodel.aainfographics.aachartcreator.aa_toAAOptions
@@ -33,6 +34,7 @@ class AnalyticsFragment : Fragment() {
     private val viewModel: AnalyticsViewModel by viewModels()
     private var chartData: List<Pair<Int, Double>> = mutableListOf()
     private var pieData: List<Pair<Category, Double>> = mutableListOf()
+    private var viewType = ChartViewType.MONTH_VIEW
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -50,7 +52,6 @@ class AnalyticsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        var viewType = ChartViewType.MONTH_VIEW
         viewModel.chartViewType.observe(viewLifecycleOwner) {
             viewType = it
             if (it == ChartViewType.YEAR_VIEW) {
@@ -63,52 +64,36 @@ class AnalyticsFragment : Fragment() {
         val pieChart = binding.pieChart
         val lineChart = binding.lineChart
 
+
+        setupViewChanger()
+        setupLineChart(lineChart)
+        setupPieChart(pieChart)
+
+
+        viewModel.curMonth.observe(viewLifecycleOwner) {
+            binding.monthDsp.text = it.toMonthStr()
+        }
+
+        viewModel.curYear.observe(viewLifecycleOwner) {
+            binding.yearDsp.text = it.toString()
+        }
+
+        binding.nextBtn.setOnClickListener { viewModel.moveForward() }
+        binding.prevButton.setOnClickListener { viewModel.moveBackward() }
+    }
+
+    private fun setupViewChanger() {
         binding.viewType.check(R.id.month_btn)
-        binding.viewType.addOnButtonCheckedListener { group, checkedId, isChecked ->
+        binding.viewType.addOnButtonCheckedListener { _, checkedId, isChecked ->
             if (isChecked && checkedId == R.id.month_btn) {
                 viewModel.switchViewType(ChartViewType.MONTH_VIEW)
             } else if (isChecked && checkedId == R.id.year_btn) {
                 viewModel.switchViewType(ChartViewType.YEAR_VIEW)
             }
         }
-        viewModel.curMonthBalanceData.observe(viewLifecycleOwner) { map ->
-            chartData = if (viewType == ChartViewType.MONTH_VIEW) mapToList(map) else mapYear(map)
-            if (chartData.isEmpty()) {
-                binding.noDataLine.visibility = VISIBLE
-                binding.noDataLine.bringToFront()
-            } else {
-                binding.noDataLine.visibility = GONE
-            }
+    }
 
-            lineChart.aa_drawChartWithChartModel(
-                AAChartModel()
-                    .chartType(AAChartType.Spline)
-                    .dataLabelsEnabled(true)
-                    .categories(chartData.map {
-                        if (viewType == ChartViewType.MONTH_VIEW)
-                            "${it.first} ${viewModel.curMonth.value.toMonthStr(true)}"
-                        else
-                            it.first.toMonthStr(true)
-                    }.toTypedArray())
-                    .series(
-                        arrayOf(
-                            AASeriesElement()
-                                .name("Balance: ")
-                                .data(chartData.map {
-                                    it.second
-                                }.toTypedArray())
-                        )
-                    ).dataLabelsEnabled(false)
-                    .legendEnabled(false)
-                    .zoomType(AAChartZoomType.X)
-                    .yAxisTitle("")
-                    .tooltipEnabled(true)
-
-
-            )
-
-        }
-
+    private fun setupPieChart(pieChart: AAChartView) {
         viewModel.curMonthSpendingData.observe(viewLifecycleOwner) { list ->
             pieData = list.filter {
                 it.category != Category.Deposit
@@ -146,16 +131,43 @@ class AnalyticsFragment : Fragment() {
             )
 
         }
+    }
 
-        viewModel.curMonth.observe(viewLifecycleOwner) {
-            binding.monthDsp.text = it.toMonthStr()
+    private fun setupLineChart(lineChart: AAChartView) {
+        viewModel.curMonthBalanceData.observe(viewLifecycleOwner) { map ->
+            chartData = if (viewType == ChartViewType.MONTH_VIEW) mapToList(map) else mapYear(map)
+            if (chartData.isEmpty()) {
+                binding.noDataLine.visibility = VISIBLE
+                binding.noDataLine.bringToFront()
+            } else {
+                binding.noDataLine.visibility = GONE
+            }
+
+            lineChart.aa_drawChartWithChartModel(
+                AAChartModel()
+                    .chartType(AAChartType.Spline)
+                    .dataLabelsEnabled(true)
+                    .categories(chartData.map {
+                        if (viewType == ChartViewType.MONTH_VIEW)
+                            "${it.first} ${viewModel.curMonth.value.toMonthStr(true)}"
+                        else
+                            it.first.toMonthStr(true)
+                    }.toTypedArray())
+                    .series(
+                        arrayOf(
+                            AASeriesElement()
+                                .name("Balance: ")
+                                .data(chartData.map {
+                                    it.second
+                                }.toTypedArray())
+                        )
+                    ).dataLabelsEnabled(false)
+                    .legendEnabled(false)
+                    .zoomType(AAChartZoomType.X)
+                    .yAxisTitle("")
+                    .tooltipEnabled(true)
+            )
+
         }
-
-        viewModel.curYear.observe(viewLifecycleOwner) {
-            binding.yearDsp.text = it.toString()
-        }
-
-        binding.nextBtn.setOnClickListener { viewModel.moveForward() }
-        binding.prevButton.setOnClickListener { viewModel.moveBackward() }
     }
 }

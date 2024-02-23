@@ -82,7 +82,8 @@ class AnalyticsViewModel @Inject constructor(
     private fun refreshData() {
         _curMonth.value = -1
         curYearStart = getCurrentYearStart()
-        curMonthStart = getCurrentMonthStart()
+        curMonthStart =
+            if (_chartViewType.value == ChartViewType.MONTH_VIEW) getCurrentMonthStart() else getCurrentYearStart()
         _curYear.value = getDayMonthYearFromTimestamp(curMonthStart).third
         _curMonth.value = getDayMonthYearFromTimestamp(curMonthStart).second
     }
