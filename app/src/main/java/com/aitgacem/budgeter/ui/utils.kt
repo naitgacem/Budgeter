@@ -1,5 +1,7 @@
 package com.aitgacem.budgeter.ui
 
+import android.content.Context
+import com.aitgacem.budgeter.R
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
@@ -113,20 +115,23 @@ fun Long.getDayOfMonth(): Int {
     return calendar.get(Calendar.DAY_OF_MONTH)
 }
 
-fun Int?.toMonthStr(short: Boolean = false): String {
+fun Int?.toMonthStr(context: Context, short: Boolean = false): String {
+    val getString = { it: Int ->
+        context.getString(it)
+    }
     return when (this) {
-        0 -> if (short) "Jan" else "January"
-        1 -> if (short) "Feb" else "February"
-        2 -> if (short) "Mar" else "March"
-        3 -> if (short) "Apr" else "April"
-        4 -> if (short) "May" else "May"
-        5 -> if (short) "Jun" else "June"
-        6 -> if (short) "Jul" else "July"
-        7 -> if (short) "Aug" else "August"
-        8 -> if (short) "Sep" else "September"
-        9 -> if (short) "Oct" else "October"
-        10 -> if (short) "Nov" else "November"
-        11 -> if (short) "Dec" else "December"
+        0 -> if (short) getString(R.string.january_short) else getString(R.string.january_long)
+        1 -> if (short) getString(R.string.february_short) else getString(R.string.february_long)
+        2 -> if (short) getString(R.string.march_short) else getString(R.string.march_long)
+        3 -> if (short) getString(R.string.april_short) else getString(R.string.april_long)
+        4 -> if (short) getString(R.string.may_short) else getString(R.string.may_long)
+        5 -> if (short) getString(R.string.june_short) else getString(R.string.june_long)
+        6 -> if (short) getString(R.string.july_short) else getString(R.string.july_long)
+        7 -> if (short) getString(R.string.august_short) else getString(R.string.august_long)
+        8 -> if (short) getString(R.string.september_short) else getString(R.string.september_long)
+        9 -> if (short) getString(R.string.october_short) else getString(R.string.october_long)
+        10 -> if (short) getString(R.string.november_short) else getString(R.string.november_long)
+        11 -> if (short) getString(R.string.december_short) else getString(R.string.december_long)
         else -> ""
     }
 }

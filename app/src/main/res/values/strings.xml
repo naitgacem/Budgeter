@@ -31,4 +31,42 @@
     <string name="analytics">Analytics</string>
     <string name="total">Total</string>
     <string name="balance">"Balance: "</string>
+
+
+    <string name="january_short">Jan</string>
+    <string name="january_long">January</string>
+
+    <string name="february_short">Feb</string>
+    <string name="february_long">February</string>
+
+    <string name="march_short">Mar</string>
+    <string name="march_long">March</string>
+
+    <string name="april_short">Apr</string>
+    <string name="april_long">April</string>
+
+    <string name="may_short">May</string>
+    <string name="may_long">May</string>
+
+    <string name="june_short">Jun</string>
+    <string name="june_long">June</string>
+
+    <string name="july_short">Jul</string>
+    <string name="july_long">July</string>
+
+    <string name="august_short">Aug</string>
+    <string name="august_long">August</string>
+
+    <string name="september_short">Sep</string>
+    <string name="september_long">September</string>
+
+    <string name="october_short">Oct</string>
+    <string name="october_long">October</string>
+
+    <string name="november_short">Nov</string>
+    <string name="november_long">November</string>
+
+    <string name="december_short">Dec</string>
+    <string name="december_long">December</string>
+
 </resources>

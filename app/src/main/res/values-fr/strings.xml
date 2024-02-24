@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="january_short">Janv</string>
+    <string name="january_long">Janvier</string>
+
+    <string name="february_short">Fév</string>
+    <string name="february_long">Février</string>
+
+    <string name="march_short">Mar</string>
+    <string name="march_long">Mars</string>
+
+    <string name="april_short">Avr</string>
+    <string name="april_long">Avril</string>
+
+    <string name="may_short">Mai</string>
+    <string name="may_long">Mai</string>
+
+    <string name="june_short">Juin</string>
+    <string name="june_long">Juin</string>
+
+    <string name="july_short">Juil</string>
+    <string name="july_long">Juillet</string>
+
+    <string name="august_short">Août</string>
+    <string name="august_long">Août</string>
+
+    <string name="september_short">Sep</string>
+    <string name="september_long">Septembre</string>
+
+    <string name="october_short">Oct</string>
+    <string name="october_long">Octobre</string>
+
+    <string name="november_short">Nov</string>
+    <string name="november_long">Novembre</string>
+
+    <string name="december_short">Déc</string>
+    <string name="december_long">Décembre</string>
+
+
+</resources>

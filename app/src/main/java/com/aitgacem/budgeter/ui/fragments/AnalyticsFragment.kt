@@ -76,7 +76,7 @@ class AnalyticsFragment : Fragment() {
 
 
         viewModel.curMonth.observe(viewLifecycleOwner) {
-            binding.monthDsp.text = it.toMonthStr()
+            binding.monthDsp.text = it.toMonthStr(requireContext())
         }
 
         viewModel.curYear.observe(viewLifecycleOwner) {
@@ -148,6 +148,7 @@ class AnalyticsFragment : Fragment() {
     }
 
     private fun setupLineChart(lineChart: AAChartView) {
+        val context = requireContext()
         viewModel.curMonthBalanceData.observe(viewLifecycleOwner) { map ->
             chartData = if (viewType == ChartViewType.MONTH_VIEW) mapToList(map) else mapYear(map)
             if (chartData.isEmpty()) {
@@ -161,9 +162,9 @@ class AnalyticsFragment : Fragment() {
                 AAChartModel().chartType(AAChartType.Spline).dataLabelsEnabled(true)
                     .categories(chartData.map {
                         if (viewType == ChartViewType.MONTH_VIEW) "${it.first} ${
-                            viewModel.curMonth.value.toMonthStr(true)
+                            viewModel.curMonth.value.toMonthStr(context, true)
                         }"
-                        else it.first.toMonthStr(true)
+                        else it.first.toMonthStr(context, true)
                     }.toTypedArray()).series(
                         arrayOf(
                             AASeriesElement().name(getString(R.string.balance)).data(chartData.map {
