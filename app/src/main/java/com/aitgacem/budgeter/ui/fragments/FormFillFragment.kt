@@ -15,6 +15,7 @@ import com.aitgacem.budgeter.R
 import com.aitgacem.budgeter.databinding.FragmentFormfillBinding
 import com.aitgacem.budgeter.ui.components.Category
 import com.aitgacem.budgeter.ui.components.ItemType
+import com.aitgacem.budgeter.ui.components.localName
 import com.aitgacem.budgeter.ui.components.toIcon
 import com.aitgacem.budgeter.ui.getDayMonthYearFromTimestamp
 import com.aitgacem.budgeter.ui.getTimestamp
@@ -86,7 +87,7 @@ class FormFillFragment : Fragment() {
                     val drawable =
                         ChipDrawable.createFromAttributes(context, null, 0, R.style.CustomChipStyle)
                     chip.setChipDrawable(drawable)
-                    chip.text = it.name
+                    chip.text = it.localName(requireContext())
                     chip.chipIcon = AppCompatResources.getDrawable(context, it.toIcon())
                     binding.transactionCategory.addView(chip)
                     map[chip.id] = it
@@ -101,7 +102,7 @@ class FormFillFragment : Fragment() {
         preFill(oldTransaction)
         setupTransitions()
 
-        binding.topbar.setOnClickListener { findNavController().popBackStack() }
+        binding.topBar.setOnClickListener { findNavController().popBackStack() }
 
 
         binding.saveBtn.setOnClickListener(::clickSave)

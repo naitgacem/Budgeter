@@ -1,52 +1,71 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
     <string name="app_name">Budgeter</string>
 
     <string name="budgeter">Budgeter</string>
-    <string name="withdraw">Retrait</string>
-    <string name="deposit">Dépôt</string>
-    <string name="transactions_details">Détails des transactions</string>
-    <string name="analytics">Analytiques</string>
+
+    <!-- Boutons et général -->
+    <string name="withdraw">Retirer</string>
+    <string name="deposit">Déposer</string>
+    <string name="recent_transactions">Transactions récentes</string>
+    <string name="transactions_details">Détails de la transaction</string>
     <string name="total">Total</string>
-    <string name="balance">Solde: </string>
+    <string name="balance">"Solde : "</string>
+    <string name="add_transaction">Ajouter une transaction</string>
+    <string name="save">Enregistrer</string>
+    <string name="month_literal">Mois</string>
+    <string name="year_literal">Année</string>
+    <string name="no_data">Pas de données</string>
+    <string name="amount">Montant</string>
 
-
-    <string name="january_short">Janv</string>
+    <!-- Mois -->
+    <string name="january_short">Jan</string>
     <string name="january_long">Janvier</string>
-
     <string name="february_short">Fév</string>
     <string name="february_long">Février</string>
-
     <string name="march_short">Mar</string>
     <string name="march_long">Mars</string>
-
     <string name="april_short">Avr</string>
     <string name="april_long">Avril</string>
-
     <string name="may_short">Mai</string>
     <string name="may_long">Mai</string>
-
     <string name="june_short">Juin</string>
     <string name="june_long">Juin</string>
-
     <string name="july_short">Juil</string>
     <string name="july_long">Juillet</string>
-
     <string name="august_short">Août</string>
     <string name="august_long">Août</string>
-
     <string name="september_short">Sep</string>
     <string name="september_long">Septembre</string>
-
     <string name="october_short">Oct</string>
     <string name="october_long">Octobre</string>
-
     <string name="november_short">Nov</string>
     <string name="november_long">Novembre</string>
-
     <string name="december_short">Déc</string>
     <string name="december_long">Décembre</string>
 
+    <!-- Descriptions de contenu -->
+    <string name="descr_transaction_icon">Icône représentant le type de transaction</string>
+    <string name="descr_previous_btn">Aller au mois/année précédent(e)</string>
+    <string name="descr_next_btn">Aller au mois/année suivant(e)</string>
+    <string name="search_transactions">Rechercher des transactions</string>
+    <string name="description">Description</string>
 
+    <!-- Catégories -->
+    <string name="category_transportation">Transport</string>
+    <string name="category_groceries">Épicerie</string>
+    <string name="category_food">Alimentation</string>
+    <string name="category_travel">Voyage</string>
+    <string name="category_utilities">Services publics</string>
+    <string name="category_entertainment">Divertissement</string>
+    <string name="category_housing">Logement</string>
+    <string name="category_education">Éducation</string>
+    <string name="category_healthcare">Soins et santé</string>
+    <string name="category_others">Autres</string>
+    <string name="category_deposit">Dépôt</string>
+
+    <!-- Navigation -->
+    <string name="home">Accueil</string>
+    <string name="analytics">Analytiques</string>
+    <string name="transactions">Transactions</string>
 </resources>

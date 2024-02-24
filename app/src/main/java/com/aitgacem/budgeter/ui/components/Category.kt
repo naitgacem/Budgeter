@@ -1,5 +1,6 @@
 package com.aitgacem.budgeter.ui.components
 
+import android.content.Context
 import android.os.Parcelable
 import com.aitgacem.budgeter.R
 import kotlinx.parcelize.Parcelize
@@ -33,5 +34,24 @@ fun Category.toIcon(): Int {
         Category.Food -> R.drawable.ic_restaurant
         Category.Others -> R.drawable.ic_edit_note
         Category.Deposit -> R.drawable.ic_arrow_upward
+    }
+}
+
+fun Category.localName(context: Context): String {
+    val getString = { it: Int ->
+        context.getString(it)
+    }
+    return when (this) {
+        Category.Transportation -> getString(R.string.category_transportation)
+        Category.Groceries -> getString(R.string.category_groceries)
+        Category.Food -> getString(R.string.category_food)
+        Category.Travel -> getString(R.string.category_travel)
+        Category.Utilities -> getString(R.string.category_utilities)
+        Category.Entertainment -> getString(R.string.category_entertainment)
+        Category.Housing -> getString(R.string.category_housing)
+        Category.Education -> getString(R.string.category_education)
+        Category.Healthcare -> getString(R.string.category_healthcare)
+        Category.Others -> getString(R.string.category_others)
+        Category.Deposit -> getString(R.string.category_deposit)
     }
 }

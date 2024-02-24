@@ -19,7 +19,8 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0"
-        android:layout_marginHorizontal="10dp" />
+        android:layout_marginHorizontal="10dp"
+        android:contentDescription="@string/descr_transaction_icon" />
 
     <TextView
         android:id="@+id/transaction_title"
@@ -27,7 +28,7 @@
         android:layout_height="match_parent"
         android:layout_marginStart="8dp"
         android:gravity="center"
-        android:text="Goceries"
+        tools:text="Groceries"
         style="@style/TextAppearance.Material3.BodyLarge"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@+id/transaction_icon"
@@ -38,7 +39,7 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_marginEnd="48dp"
-        android:text="1000 Da"
+        tools:text="1000 Da"
         style="@style/TextAppearance.Material3.BodyMedium"
         android:gravity="center"
         app:layout_constraintBottom_toBottomOf="parent"

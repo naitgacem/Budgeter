@@ -28,7 +28,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="January"
+                tools:text="January"
                 android:id="@+id/month_dsp"
                 style="@style/TextAppearance.Material3.HeadlineSmall"
                 android:layout_alignParentStart="true"
@@ -37,7 +37,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="2024"
+                tools:text="2024"
                 android:id="@+id/year_dsp"
                 style="@style/TextAppearance.Material3.HeadlineSmall"
                 android:layout_toEndOf="@id/month_dsp"
@@ -68,7 +68,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
-                    android:text="Month" />
+                    android:text="@string/month_literal" />
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/year_btn"
@@ -77,7 +77,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="16dp"
                     android:layout_toStartOf="@+id/month_btn"
-                    android:text="Year" />
+                    android:text="@string/year_literal" />
             </com.google.android.material.button.MaterialButtonToggleGroup>
 
             <com.google.android.material.button.MaterialButton
@@ -88,11 +88,13 @@
                 android:layout_marginStart="16dp"
                 app:icon="@drawable/ic_arrow_back"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                android:contentDescription="@string/descr_previous_btn" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/next_btn"
                 style="@style/Widget.Material3.Button.IconButton.Filled.Tonal"
+                android:contentDescription="@string/descr_next_btn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="end"
@@ -123,7 +125,7 @@
                 style="@style/TextAppearance.Material3.HeadlineLarge"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:text="No data"
+                android:text="@string/no_data"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -151,7 +153,7 @@
                 style="@style/TextAppearance.Material3.HeadlineLarge"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:text="No data"
+                android:text="@string/no_data"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"

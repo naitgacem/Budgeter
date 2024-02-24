@@ -12,7 +12,7 @@
         android:minHeight="60dp">
 
         <com.google.android.material.appbar.MaterialToolbar
-            android:id="@+id/topbar"
+            android:id="@+id/topBar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:minHeight="?attr/actionBarSize"
@@ -31,7 +31,7 @@
             style="@style/TextAppearance.Material3.HeadlineMedium"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Add a transaction"
+            android:text="@string/add_transaction"
             app:layout_constraintTop_toTopOf="parent"
             android:layout_marginVertical="16dp" />
 
@@ -39,9 +39,9 @@
             android:id="@+id/transaction_amount"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Amount"
+            android:hint="@string/amount"
             app:endIconMode="clear_text"
-
+            android:layout_marginTop="16dp"
             app:layout_constraintTop_toBottomOf="@+id/operation_title"
             app:startIconDrawable="@drawable/ic_attach_money">
 
@@ -55,7 +55,7 @@
             android:id="@+id/transaction_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Description"
+            android:hint="@string/description"
             app:endIconMode="clear_text"
             app:layout_constraintTop_toBottomOf="@+id/transaction_amount"
             app:startIconDrawable="@drawable/ic_description">
@@ -88,7 +88,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/save_btn"
-            android:text="Save"
+            android:text="@string/save"
             app:layout_constraintTop_toBottomOf="@id/transaction_category"
             android:gravity="center_horizontal"
             app:layout_constraintStart_toStartOf="parent"

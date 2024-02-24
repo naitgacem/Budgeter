@@ -16,48 +16,73 @@
 
 
     <string name="budgeter">Budgeter</string>
+
+    <!--    Buttons and general -->
     <string name="withdraw">Withdraw</string>
     <string name="deposit">Deposit</string>
-    <string name="transactions_details">transactions_details</string>
-    <string name="analytics">Analytics</string>
+    <string name="recent_transactions">Recent transactions</string>
+    <string name="transactions_details">Transaction details</string>
     <string name="total">Total</string>
     <string name="balance">"Balance: "</string>
+    <string name="add_transaction">Add a transaction</string>
+    <string name="save">Save</string>
+    <string name="month_literal">Month</string>
+    <string name="year_literal">Year</string>
+    <string name="no_data">No data</string>
+    <string name="amount">Amount</string>
 
 
+    <!--    Months   -->
     <string name="january_short">Jan</string>
     <string name="january_long">January</string>
-
     <string name="february_short">Feb</string>
     <string name="february_long">February</string>
-
     <string name="march_short">Mar</string>
     <string name="march_long">March</string>
-
     <string name="april_short">Apr</string>
     <string name="april_long">April</string>
-
     <string name="may_short">May</string>
     <string name="may_long">May</string>
-
     <string name="june_short">Jun</string>
     <string name="june_long">June</string>
-
     <string name="july_short">Jul</string>
     <string name="july_long">July</string>
-
     <string name="august_short">Aug</string>
     <string name="august_long">August</string>
-
     <string name="september_short">Sep</string>
     <string name="september_long">September</string>
-
     <string name="october_short">Oct</string>
     <string name="october_long">October</string>
-
     <string name="november_short">Nov</string>
     <string name="november_long">November</string>
-
     <string name="december_short">Dec</string>
     <string name="december_long">December</string>
+
+
+    <!--Content Descritions-->
+    <string name="descr_transaction_icon">Icon representing the transaction type</string>
+    <string name="descr_previous_btn">Go to previous Month/Year</string>
+    <string name="descr_next_btn">Go to next Month/Year</string>
+    <string name="search_transactions">Search transactions</string>
+    <string name="description">Description</string>
+
+    <!-- Categories -->
+    <string name="category_transportation">Transportation</string>
+    <string name="category_groceries">Groceries</string>
+    <string name="category_food">Food</string>
+    <string name="category_travel">Travel</string>
+    <string name="category_utilities">Utilities</string>
+    <string name="category_entertainment">Entertainment</string>
+    <string name="category_housing">Housing</string>
+    <string name="category_education">Education</string>
+    <string name="category_healthcare">Healthcare</string>
+    <string name="category_others">Others</string>
+    <string name="category_deposit">Deposit</string>
+
+    <!--Navigation-->
+    <string name="home">Home</string>
+    <string name="analytics">Analytics</string>
+    <string name="transactions">Transactions</string>
+
 
 </resources>

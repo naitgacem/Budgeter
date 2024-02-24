@@ -2,15 +2,15 @@ package com.aitgacem.budgeter.ui
 
 import android.content.Context
 import com.aitgacem.budgeter.R
-import java.text.SimpleDateFormat
+import java.text.DateFormat.getDateInstance
 import java.util.Calendar
 import java.util.Date
 
 fun String.toFormattedDate(): String {
     val date: Long = this.toLong()
-    val dateFormat = SimpleDateFormat("dd/MM/yyyy")
+    val a = getDateInstance()
     val dateObj = Date(date)
-    return dateFormat.format(dateObj)
+    return a.format(dateObj)
 }
 
 fun getTimestamp(day: Int, month: Int, year: Int): Long {

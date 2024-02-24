@@ -13,11 +13,11 @@
         android:minHeight="60dp">
 
         <com.google.android.material.appbar.MaterialToolbar
-            android:id="@+id/topbar"
+            android:id="@+id/topBar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:minHeight="?attr/actionBarSize"
-            app:title="Budgeter"
+            app:title="@string/app_name"
             app:navigationIcon="@drawable/ic_savings" />
     </com.google.android.material.appbar.AppBarLayout>
 
@@ -46,7 +46,6 @@
                         style="@style/Widget.Material3.CardView.Elevated"
                         android:layout_width="150dp"
                         android:layout_height="100dp"
-                        android:text="Balance"
                         app:cardCornerRadius="8dp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -65,7 +64,7 @@
                                 android:id="@+id/total_balance"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Total Balance"
+                                android:text="@string/balance"
                                 app:layout_constraintBottom_toBottomOf="parent"
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toTopOf="parent"
@@ -76,12 +75,13 @@
                                 android:id="@+id/balance_amount"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="500Da"
+                                android:layout_marginStart="12dp"
+                                android:maxLines="1"
+                                tools:text="1000 Da"
                                 app:layout_constraintBottom_toBottomOf="parent"
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toTopOf="parent"
-                                app:layout_constraintVertical_bias="0.7"
-                                android:layout_marginStart="12dp" />
+                                app:layout_constraintVertical_bias="0.7" />
                         </androidx.constraintlayout.widget.ConstraintLayout>
 
 
@@ -91,7 +91,7 @@
                         android:id="@+id/deposit_btn"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Deposit"
+                        android:text="@string/deposit"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintHorizontal_bias="0.75"
@@ -107,7 +107,7 @@
                         android:layout_height="wrap_content"
                         android:minWidth="128dp"
                         android:minHeight="56dp"
-                        android:text="Withdraw"
+                        android:text="@string/withdraw"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintHorizontal_bias="0.75"
@@ -123,7 +123,7 @@
                 android:layout_height="wrap_content"
                 style="@style/TextAppearance.Material3.TitleLarge"
                 android:layout_marginHorizontal="32dp"
-                android:text="Recent transations" />
+                android:text="@string/recent_transactions" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:layout_width="match_parent"
