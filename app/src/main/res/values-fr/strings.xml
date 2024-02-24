@@ -1,5 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
+    <string name="app_name">Budgeter</string>
+
+    <string name="budgeter">Budgeter</string>
+    <string name="withdraw">Retrait</string>
+    <string name="deposit">Dépôt</string>
+    <string name="transactions_details">Détails des transactions</string>
+    <string name="analytics">Analytiques</string>
+    <string name="total">Total</string>
+    <string name="balance">Solde: </string>
+
+
     <string name="january_short">Janv</string>
     <string name="january_long">Janvier</string>
 
