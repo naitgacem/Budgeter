@@ -1,4 +1,4 @@
-# <img src="./app/play_store_512.png" alt="drawing" width="24"/> Budgeter
+# <img src="./app/play_store_512.png" alt="drawing" width="24"/> Budgeter [![Android CI](https://github.com/naitgacem/Budgeter/actions/workflows/android.yml/badge.svg?event=workflow_dispatch)](https://github.com/naitgacem/Budgeter/actions/workflows/android.yml)
 
 Budgeter is a simple budgeting app, this is still in very early stages.
 
