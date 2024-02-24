@@ -29,4 +29,6 @@
     <string name="deposit">Deposit</string>
     <string name="transactions_details">transactions_details</string>
     <string name="analytics">Analytics</string>
+    <string name="total">Total</string>
+    <string name="balance">"Balance: "</string>
 </resources>

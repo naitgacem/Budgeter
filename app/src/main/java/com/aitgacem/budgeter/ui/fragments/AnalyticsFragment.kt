@@ -124,7 +124,7 @@ class AnalyticsFragment : Fragment() {
             pieChart.aa_drawChartWithChartOptions(
                 AAChartModel().chartType(AAChartType.Pie).series(
                     arrayOf(
-                        AASeriesElement().name("Total").data(
+                        AASeriesElement().name(getString(R.string.total)).data(
                             pieData.map {
                                 arrayOf(it.first.name, it.second)
                             }.toTypedArray()
@@ -166,7 +166,7 @@ class AnalyticsFragment : Fragment() {
                         else it.first.toMonthStr(true)
                     }.toTypedArray()).series(
                         arrayOf(
-                            AASeriesElement().name("Balance: ").data(chartData.map {
+                            AASeriesElement().name(getString(R.string.balance)).data(chartData.map {
                                 it.second
                             }.toTypedArray())
                         )
