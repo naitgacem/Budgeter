@@ -1,19 +1,39 @@
-# <img src="./app/src/main/res/drawable/play_store_512.png" alt="drawing" width="25"/> Budgeter
+# <img src="./app/play_store_512.png" alt="drawing" width="24"/> Budgeter
 
 Budgeter is a simple budgeting app, this is still in very early stages.
 
 ## Screenshots
+<table>
+  <tr>
+    <td><img src="screenshots/1_dark.png" alt="Screenshot 1"></td>
+    <td><img src="screenshots/2_dark.png" alt="Screenshot 2"></td>
+    <td><img src="screenshots/3_dark.png" alt="Screenshot 3"></td>
+    <td><img src="screenshots/4_dark.png" alt="Screenshot 4"></td>
+    <td><img src="screenshots/5_dark.png" alt="Screenshot 5"></td>
+  </tr>
+   <tr>
+    <td><img src="screenshots/1_light.png" alt="Screenshot 1"></td>
+    <td><img src="screenshots/2_light.png" alt="Screenshot 2"></td>
+    <td><img src="screenshots/3_light.png" alt="Screenshot 3"></td>
+    <td><img src="screenshots/4_light.png" alt="Screenshot 4"></td>
+    <td><img src="screenshots/5_light.png" alt="Screenshot 5"></td>  
+  </tr>
+</table>
+
+## Screenshots (legacy)
+
 
 <table>
   <tr>
     <td><img src="screenshots/Screenshot_1.png" alt="Screenshot 1"></td>
     <td><img src="screenshots/Screenshot_2.png" alt="Screenshot 2"></td>
     <td><img src="screenshots/Screenshot_3.png" alt="Screenshot 3"></td>
-  </tr>
-   <tr>
     <td><img src="screenshots/Screenshot_4.png" alt="Screenshot 4"></td>
     <td><img src="screenshots/Screenshot_5.png" alt="Screenshot 5"></td>
     <td><img src="screenshots/Screenshot_6.png" alt="Screenshot 6"></td>
+  </tr>
+   <tr>
+    
   </tr>
 </table>
 
@@ -21,13 +41,15 @@ Budgeter is a simple budgeting app, this is still in very early stages.
 
 Features include:
 
-* Adding and withdrawing of funds.
+* Record Adding and withdrawing of funds.
 * Categories to organize your spending.
 * Balance tracking after each transaction.
 * A pie chart of spending by category.
 * A line chart of balance changes over time.
 * A history of all transactions recorded.
 * Fully offline.
+* Dark theme support.
+* Dual language, Eng/Fr.
 
 ## Download
 Get the app from our [releases page](https://github.com/naitgacem/Budgeter/releases).
