@@ -10,7 +10,7 @@
     <string name="recent_transactions">Transactions récentes</string>
     <string name="transactions_details">Détails de la transaction</string>
     <string name="total">Total</string>
-    <string name="balance">"Solde : "</string>
+    <string name="balance">"Solde"</string>
     <string name="add_transaction">Ajouter une transaction</string>
     <string name="save">Enregistrer</string>
     <string name="month_literal">Mois</string>

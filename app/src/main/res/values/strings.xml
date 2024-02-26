@@ -23,7 +23,7 @@
     <string name="recent_transactions">Recent transactions</string>
     <string name="transactions_details">Transaction details</string>
     <string name="total">Total</string>
-    <string name="balance">"Balance: "</string>
+    <string name="balance">"Balance"</string>
     <string name="add_transaction">Add a transaction</string>
     <string name="save">Save</string>
     <string name="month_literal">Month</string>
