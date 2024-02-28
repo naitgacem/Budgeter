@@ -1,7 +1,8 @@
-package com.aitgacem.budgeter
+package com.aitgacem.budgeter.ui.fragments
 
 import android.os.Bundle
 import androidx.preference.PreferenceFragmentCompat
+import com.aitgacem.budgeter.R
 
 class SettingsFragment : PreferenceFragmentCompat() {
 
