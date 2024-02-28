@@ -84,5 +84,9 @@
     <string name="analytics">Analytics</string>
     <string name="transactions">Transactions</string>
 
+    <!--    Settings -->
+    <string name="telemetry">Telemetry</string>
+    <string name="crashlytics">Send crash reports</string>
+
 
 </resources>

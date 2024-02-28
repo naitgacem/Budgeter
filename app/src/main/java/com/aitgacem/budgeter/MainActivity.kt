@@ -6,6 +6,7 @@ import android.view.View.VISIBLE
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
+import androidx.preference.PreferenceManager.getDefaultSharedPreferences
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.crashlytics.ktx.crashlytics
 import com.google.firebase.ktx.Firebase
@@ -16,6 +17,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.main_activity)
+        setupCrashlytics()
 
         val navHostFragment =
             supportFragmentManager.findFragmentById(R.id.main_activity_host) as NavHostFragment
@@ -35,6 +37,12 @@ class MainActivity : AppCompatActivity() {
             }
         }
         bottomBar.setupWithNavController(navController)
+
+    }
+
+    private fun setupCrashlytics() {
+        val enabled = getDefaultSharedPreferences(this).getBoolean("crashlytics", false)
+        Firebase.crashlytics.setCrashlyticsCollectionEnabled(enabled)
 
     }
 

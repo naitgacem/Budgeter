@@ -68,4 +68,9 @@
     <string name="home">Accueil</string>
     <string name="analytics">Analytiques</string>
     <string name="transactions">Transactions</string>
+
+    <!--    Parametres -->
+    <string name="telemetry">Télémétrie</string>
+    <string name="crashlytics">Envoyer des rapports d\'erreur</string>
+
 </resources>
