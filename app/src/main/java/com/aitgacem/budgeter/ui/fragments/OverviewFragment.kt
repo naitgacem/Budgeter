@@ -9,13 +9,12 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.aitgacem.budgeter.data.TransactionsRepository
+import com.aitgacem.budgeter.R
 import com.aitgacem.budgeter.databinding.FragmentOverviewScreenBinding
 import com.aitgacem.budgeter.ui.components.RecentAdapter
 import com.aitgacem.budgeter.ui.viewmodels.OverviewViewModel
 import com.google.android.material.transition.MaterialSharedAxis
 import dagger.hilt.android.AndroidEntryPoint
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class OverviewFragment : Fragment() {
@@ -43,7 +42,15 @@ class OverviewFragment : Fragment() {
         }
 
         setupRecyclerView()
-
+        binding.topBar.setOnMenuItemClickListener { menuItem ->
+            when (menuItem.itemId) {
+                R.id.settings_btn -> {
+                    val action = OverviewFragmentDirections.gotoSettings()
+                    findNavController().navigate(action)
+                }
+            }
+            false
+        }
         binding.depositBtn.setOnClickListener {
             val action = OverviewFragmentDirections.depositAction(true)
             view.findNavController().navigate(action)

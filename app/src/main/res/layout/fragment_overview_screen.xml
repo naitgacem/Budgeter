@@ -18,7 +18,8 @@
             android:layout_height="wrap_content"
             android:minHeight="?attr/actionBarSize"
             app:title="@string/app_name"
-            app:navigationIcon="@drawable/ic_savings" />
+            app:navigationIcon="@drawable/ic_savings"
+            app:menu="@menu/settings_menu" />
     </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.core.widget.NestedScrollView

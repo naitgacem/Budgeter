@@ -3,16 +3,13 @@ package com.aitgacem.budgeter
 import android.os.Bundle
 import android.view.View.GONE
 import android.view.View.VISIBLE
-import androidx.activity.ComponentActivity
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.fragment.NavHostFragment
-import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
-import com.aitgacem.budgeter.data.TransactionDatabase
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.firebase.crashlytics.ktx.crashlytics
+import com.google.firebase.ktx.Firebase
 import dagger.hilt.android.AndroidEntryPoint
-import java.lang.ref.WeakReference
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
@@ -28,6 +25,7 @@ class MainActivity : AppCompatActivity() {
         val fullScreenDest = setOf(
             R.id.details_dest,
             R.id.formFill_dest,
+            R.id.settings_dest,
         )
         navController.addOnDestinationChangedListener { _, destination, _ ->
             if (destination.id in fullScreenDest) {
