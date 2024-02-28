@@ -24,6 +24,8 @@ import com.github.aachartmodel.aainfographics.aachartcreator.AAChartView
 import com.github.aachartmodel.aainfographics.aachartcreator.AAChartZoomType
 import com.github.aachartmodel.aainfographics.aachartcreator.AASeriesElement
 import com.github.aachartmodel.aainfographics.aachartcreator.aa_toAAOptions
+import com.github.aachartmodel.aainfographics.aaoptionsmodel.AAChart
+import com.github.aachartmodel.aainfographics.aaoptionsmodel.AAChartEvents
 import com.github.aachartmodel.aainfographics.aaoptionsmodel.AADataLabels
 import com.github.aachartmodel.aainfographics.aaoptionsmodel.AAInactive
 import com.github.aachartmodel.aainfographics.aaoptionsmodel.AAItemStyle
@@ -41,6 +43,17 @@ class AnalyticsFragment : Fragment() {
     private var chartData: List<Pair<Int, Double>> = mutableListOf()
     private var pieData: List<Pair<Category, Double>> = mutableListOf()
     private var viewType = ChartViewType.MONTH_VIEW
+    private var hideTooltipJSFucntion = """
+                                            function() {
+                                                const chart = this;
+                                                Highcharts.addEvent(
+                                                    chart.tooltip,
+                                                    'refresh',
+                                                    function () {
+                                                        chart.tooltip.hide(500);
+                                                });
+                                            }
+                                            """
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -122,25 +135,38 @@ class AnalyticsFragment : Fragment() {
             }
 
             pieChart.aa_drawChartWithChartOptions(
-                AAChartModel().chartType(AAChartType.Pie).series(
-                    arrayOf(
-                        AASeriesElement().name(getString(R.string.total)).data(
-                            pieData.map {
-                                arrayOf(it.first.name, it.second)
-                            }.toTypedArray()
+                AAChartModel()
+                    .chartType(AAChartType.Pie).series(
+                        arrayOf(
+                            AASeriesElement().name(getString(R.string.total)).data(
+                                pieData.map {
+                                    arrayOf(it.first.name, it.second)
+                                }.toTypedArray()
 
-                        ).allowPointSelect(false)
-                            .states(AAStates().inactive(AAInactive().enabled(false)))
-                            .tooltip(AATooltip().followTouchMove(true))
-                            .dataLabels(AADataLabels().enabled(false))
-                    )
-                ).tooltipEnabled(true).backgroundColor("").animationDuration(0).aa_toAAOptions()
+                            )
+                                .allowPointSelect(false)
+                                .states(AAStates().inactive(AAInactive().enabled(false)))
+                                .tooltip(AATooltip().followTouchMove(true))
+                                .dataLabels(AADataLabels().enabled(false))
+                        )
+                    ).tooltipEnabled(true).backgroundColor("").animationDuration(0)
+                    .aa_toAAOptions()
                     .legend(
                         AALegend().itemStyle(
                             AAItemStyle().color(foregroundColor)
                                 .fontWeight(AAChartFontWeightType.Thin)
                         )
                     )
+                    .chart(
+                        AAChart().type(AAChartType.Pie)
+                            .events(
+                                AAChartEvents().load(
+                                    hideTooltipJSFucntion
+                                )
+                            )
+                            .backgroundColor("")
+                    )
+
 
             )
 
@@ -158,7 +184,7 @@ class AnalyticsFragment : Fragment() {
                 binding.noDataLine.visibility = GONE
             }
 
-            lineChart.aa_drawChartWithChartModel(
+            lineChart.aa_drawChartWithChartOptions(
                 AAChartModel().chartType(AAChartType.Spline).dataLabelsEnabled(true)
                     .categories(chartData.map {
                         if (viewType == ChartViewType.MONTH_VIEW) "${it.first} ${
@@ -171,8 +197,21 @@ class AnalyticsFragment : Fragment() {
                                 it.second
                             }.toTypedArray())
                         )
-                    ).dataLabelsEnabled(false).legendEnabled(false).zoomType(AAChartZoomType.X)
-                    .yAxisTitle("").tooltipEnabled(true).backgroundColor("").animationDuration(0)
+                    ).dataLabelsEnabled(false)
+                    .legendEnabled(false)
+                    .yAxisTitle("")
+                    .tooltipEnabled(true)
+
+                    .animationDuration(0)
+                    .aa_toAAOptions().chart(
+                        AAChart().events(
+                            AAChartEvents().load(
+                                hideTooltipJSFucntion
+                            )
+                        )
+                            .backgroundColor("")
+                            .zoomType(AAChartZoomType.X.value)
+                    )
             )
 
         }
