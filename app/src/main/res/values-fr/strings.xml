@@ -71,6 +71,12 @@
 
     <!--    Parametres -->
     <string name="telemetry">Télémétrie</string>
-    <string name="crashlytics">Envoyer des rapports d\'erreur</string>
+    <string name="send_crash_reports">Envoyer des rapports d\'erreur</string>
+    <string name="privacy_popup">"Paramètres de confidentialité "</string>
+    <string name="privacy_descr">"La télémétrie nous permet de comprendre et d'améliorer l'expérience utilisateur avec l'application. "</string>
+    <string name="send_usage_reports">Envoyer des rapports d\'utilisation</string>
+    <string name="learn_more">En savoir plus</string>
+    <string name="accept">Confirmer</string>
+    <string name="dismiss">Annuler</string>
 
 </resources>

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <array name="privacy_dialog_choices">
+        <item>@string/send_crash_reports</item>
+        <item>@string/send_usage_reports</item>
+    </array>
+</resources>

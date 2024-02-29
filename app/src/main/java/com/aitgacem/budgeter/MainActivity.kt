@@ -1,6 +1,7 @@
 package com.aitgacem.budgeter
 
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import androidx.appcompat.app.AppCompatActivity
@@ -8,16 +9,21 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import androidx.preference.PreferenceManager.getDefaultSharedPreferences
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.crashlytics.ktx.crashlytics
 import com.google.firebase.ktx.Firebase
 import dagger.hilt.android.AndroidEntryPoint
+
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.main_activity)
+
+        showPrivacyDialog()
         setupCrashlytics()
+
 
         val navHostFragment =
             supportFragmentManager.findFragmentById(R.id.main_activity_host) as NavHostFragment
@@ -40,13 +46,54 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    private fun setupCrashlytics() {
-        val enabled = getDefaultSharedPreferences(this).getBoolean("crashlytics", false)
-        Firebase.crashlytics.setCrashlyticsCollectionEnabled(enabled)
+    private fun showPrivacyDialog() {
+        val sharedPref = getDefaultSharedPreferences(this)
+        val editor = sharedPref.edit()
+
+        if (!sharedPref.getBoolean("first_start", true)) {
+            return
+        }
+
+
+        val header = LayoutInflater.from(this).inflate(R.layout.dialog_privacy_title, null, false)
+        MaterialAlertDialogBuilder(this)
+            .setCustomTitle(header)
+            .setNeutralButton(resources.getString(R.string.learn_more)) { dialog, which ->
+
+            }
+            .setNegativeButton(resources.getString(R.string.dismiss)) { dialog, which ->
+                editor.putBoolean("first_start", false)
+            }
+            .setPositiveButton(resources.getString(R.string.accept)) { dialog, which ->
+                editor.putBoolean("first_start", false)
+                editor.apply()
+            }
+            .setMultiChoiceItems(
+                R.array.privacy_dialog_choices,
+                BooleanArray(2) { false }) { _, which, isChecked ->
+                when (which) {
+                    0 -> editor.putBoolean(
+                        "firebase_crashlytics", isChecked
+                    )
+
+                    1 -> editor.putBoolean(
+                        "google_analytics", isChecked
+                    )
+
+                    else -> {
+
+                    }
+                }
+
+            }
+            .show()
 
     }
 
-
+    private fun setupCrashlytics() {
+        val enabled = getDefaultSharedPreferences(this).getBoolean("firebase_crashlytics", false)
+        Firebase.crashlytics.setCrashlyticsCollectionEnabled(enabled)
+    }
 }
 
 

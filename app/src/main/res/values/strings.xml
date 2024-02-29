@@ -86,7 +86,12 @@
 
     <!--    Settings -->
     <string name="telemetry">Telemetry</string>
-    <string name="crashlytics">Send crash reports</string>
-
+    <string name="send_crash_reports">Send crash reports</string>
+    <string name="send_usage_reports">Send usage reports</string>
+    <string name="privacy_popup">Privacy settings</string>
+    <string name="privacy_descr">Telemetry allows us to understand and improve the user experience with the app.</string>
+    <string name="learn_more">Learn more</string>
+    <string name="accept">Confirm</string>
+    <string name="dismiss">Dismiss</string>
 
 </resources>

@@ -2,8 +2,11 @@
     <PreferenceCategory app:title="@string/telemetry">
 
         <SwitchPreferenceCompat
-            app:key="crashlytics"
-            app:title="@string/crashlytics" />
+            app:key="firebase_crashlytics"
+            app:title="@string/send_crash_reports" />
+        <SwitchPreferenceCompat
+            app:key="google_analytics"
+            app:title="@string/send_usage_reports" />
 
 
     </PreferenceCategory>
