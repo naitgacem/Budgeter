@@ -140,7 +140,8 @@ dependencies {
 //------------------------------------------------------------------------------------------------
     //FIREBASE
     implementation platform('com.google.firebase:firebase-bom:32.7.2')
-    implementation 'com.google.firebase:firebase-crashlytics'
+    implementation 'com.google.firebase:firebase-crashlytics-ktx'
+    implementation 'com.google.firebase:firebase-analytics-ktx'
 }
 kapt {
     correctErrorTypes true

@@ -10,6 +10,8 @@ import androidx.navigation.ui.setupWithNavController
 import androidx.preference.PreferenceManager.getDefaultSharedPreferences
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.firebase.analytics.FirebaseAnalytics
+import com.google.firebase.analytics.ktx.analytics
 import com.google.firebase.crashlytics.ktx.crashlytics
 import com.google.firebase.ktx.Firebase
 import dagger.hilt.android.AndroidEntryPoint
@@ -17,13 +19,14 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
+    private lateinit var firebaseAnalytics: FirebaseAnalytics
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.main_activity)
 
         showPrivacyDialog()
-        setupCrashlytics()
-
+        setupFirebase()
 
         val navHostFragment =
             supportFragmentManager.findFragmentById(R.id.main_activity_host) as NavHostFragment
@@ -46,6 +49,7 @@ class MainActivity : AppCompatActivity() {
 
     }
 
+
     private fun showPrivacyDialog() {
         val sharedPref = getDefaultSharedPreferences(this)
         val editor = sharedPref.edit()
@@ -54,7 +58,8 @@ class MainActivity : AppCompatActivity() {
             return
         }
 
-
+        editor.putBoolean("first_start", false)
+        editor.apply()
         val header = LayoutInflater.from(this).inflate(R.layout.dialog_privacy_title, null, false)
         MaterialAlertDialogBuilder(this)
             .setCustomTitle(header)
@@ -62,10 +67,8 @@ class MainActivity : AppCompatActivity() {
 
             }
             .setNegativeButton(resources.getString(R.string.dismiss)) { dialog, which ->
-                editor.putBoolean("first_start", false)
             }
             .setPositiveButton(resources.getString(R.string.accept)) { dialog, which ->
-                editor.putBoolean("first_start", false)
                 editor.apply()
             }
             .setMultiChoiceItems(
@@ -90,9 +93,16 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    private fun setupCrashlytics() {
-        val enabled = getDefaultSharedPreferences(this).getBoolean("firebase_crashlytics", false)
-        Firebase.crashlytics.setCrashlyticsCollectionEnabled(enabled)
+    private fun setupFirebase() {
+        firebaseAnalytics = Firebase.analytics
+
+        val crashReportEnabled =
+            getDefaultSharedPreferences(this).getBoolean("firebase_crashlytics", false)
+        val googleAnalyticsEnabled =
+            getDefaultSharedPreferences(this).getBoolean("google_analytics", false)
+
+        Firebase.crashlytics.setCrashlyticsCollectionEnabled(crashReportEnabled)
+        Firebase.analytics.setAnalyticsCollectionEnabled(googleAnalyticsEnabled)
     }
 }
 
